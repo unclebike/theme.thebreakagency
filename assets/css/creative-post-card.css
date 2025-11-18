@@ -1,0 +1,108 @@
+.creative-latest-posts-homepage {
+    padding-top: max(120px, 8.33vw);
+}
+
+.creative-latest-posts-homepage .latest-posts {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}   
+
+.creative-latest-posts-homepage .latest-posts-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 75%;
+}
+
+.creative-post-card-link {
+    z-index: 2;
+    color: var(--text-color);
+    text-align: center;
+    padding-top: max(10px, calc(0.69vw * var(--scale)));
+    text-decoration: none;
+    position: relative;
+}
+
+.creative-post-card-title {
+    opacity: 0.2;
+    text-align: center;
+    transition: opacity 0.05s ease;
+}
+
+.creative-post-card:hover .creative-post-card-title,
+.creative-post-card:hover .creative-post-card-image-wrapper  {
+    opacity: 1;
+}
+
+.creative-post-card-image-container {
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    will-change: transform;
+}
+
+.creative-post-card-image-wrapper {
+    width: 14vw;
+    transform: translate(-50%, -50%) rotate(5deg);
+    opacity: 0;
+    transition: opacity 0.05s ease;
+}
+
+.creative-post-card-overlay {
+    background-color: white;
+    opacity: .15;
+    position: absolute;
+    inset: 0;
+}
+
+.creative-post-card-title.dot {
+    line-height: max(calc(42px * var(--heading-font-scale)), calc(2.92vw * var(--scale) * var(--heading-font-scale)));
+}
+
+@media screen and (max-width: 1080px) {
+    .creative-latest-posts-homepage {
+        padding-top: 60px;
+    }
+    
+    .creative-latest-posts-homepage .latest-posts-inner {
+        max-width: 100%;
+    }
+
+    .creative-post-card-title {
+        transition: opacity 0.2s ease;
+    }
+    
+    .creative-post-card-image-container {
+        position: absolute;
+        top: auto;
+        left: auto;
+        transform: translate(50%, 50%) !important;
+    }
+    
+    .creative-post-card-image-wrapper {
+        width: 24vw;
+        min-width: 240px;
+        transition: opacity 0.2s ease;
+    }
+    
+    .creative-post-card-title.dot {
+        line-height: calc(32px * var(--heading-font-scale));
+    }
+}
+
+@media screen and (max-width: 767px) { 
+    .creative-latest-posts-homepage {
+        padding-top: 40px;
+    }
+
+    .creative-post-card-image-wrapper {
+        width: 170px;
+        min-width: auto;
+    }
+
+    .creative-post-card-title.dot {
+        line-height: calc(22px * var(--heading-font-scale));
+    }
+}

@@ -1,0 +1,54 @@
+<link rel="stylesheet" type="text/css" href="{{asset "css/secondary-hero.css"}}" />
+<link rel="stylesheet" type="text/css" href="{{asset "css/post-card.css"}}" />
+
+{{!< default}}
+
+<main data-accent-navigation="true">
+    <section class="secondary-hero">
+        <div class="wide-container">         
+            <div class="secondary-hero-content">
+                <div class="secondary-heading-wrapper">
+                    <div class="tags-wrapper dark{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                        <div class="bracket-subtitle">
+                            <div class="medium-text left-bracket">{{t "["}}</div>
+                            <div class="bracket-button-text">
+                                <div class="medium-text main">{{#get "authors" limit="all" include='count.posts'}}{{plural pagination.total empty=(t "No Authors") singular=(t "1 Author") plural=(t "% Authors")}}{{/get}}</div>
+                            </div>
+                            <div class="medium-text right-bracket">{{t "["}}</div>                    
+                        </div>
+                    </div>
+                    {{#post}}
+                        <h1 class="dark{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                            {{title}}
+                        </h1>
+                    {{/post}}
+                </div>
+
+                <div class="secondary-paragraph-wrapper{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                    <p class="paragraph">
+                        {{#post}}
+                            {{excerpt}}
+                        {{/post}}
+                    </p>
+                </div>
+            </div>            
+        </div>
+    </section>
+    {{#get "authors" limit="all" include='count.posts'}}
+    <section class="last-section">
+        <div class="wide-container">
+            <div class="grid grid-with-border{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">               
+                {{#foreach authors}}
+                    {{>"components/author-card"}}
+                {{/foreach}}              
+            </div> 
+        </div>
+    </section>
+    {{/get}}
+</main>
+
+{{#match @custom.footer_type "Creative"}}
+    {{> "components/footer-creative"}}
+{{else}}
+    {{> "components/footer-normal"}}
+{{/match}}

@@ -1,0 +1,111 @@
+.our-selection-slider {
+    height: 100vh;
+    display: block;
+    position: relative;
+}
+
+.slider-wrapper {
+    position: relative;
+    height: 100%;
+    z-index: 2;
+}
+
+.slider-navigation {
+    z-index: 3;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    display: flex;
+    position: absolute;
+    top: max(36px, calc(2.5vw* var(--scale)));
+}
+
+.slider-navigation .medium-text {
+    color: var(--overlay-text-color);
+}
+
+.slider-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.slide-number {
+    overflow: hidden;
+    height: max(calc(42px * var(--heading-font-scale) * var(--heading-font-line-height-scale)), calc(2.92vw * var(--scale) * var(--heading-font-scale) * var(--heading-font-line-height-scale)));
+    display: flex;
+}
+
+.current-slide-number-inner {
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    transition: 1.2s var(--ease-transition);
+    will-change: transform;
+}
+
+.slide {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+}
+
+.slider-button {
+    color: var(--overlay-text-color);
+    width: max(76px, calc(5.3vw* var(--scale)));
+    height: max(76px, calc(5.3vw* var(--scale)));
+    position: absolute;
+    left: 0;
+    z-index: 3;
+    top: 50%;
+    transform: translateY(-75%);
+    cursor: pointer;
+    will-change: scale;
+    transition: scale 0.15s ease;
+    transform-origin: center center;
+}
+
+.slider-button:active {
+    scale: 0.96;
+}
+
+.slider-button[name="next"] {
+    left: auto;
+    right: 0;
+}
+
+.slider-arrow-inner {
+    width: max(24px, calc(1.67vw* var(--scale)));
+}
+
+.slider-arrow-inner.rotated {
+    transform: rotate(180deg);
+}
+
+@media screen and (max-width: 1080px) {
+    .slide-number {
+        height: calc(38px * var(--heading-font-scale) * var(--heading-font-line-height-scale));
+    } 
+}
+
+@media screen and (max-width: 767px) { 
+    .slider-navigation {
+        top: 32px;
+    }
+
+    .slide-number {
+        height: calc(36px * var(--heading-font-scale) * var(--heading-font-line-height-scale));
+    } 
+
+    .slider-button {
+        width: 60px;
+        height: 60px;
+    }
+
+    .slider-arrow-inner {
+        width: 20px;
+    }
+}

@@ -1,0 +1,530 @@
+@font-face {
+    font-family: 'Thunder';
+    src: url('../fonts/Thunder-BoldLC.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Thunder';
+    src: url('../fonts/Thunder-LC.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Thunder';
+    src: url('../fonts/Thunder-SemiBoldLC.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Thunder';
+    src: url('../fonts/Thunder-MediumLC.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --scale: 1;
+}
+
+@media (min-width: 1920px) {
+    :root{
+        --scale: 0.8;
+    }
+}
+
+
+#comments-section {
+    min-width: calc(800px + 2 * max(26px, 1.8vw));
+    width: calc((56vw * var(--scale)) + 2 * max(26px, 1.8vw));
+    padding-left: max(26px, 1.8vw);
+    padding-right: max(26px, 1.8vw);
+    margin-left: auto;
+    margin-right: var(--margin-right, auto);
+    padding-bottom: 0px !important;
+}
+
+@media screen and (max-width: 1190px) {
+    #comments-section {
+        margin-right: auto;
+    }   
+}
+
+
+#comments-section * {
+    font-family: var(--font2) !important;
+    color: var(--text-color);
+}
+
+#comments-section path {
+    stroke: var(--text-color);
+}
+
+#comments-section h2 *,
+#comments-section .h1 * {
+    text-transform: var(--text-style);
+    font-family: var(--font1);
+    line-height: calc(80% * var(--heading-font-line-height-scale));
+    font-weight: 600;
+}
+
+#comments-section div[data-test="comment-elements"]:not(:empty){
+    margin-top: max(56px, calc(3.89vw * var(--scale)));
+}
+
+#comments-section figure {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: max(53px, calc(3.68vw * var(--scale)));
+    width: max(53px, calc(3.68vw * var(--scale)));
+    height: max(53px, calc(3.68vw * var(--scale)));
+    overflow: hidden;
+}
+
+#comments-section figure div, #comments-section figure img {
+    width: 100%;
+    height: 100%;
+}
+
+#comments-section figure img {
+    border: 1px solid var(--text-color);
+    border-radius: 100%;
+}
+
+#comments-section figure {
+    margin-right: max(7px, calc(0.5vw * var(--scale)));
+}
+
+#comments-section h1 {
+    text-transform: var(--text-style);
+    font-family: var(--font1) !important;
+    line-height: calc(100% * var(--heading-font-line-height-scale));
+    font-weight: 600;
+    font-size: max(calc(62px * var(--heading-font-scale)), calc(4.31vw * var(--scale) * var(--heading-font-scale)));
+}
+
+#comments-section h1 + p {
+    font-size: max(18px, calc(1.25vw * var(--scale)));
+    color: var(--text-color);
+}
+
+#comments-section p {
+    font-size: max(16px, calc(1.11vw * var(--scale)));
+    line-height: 150%;
+}
+
+#comments-section h4,
+#comments-section div[data-testid="main-form"] .absolute.left-0 div + div .w-full.text-base,
+#comments-section .z-20.mb-7 *,
+#comments-section [data-testid="member-name"] {
+    font-family: var(--font2) !important;
+    letter-spacing: 0em;
+    color: var(--text-color);
+    font-size: max(16px, calc(1.11vw * var(--scale)));
+    line-height: 100%;
+    margin-top: max(6px, calc(0.41vw * var(--scale)));
+    font-weight: 400;
+}
+
+#comments-section div[data-testid="comment-elements"] span:not(form span), #comments-section div[data-testid="comment-elements"] .group,
+#comments-section div[data-testid="main-form"] .absolute.left-0 div + div button,
+#comments-section div[data-testid="form-header"] button,
+#comments-section [data-testid="comment-context-menu-inner"] button,
+#comments-section [data-testid="comment-in-reply-to"]  {
+    margin-top: max(5px, calc(0.35vw * var(--scale)));
+    line-height: 130%;
+    font-size: max(14px, calc(0.97vw * var(--scale)));
+}
+
+#comments-section div[data-testid="comment-elements"] span:not(form span), #comments-section div[data-testid="comment-elements"] .group,
+#comments-section div[data-testid="main-form"] .absolute.left-0 div + div button,
+#comments-section div[data-testid="form-header"] button {
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+#comments-section [data-testid="like-button"] svg {
+    width: max(14px, calc(0.97vw * var(--scale)));
+    height: max(14px, calc(0.97vw * var(--scale)));
+    margin-bottom: 3px;
+}
+
+#comments-section .fill-\[rgba\(0\2c 0\2c 0\2c 0\.9\)\]{
+    stroke: var(--text-color);
+    fill: var(--text-color);
+}
+
+#comments-section [data-testid="comment-component"] {
+    margin-top: max(38px, calc(2.64vw * var(--scale)));
+    margin-bottom: 0px;
+}
+
+#comments-section section {
+    margin-bottom: max(53px, calc(3.69vw * var(--scale)));
+    padding-top: max(92px, 6.4vw);
+    padding-bottom: max(92px, 6.4vw);
+    border-top: none;
+    border-bottom: 1px solid var(--text-color);
+    position: relative;
+}
+
+#comments-section [data-testid="comment-elements"] > div:last-child {
+    padding-bottom: max(53px, calc(3.69vw * var(--scale)));
+    border-bottom: 1px solid var(--text-color);
+}
+
+#comments-section section > button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    font-size: max(16px, calc(1.11vw * var(--scale)));
+    display: block;
+    background-color: var(--text-color) !important;
+    color: var(--background-color);
+    border-radius: max(100px, calc(6.94vw * var(--scale)));
+    padding: max(15px, calc(1.04vw * var(--scale))) max(30px, calc(2.08vw * var(--scale)));
+    margin-top: max(36px, 2.5vw);
+    margin-bottom: 0px;
+}
+
+#comments-section section > button:hover {
+    opacity: 1;
+}
+
+#comments-section [data-testid="submit-form-button"] {
+    background-color: var(--text-color) !important;
+    color: var(--background-color) !important;
+    font-weight: 400;
+    font-size: max(14px, calc(0.97vw * var(--scale)));
+    padding: max(10px, calc(0.69vw * var(--scale))) max(32px, calc(2.22vw * var(--scale)));
+    line-height: 100%;
+    margin-bottom: 0;
+    width: auto;
+    height: auto;
+    margin-right: max(12px, calc(0.83vw * var(--scale)));
+}
+
+#comments-section [data-testid="submit-form-button"] * {
+    color: var(--background-color) !important;
+}
+
+#comments-section section p {
+    margin-bottom: 0;
+}
+
+#comments-section section p .font-semibold {
+    color: var(--text-color) !important;
+    font-weight: 500 !important;
+}
+
+#comments-section section p span:not(.font-semibold),  #comments-section section p button{
+    margin-top: max(10px, calc(0.69vw * var(--scale)));
+    line-height: 150%;
+    color: var(--text-color);
+    font-size: max(14px, calc(0.97vw * var(--scale)));
+    opacity: 0.6;
+}
+
+#comments-section section p button {
+    color: var(--text-color) !important;
+    opacity: 1 !important;
+}
+
+#comments-section section p button:hover {
+    text-decoration: underline;
+}
+
+#comments-section div[data-testid="main-form"] {
+    margin-top: max(38px, calc(2.64vw * var(--scale)));
+    margin-bottom: 0px;
+}
+
+#comments-section .pl-\[40px\] {
+    padding-left: calc(5vw * var(--scale)) !important;
+}
+
+#comments-section .rounded-md p {
+    padding-left: max(14px, calc(0.97vw * var(--scale)));
+    padding-right: max(14px, calc(0.97vw * var(--scale)));
+}
+
+#comments-section form button {
+    font-size: max(16px, calc(1.11vw * var(--scale)));
+    color: var(--text-color);
+}
+
+.comments-top-border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.comments-bottom-border {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#comments-section [data-testid="comment-component"] .mt-10 {
+    margin-top: 0px;
+}
+
+#comments-section .mb-2 {
+    margin-bottom: max(12px, calc(0.83vw * var(--scale)));
+}
+
+#comments-section div[data-testid="comment-component"] .grow .sm\:flex-row,
+#comments-section div[data-testid="main-form"] .absolute.left-0 .flex.flex-wrap,
+#comments-section div[data-testid="form-header"] > div {
+   /*  gap: max(3px, calc(0.2vw * var(--scale))); */
+    flex-direction: column;
+}
+
+#comments-section h4 + div,
+#comments-section div[data-testid="form-header"] {
+    display: block;
+}
+
+#comments-section h4 + div span .mx-\[0\.3em\],
+#comments-section div[data-testid="main-form"] .absolute.left-0 div + div button .mx-\[0\.3em\],
+#comments-section div[data-testid="form-header"] button span .mx-\[0\.3em\] {
+    display: none;
+}
+
+#comments-section h4 + div span .\[overflow-wrap\:anywhere\] + span .mx-\[0\.3em\] {
+    display: inline-block;
+}
+
+#comments-section div[data-testid="main-form"] .transition-\[padding\].pt-\[48px\] {
+    padding-top: calc(4vw * var(--scale));
+}
+
+#comments-section [data-testid="comment-component"] .h-full.to-transparent {
+    width: 2px;
+    margin-right: calc(0.5vw * var(--scale));
+}
+
+#comments-section [data-testid="comment-component"] div[data-testid="comment-component"] {
+    margin-top: calc(4.2vw * var(--scale));
+    margin-bottom: 0px;
+}
+
+#comments-section .gh-comment-content p {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+#comments-section div[data-testid="form-editor"] {
+    padding-left: calc(1vw * var(--scale));
+    padding-right: calc(1vw * var(--scale));
+}
+
+#comments-section .z-20.mb-7 {
+    margin-bottom: 0px !important;
+    margin-top: 0px !important;
+}
+
+#comments-section [data-testid="reply-form"] div[data-testid="form-editor"] {
+    margin-top: 2vw;
+}
+
+#comments-section [data-testid="comments-sorting-form-dropdown"] button {
+    padding: calc(0.4vw * var(--scale)) calc(1vw * var(--scale));
+}
+
+#comments-section [data-testid="comments-sorting-form"] > div {
+    width: max(100px, calc(7vw * var(--scale)));
+}
+
+#comments-section [data-testid="comment-context-menu-inner"] {
+    min-width: max(80px, calc(5.56vw * var(--scale)));
+    background-color: var(--background-color);
+}
+
+#comments-section [data-testid="comments-sorting-form-dropdown"] {
+    background-color: var(--background-color);
+}
+
+#comments-section [data-testid="replying-to"] {
+    margin-top: max(2px, calc(0.14vw * var(--scale)));
+}
+
+#comments-section .z-20.mb-7 * {
+    margin-top: 0px !important;
+}
+
+#comments-section [data-testid="reply-pagination-button"] {
+    margin-left: calc((4.4vw * var(--scale)) + 1.2rem);
+    margin-top: max(28px, calc(1.94vw * var(--scale))) !important;
+    margin-bottom: 0px !important;
+}
+
+#comments-section [data-testid="reply-pagination-button"] span {
+    margin-top: 0px !important;
+    opacity: 1 !important;
+}
+
+#comments-section div[data-testid="form-header"] button,
+#comments-section div[data-testid="form-header"] button span {
+    margin-top: 3px !important;
+}
+
+
+
+@media (max-width: 1080px) {
+    #comments-section {
+        min-width: 100%;
+        width: 100%;
+    }
+
+    #comments-section section {
+        padding-top: 76px;
+        padding-bottom: 76px;
+    }
+   
+    #comments-section div[data-test="comment-elements"]:not(:empty){
+        margin-top: 56px;
+    }
+
+    #comments-section h1 {
+        font-size: calc(54px * var(--heading-font-scale))
+    }
+
+    #comments-section [data-testid="comment-component"] {
+        margin-top: 28px;
+    }
+
+    #comments-section .pl-\[40px\] {
+        padding-left: 68px !important;
+    }
+
+    #comments-section div[data-testid="main-form"] .transition-\[padding\].pt-\[48px\] {
+        padding-top: 68px;
+    }
+
+    #comments-section [data-testid="comment-component"] .h-full.to-transparent {
+        margin-right: 5px;
+    }
+
+    #comments-section div[data-testid="form-editor"] {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    #comments-section div[data-testid="form-editor"] {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+    
+    #comments-section .z-20.mb-7 {
+        margin-bottom: 0px;
+    }
+    
+    #comments-section [data-testid="reply-form"] div[data-testid="form-editor"] {
+        margin-top: 25px;
+    }
+    
+    #comments-section [data-testid="comments-sorting-form-dropdown"] button {
+        padding: 4px 10px;
+    }
+
+    #comments-section [data-testid="reply-pagination-button"] {
+        margin-top: 18px !important;
+        margin-left: calc(59px + 1.2rem);
+    }
+
+    #comments-section div[data-testid="form-header"] button {
+        margin-top: 5px !important;
+    }
+}
+
+@media (max-width: 767px) {
+    #comments-section {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    #comments-section section {
+        padding-top: 68px;
+        padding-bottom: 68px;
+        margin-bottom: 42px;
+    }
+
+    #comments-section figure {
+        min-width: 47px;
+        width: 47px;
+        height: 47px;
+    }
+    
+    #comments-section h1 {
+        font-size: calc(42px * var(--heading-font-scale));
+    }
+
+    #comments-section section > button {
+        margin-top: 28px;
+    }
+    
+    #comments-section [data-testid="like-button"] svg {
+        width: 13px;
+        height: 13px;
+    }
+
+    #comments-section div[data-test="comment-elements"]:not(:empty){
+        margin-top: 42px;
+    }
+
+    #comments-section .mb-2 {
+        margin-bottom: 10px;
+    }
+
+    #comments-section .pl-\[40px\] {
+        padding-left: 60px !important;
+    }
+
+    #comments-section div[data-testid="main-form"] .transition-\[padding\].pt-\[48px\] {
+        padding-top: 56px;
+    }
+
+    #comments-section div[data-testid="comment-component"] .grow .sm\:flex-row,
+    #comments-section div[data-testid="main-form"] .absolute.left-0 .flex.flex-wrap,
+    #comments-section div[data-testid="form-header"] > div {
+        gap: 1px;
+    }
+
+    #comments-section [data-testid="comment-component"] .h-full.to-transparent {
+        width: 1px;
+        margin-right: 4px;
+    }
+
+    #comments-section div[data-testid="form-editor"] {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+    
+    #comments-section [data-testid="reply-form"] div[data-testid="form-editor"] {
+        margin-top: 10px;
+    }
+
+    #comments-section [data-testid="reply-pagination-button"] {
+        margin-left: calc(51px + 0.8rem);
+    }
+
+    #comments-section div[data-testid="form-header"] button,
+    #comments-section div[data-testid="form-header"] button span {
+        margin-top: 2px !important;
+    }
+
+    #comments-section [data-testid="comment-elements"] > div:last-child {
+        padding-bottom: 28px;
+    }
+}

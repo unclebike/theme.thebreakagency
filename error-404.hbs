@@ -1,0 +1,26 @@
+<link rel="stylesheet" type="text/css" href="{{asset "css/form-page.css"}}" />
+
+{{!< default}}
+
+
+<main class="full-page" data-accent-navigation="true">
+    <section class="full-page-section">
+        {{> "components/form-page" title=(t "404") custom_excerpt=(t "The page you are looking for doesn't exist or has been moved.") type="404"}}   
+    </section>
+</main>
+
+<footer class="wide-container footer-bottom-outer footer-bottom-dark{{#if @custom.use_page_load_animations}} opacity-animation{{/if}}">
+    <custom-footer data-is-creative="false">
+        {{> "components/footer-bottom"}}
+    </custom-footer>
+</footer>
+
+<style>
+    .copyright-text-wrapper .paragraph.light, .copyright-text-wrapper .paragraph.light * {
+        color: var(--text-color) !important;
+    }
+
+    .form-page-paragraph {
+        max-width: max(350px, calc(24.31vw * var(--scale)))
+    }
+</style>

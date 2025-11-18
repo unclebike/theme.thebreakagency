@@ -1,0 +1,98 @@
+.secondary-hero {
+    padding-top: max(168px, calc(11.67vw * var(--scale)));
+}
+
+.secondary-hero-content {
+    gap: max(48px, calc(3.3vw * var(--scale)));
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: max(16px, calc(1.11vw * var(--scale)));   
+    display: flex;
+    position: relative;
+}
+
+.secondary-paragraph-wrapper {
+    max-width: calc((100% - 2 * max(26px, 1.8vw)) / 3);
+    width: 100%;
+}
+
+html[data-primary-font="Thunder"] .secondary-paragraph-wrapper {
+    margin-bottom: max(calc(12px * var(--heading-font-scale) * var(--heading-font-line-height-scale)), calc(0.83vw * var(--scale) * var(--heading-font-scale) * var(--heading-font-line-height-scale)));
+}
+
+.grid-with-border {
+    padding-top: max(36px, calc(2.5vw * var(--scale)));
+    border-top: 1px solid var(--text-color);
+}
+
+.hero-border {
+    height: 1px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin-top: max(56px, calc(3.89vw * var(--scale)));
+}
+
+.centered-secondary-hero .secondary-hero-content {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: max(16px, calc(1.11vw * var(--scale))) !important;
+}
+
+.centered-secondary-hero .tags-wrapper {
+    justify-content: center;
+}
+
+.centered-secondary-hero .secondary-paragraph-wrapper {
+    max-width:  max(445px, calc(31vw * var(--scale)));
+}
+
+@media screen and (max-width: 1080px) {
+    .secondary-hero {
+        padding-top: 148px;
+    }
+
+    .secondary-hero-content {
+        gap: 12px;
+        padding-bottom: 28px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    html[data-primary-font="Thunder"] .secondary-hero-content  {
+        gap: 0px;
+    }
+
+    .secondary-paragraph-wrapper {
+        max-width: 620px;
+        margin-bottom: 0px !important;
+    }
+
+    .hero-border {
+        margin-top: 46px;
+    }
+
+    .centered-secondary-hero .secondary-hero-content {
+        gap: 10px !important;
+    }
+
+    .centered-secondary-hero h1 {
+        line-height: calc(90% * var(--heading-font-line-height-scale));
+    }
+}
+
+@media screen and (max-width: 767px) { 
+    .secondary-hero {
+        padding-top: 128px;
+    }
+
+    html[data-primary-font="Thunder"] .secondary-hero-content  {
+        gap: 3px;
+    }
+
+    .hero-border {
+        margin-top: 32px;
+    }
+}

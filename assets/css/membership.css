@@ -1,0 +1,176 @@
+.membership-tab-buttons {
+    display: flex;
+    gap: max(6px, calc(0.42vw * var(--scale)));
+    position: relative;
+}
+
+html[data-primary-font="Thunder"] .membership-tab-buttons {
+    margin-bottom: max(calc(16px* var(--heading-font-scale)* var(--heading-font-line-height-scale)), calc(1.11vw* var(--scale)* var(--heading-font-scale)* var(--heading-font-line-height-scale)));
+}
+
+.membership-button {
+    padding: max(10px, calc(0.69vw * var(--scale))) max(30px, calc(2.08vw * var(--scale)));
+    min-width: max(120px, calc(8.33vw * var(--scale)));
+}
+
+.membership-tiers[data-inactive="true"] {
+    display: none;
+}
+
+.membership-button[data-inactive="true"] {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+}
+
+.tier-card {
+    padding: max(62px, 4.31vw) max(26px, 1.8vw);
+    border: 1px solid var(--text-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.tier-price {
+    margin-top: max(34px, calc(2.36vw * var(--scale)));
+    margin-bottom: max(28px, calc(1.94vw * var(--scale)));
+}
+
+html[data-primary-font="Thunder"] .tier-price {
+    margin-top: max(34px, calc(2.36vw * var(--scale)));
+    margin-bottom: max(17px, calc(1.18vw * var(--scale)));
+}
+
+.tier-description,
+.benefit-list-item p {
+    line-height: 133%;
+}
+
+.benefits-outer {
+    margin-top: max(24px, calc(1.67vw * var(--scale)));
+    border-top: 1px solid var(--text-color);
+}
+
+.benefits-list {
+    margin-top: max(31px, calc(2.15vw * var(--scale)));
+    gap: max(21px, calc(1.46vw * var(--scale)));
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.benefit-list-item {
+    display: flex;
+    gap: max(11px, calc(0.76vw * var(--scale)));
+}
+
+.benefit-icon-outer {
+    width: max(23px, calc(1.6vw * var(--scale)));
+    min-width: max(23px, calc(1.6vw * var(--scale)));
+    height: max(23px, calc(1.6vw * var(--scale)));
+    min-height: max(23px, calc(1.6vw * var(--scale)));
+    color: var(--background-color);
+    background-color: var(--text-color);
+    border-radius: 3px;
+}
+
+.benefit-icon {
+    width: max(19px, calc(1.32vw * var(--scale)));
+    min-width: max(19px, calc(1.32vw * var(--scale)));
+    height: max(19px, calc(1.32vw * var(--scale)));
+    min-height: max(19px, calc(1.32vw * var(--scale)));
+}
+
+.tier-button-wrapper {
+    margin-top: auto;
+}
+
+.tier-button-wrapper .button {
+    margin-top: max(68px, 4.72vw);
+    text-decoration: none;
+    text-transform: none;
+    font-size: max(18px, calc(1.25vw * var(--scale)));
+}
+
+.save-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+    transform: translateY(-140%) translateX(-70%);
+    gap: max(9px, calc(0.63vw * var(--scale)));
+}
+
+.save-arrow {
+    width: max(35px, calc(2.43vw * var(--scale)));
+    height: max(35px, calc(2.43vw * var(--scale)));
+}
+
+.save-text {
+    position: relative;
+    bottom: max(14px, calc(0.97vw * var(--scale)));
+}
+
+@media screen and (max-width: 1080px) {
+    .save-container {
+        display: none !important;
+    }
+
+    .membership-tab-buttons {
+        margin-top: 8px;
+        margin-bottom: 6px !important;
+    }
+
+    .tier-card {
+        padding: 56px 26px;
+        min-height: 580px;
+    }
+
+    html[data-primary-font="Thunder"] .membership-tab-buttons {
+        margin-top: 12px;
+    }
+
+    .benefits-list {
+        gap: 18px;
+    }
+
+    .benefit-icon-outer {
+        width: 19px;
+        min-width: 19px;
+        height: 19px;
+        min-height: 19px;
+    }
+    
+    .benefit-icon {
+        width: 17px;
+        min-width: 17px;
+        height: 17px;
+        min-height: 17px;
+    }
+
+    .tier-description,
+    .benefit-list-item p {
+        line-height: 130%;
+    }
+    
+    .tier-button-wrapper .button {
+        margin-top: 58px;
+        font-size: 16px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+}
+
+@media screen and (max-width: 767px) { 
+    .membership-tab-buttons {
+        margin-top: 6px;
+        margin-bottom: 4px !important;
+    }
+
+    html[data-primary-font="Thunder"] .membership-tab-buttons {
+        margin-top: 8px;
+    }
+
+    .tier-price h2 {
+        font-size: calc(48px * var(--heading-font-scale));
+    }
+}

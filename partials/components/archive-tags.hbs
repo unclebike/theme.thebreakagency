@@ -1,0 +1,22 @@
+<div class="archive-tags-outer{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+    <div class="tags-gradient tags-gradient-before"></div>
+    <archive-tags data-current-tag="all-tags">
+        <div class="button archive-tag-button">
+            <input id="all-tags" type="radio" name="archive-tags" data-number="{{#get "posts" limit="all"}}{{plural posts.length empty=(t "No Posts") singular=(t "1 Post") plural=(t "% Posts")}}{{/get}}" checked>
+            <label class="radio-button-text" for="all-tags">
+                {{t "All Tags"}} ({{#get "posts" limit="all"}}{{posts.length}}{{/get}})
+            </label>
+        </div>
+
+        {{#get "tags" include="count.posts" limit="all"}}
+            {{#foreach tags}}
+                <div class="button archive-tag-button">
+                    <input id="{{slug}}" type="radio" name="archive-tags" data-number="{{plural count.posts empty=(t "No Posts") singular=(t "1 Post") plural=(t "% Posts")}}">
+                    <label class="radio-button-text" for="{{slug}}">
+                        {{name}} ({{count.posts}})
+                    </label>
+                </div>
+            {{/foreach}}
+        {{/get}}
+    </archive-tags>
+</div>

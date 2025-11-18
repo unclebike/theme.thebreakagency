@@ -1,0 +1,20 @@
+<div class="footer-bottom">
+    <div class="socials">
+        {{> "components/custom-socials"}}
+    </div>
+
+    <div class="copyright-text-wrapper">
+        <div class="copyright-border"></div>
+        <p class="paragraph light">
+            &copy;&nbsp;{{date format="YYYY"}}&nbsp;<a class="hover-underline" href="{{@site.url}}">{{@site.title}}</a>&nbsp;-&nbsp;{{t "Published with"}}&nbsp;<a href="https://ghost.org/" target="_blank" class="hover-underline">Ghost</a><span>&nbsp;&&nbsp;</span><a class="hover-underline" href="https://www.kusa-projects.com/" target="_blank">{{@site.title}}</a>
+        </p>
+    </div>
+
+    <div class="return-button-wrapper">
+        <button class="unstyled-button social return-button" aria-label="Return to top">
+            <div class="social-inner">
+                {{> "icons/small-arrow-icon"}}
+            </div>
+        </button>
+    </div>
+</div>

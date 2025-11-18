@@ -1,0 +1,13 @@
+{{!< default}}
+
+{{#post}}
+    <main data-accent-navigation="{{#unless feature_image}}true{{else}}{{#match @custom.post_header_type "Background Media"}}false{{else match @custom.post_header_type "Background Media Centered"}}false{{else}}true{{/match}}{{/unless}}">
+        {{> "components/article"}}
+    </main>
+{{/post}}
+
+{{#match @custom.footer_type "Creative"}}
+    {{> "components/footer-creative"}}
+{{else}}
+    {{> "components/footer-normal"}}
+{{/match}}

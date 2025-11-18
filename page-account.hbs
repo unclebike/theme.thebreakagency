@@ -1,0 +1,157 @@
+{{#unless @member}}
+    <script>
+        window.location.href = '{{@site.url}}/signin/';
+    </script>
+{{/unless}}
+
+<link rel="stylesheet" type="text/css" href="{{asset "css/hero-section.css"}}" />
+<link rel="stylesheet" type="text/css" href="{{asset "css/account.css"}}" />
+
+{{!< default}}
+
+<main data-accent-navigation="true" class="hero-section-no-image account-page">
+    <section class="hero-section last-section">
+        <div class="narrow-container">
+            <div class="hero-content">
+                <div class="hero-content-inner">
+                <div class="hero-text-content">
+                    <div class="tags-wrapper{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                        <div class="bracket-subtitle">
+                            <div class="medium-text left-bracket">{{t "["}}</div>
+                            <div class="bracket-button-text">
+                                <div class="medium-text main">
+                                    {{#if @member.paid}}
+                                        {{t "Paid Member"}}
+                                    {{else}}
+                                        {{t "Free Member"}}                  
+                                    {{/if}}
+                                </div>
+                            </div> 
+                            <div class="medium-text right-bracket">{{t "["}}</div>
+                        </div>
+                    </div>
+
+                    <div class="heading-1-and-bio">
+                        <div class="heading-1-wrapper{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}" data-content-length="{{@custom.content_length_on_background_media}}">
+                            <h1>{{t "Your Account"}}</h1>
+                        </div>
+
+                        <div class="post-summary-wrapper{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                            <p class="paragraph overlay">
+                                {{#if @member.paid}}
+                                    {{t "You currently have a paid membership, you can find more details in your account settings."}}
+                                {{else}}
+                                    {{t "You currently have a free membership, upgrade to a paid subscription for full access."}}                  
+                                {{/if}}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="account-data-outer{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                        {{#unless @member.paid}}
+                            <div class="account-data">
+                                <div class="account-data-row">
+                                    <span class="left-align">
+                                        {{t "Full Name"}}
+                                    </span>
+
+                                    <span class="right-align">
+                                        {{@member.name}}
+                                    </span>
+                                </div>
+
+                                <div class="account-data-row">
+                                    <span class="left-align">
+                                        {{t "Email"}}
+                                    </span>
+
+                                    <span class="right-align">
+                                        {{@member.email}}
+                                    </span>
+                                </div>
+                            </div>
+                        {{else}}
+                            {{#foreach @member.subscriptions}}
+                                <div class="account-data">
+                                    <div class="account-data-row">
+                                        <span class="left-align">
+                                            {{t "Full Name"}}
+                                        </span>
+
+                                        <span class="right-align">
+                                            {{#if @member.name}}
+                                                {{@member.name}}
+                                            {{else}}
+                                                /
+                                            {{/if}}
+                                        </span>
+                                    </div>
+
+                                    <div class="account-data-row">
+                                        <span class="left-align">
+                                            {{t "Email"}}
+                                        </span>
+
+                                        <span class="right-align">
+                                            {{@member.email}}
+                                        </span>
+                                    </div>
+
+                                    {{#if @member.paid}}
+                                        <div class="account-data-row">
+                                            <span class="left-align">
+                                                {{t "Current Plan"}}
+                                            </span>
+
+                                            <span class="right-align">
+                                                {{price plan}}/{{plan.interval}}
+                                            </span>
+                                        </div>
+
+                                        <div class="account-data-row">
+                                            <span class="left-align">
+                                                {{t "Card"}}
+                                            </span>
+
+                                            <span class="right-align">
+                                                **** **** **** {{default_payment_card_last4}}
+                                            </span>
+                                        </div>
+
+                                        <div class="account-data-row">
+                                            <span class="left-align">
+                                                {{#if cancel_at_period_end}}{{t "Expires"}}{{else}}{{t "Billing Date"}}{{/if}}
+                                            </span>
+
+                                            <span class="right-align">
+                                                {{date current_period_end}}
+                                            </span>
+                                        </div>
+                                    {{/if}}
+                                </div>
+                            {{/foreach}}
+                        {{/unless}}
+
+                        <div class="account-page-buttons">
+                            <a href="javascript:" class="button" data-members-signout>
+                                {{t "Sign out"}}
+                            </a>
+
+                            <a href="javascript:" data-portal="account" class="account-settings-link">
+                                <small>
+                                    {{t "Account settings"}} 
+                                </small>       
+                            </a>                    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer-bottom-dark wide-container">
+    <custom-footer data-is-creative="false">
+        {{> "components/footer-bottom"}}
+    </custom-footer>
+</footer>

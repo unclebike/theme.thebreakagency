@@ -1,0 +1,140 @@
+.card-image-wrapper {
+    display: block;
+    width: 100%;
+}
+
+html[data-primary-font="Thunder"] .card-top {
+    margin-bottom: max(6px, calc(0.42vw * var(--scale)));
+}
+
+.card-top {
+    grid-column-gap: max(6px, calc(0.42vw * var(--scale)));
+    grid-row-gap: max(6px, calc(0.42vw * var(--scale)));
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-bottom: max(8px, calc(0.56vw * var(--scale)));
+    display: flex;
+}
+
+.card-top .medium-text {
+    color: var(--text-color);
+    font-size: max(calc(20px * var(--heading-font-scale)), calc(1.39vw * var(--scale) * var(--heading-font-scale)));
+    font-weight: 600;
+}
+
+html[data-primary-font="Thunder"] .card .restricted-access-icon {
+    margin-bottom: max(calc(6px * var(--heading-font-scale) * var(--heading-font-line-height-scale)), calc(0.42vw * var(--scale) * var(--heading-font-scale) * var(--heading-font-line-height-scale)));
+}
+
+.card .restricted-access-icon {
+    min-width: max(calc(16px * var(--heading-font-scale)), calc(1.11vw * var(--scale) * var(--heading-font-scale)));
+    width: max(calc(16px * var(--heading-font-scale)), calc(1.11vw * var(--scale) * var(--heading-font-scale)));
+    height: max(calc(16px * var(--heading-font-scale)), calc(1.11vw * var(--scale) * var(--heading-font-scale)));
+}
+
+.bracket-no-gap {
+    gap: 0px !important;
+}
+
+html[data-primary-font="Thunder"] .card .left-bracket,
+html[data-primary-font="Thunder"] .card .right-bracket {
+    padding-bottom: max(2px, calc(0.14vw * var(--scale)));
+}
+
+.card-content {
+    margin-top: max(16px, calc(1.11vw * var(--scale)));
+}
+
+.card-text {
+    color: var(--text-color);
+    font-weight: 500;
+    line-height: calc(100% * var(--heading-font-line-height-scale));
+    text-decoration: none;
+    display: block;
+    font-size: max(calc(30px * var(--heading-font-scale)), calc(2.08vw * var(--scale) * var(--heading-font-scale)));
+}
+
+html[data-primary-font="Thunder"] .card-excerpt {
+    margin-top: max(3px, calc(0.21vw * var(--scale)));
+}
+
+.card-excerpt {
+    margin-top: max(8px, calc(0.56vw * var(--scale)));
+}
+
+.card-title-and-circle-wrapper {
+    position: relative;
+    width: fit-content;
+}
+
+html[data-primary-font="Thunder"] .card-circle {
+    top: calc(50% - max(calc(4px * (var(--heading-font-scale) + var(--circle-scale))), calc(0.28vw * var(--scale) * (var(--heading-font-scale) + var(--circle-scale)))));
+}
+
+.card-circle {
+    top: 50%;
+    position: absolute;
+    left: 0px;
+    border-radius: 100%;
+    width: max(calc(10px * (var(--heading-font-scale) + var(--circle-scale))), calc(0.69vw * var(--scale) * (var(--heading-font-scale) + var(--circle-scale))));
+    height: max(calc(10px * (var(--heading-font-scale) + var(--circle-scale))), calc(0.69vw * var(--scale) * (var(--heading-font-scale) + var(--circle-scale))));
+    background-color: var(--text-color);
+    opacity: 0;
+    transform: translateX(calc(-50% - calc(max(13px, 0.8vw)))) translateY(-50%) scale(0);
+    will-change: transform, opacity;
+    transition: transform 0.25s var(--bounce-past-transition), opacity 0.2s linear;
+}
+
+.card-title-and-circle-wrapper:hover .card-circle {
+    opacity: 1;
+    transform: translateX(calc(-50% - calc(max(13px, 0.8vw)))) translateY(-50%) scale(1);
+}
+
+.tag-card .card-image-wrapper {
+    aspect-ratio: 4/3;
+}
+
+.tag-card .card-text {
+    font-size: max(calc(26px * var(--heading-font-scale)), calc(1.81vw * var(--scale) * var(--heading-font-scale)));
+}
+
+.tag-card .card-small-text {
+    opacity: 0.7;
+}
+
+html[data-primary-font="Thunder"] .tag-card .card-small-text {
+    margin-top: max(2px, calc(0.14vw * var(--scale)));
+}
+
+.tag-card .card-small-text {
+    margin-top: max(4px, calc(0.28vw * var(--scale)));
+}
+
+@media screen and (max-width: 1080px) {
+    .card-title-and-circle-wrapper:hover .card-circle {
+        opacity: 0;
+        transform: translateX(calc(-50% - calc(max(13px, 0.6vw)))) scale(0);
+    }
+}
+
+@media screen and (max-width: 767px) { 
+    .tag-card .card-content {
+        margin-top: 12px;
+    }
+
+    .tag-card .card-text {
+        font-size: calc(22px * var(--heading-font-scale));
+    }
+
+    .tag-card .card-small-text p {
+        font-size: 14px;
+    }
+
+    .tag-card .card-small-text {
+        margin-top: 2px;
+    }
+
+    html[data-primary-font="Thunder"] .tag-card .card-small-text {
+        margin-top: 0px;
+    }
+}

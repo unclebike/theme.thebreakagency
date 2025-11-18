@@ -1,0 +1,138 @@
+.account-page {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.account-page .hero-content {
+    text-align: center;
+}
+
+.account-page .heading-1-and-bio {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.account-page .tags-wrapper {
+    justify-content: center;
+}
+
+.account-page .hero-content-inner {
+    width: 100%;
+}
+
+.hero-section-no-image .hero-section {
+    padding-bottom: max(90px, calc(6.25vw* var(--scale)));
+}
+
+.account-data-outer {
+    border-top: 1px solid var(--text-color);
+    margin-top: max(27px, calc(1.88vw* var(--scale)));
+    max-width: max(620px, calc(43.1vw* var(--scale)));
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.account-data-row {
+    border-bottom: 1px solid var(--text-color);
+    padding: max(18px, calc(1.25vw* var(--scale))) 0 max(16px, calc(1.11vw* var(--scale))) 0;
+    display: flex;
+    justify-content: space-between;
+    line-height: calc(80% * var(--heading-font-line-height-scale));
+    font-size: max(calc(28px * var(--heading-font-scale)), calc(1.94vw * var(--heading-font-scale)));
+    font-weight: 500;
+    font-family: var(--font1);
+    gap: max(32px, calc(2.22vw* var(--scale)));
+}
+
+.account-page .post-summary-wrapper {
+    margin-bottom: 0px !important;
+}
+
+html[data-primary-font="Thunder"] .account-data-row {
+    padding: max(20px, calc(1.39vw* var(--scale))) 0 max(12px, calc(0.83vw* var(--scale))) 0;
+}
+
+.right-align {
+    text-align: right;
+}
+
+.left-align {
+    text-align: left;
+}
+
+.account-page-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: max(27px, calc(1.88vw* var(--scale)));
+    gap: max(8px, calc(0.56vw* var(--scale)));
+}
+
+.account-page-buttons .button {
+    text-decoration: none;
+    text-transform: none;
+    padding-top: max(12px, calc(0.83vw* var(--scale)));
+    padding-bottom: max(12px, calc(0.83vw* var(--scale)));
+}
+
+.account-settings-link {
+    color: var(--text-color);
+}
+
+.footer-bottom-dark * {
+    color: var(--text-color);
+}
+
+.footer-bottom-dark .social {
+    border: 1px solid var(--text-color);
+}
+
+.footer-bottom-dark .social:hover {
+    background-color: var(--text-color);
+    color: var(--background-color);
+}
+
+.footer-bottom-dark .social:hover .social-inner path {
+    color: var(--background-color);
+}
+
+@media screen and (max-width: 1080px) {    
+    .footer-bottom-dark .social:hover {
+        background-color: var(--background-color);
+        color: var(--text-color);
+    }
+    
+    .footer-bottom-dark .social:hover .social-inner path {
+        color: var(--text-color);
+    }
+
+    .footer-bottom-dark .copyright-border {
+        background-color: var(--text-color);
+    }
+}
+
+@media screen and (max-width: 767px) { 
+    .account-data-outer {
+        margin-top: 23px;
+    }
+    
+    .account-data-row {
+        padding: 16px 0 14px 0;
+        line-height: calc(95% * var(--heading-font-line-height-scale));
+        font-size: calc(24px * var(--heading-font-scale));
+    }
+    
+    html[data-primary-font="Thunder"] .account-data-row {
+        padding: 14px 0 6px 0;
+    }
+    
+    .account-page-buttons {
+        margin-top: 23px;
+    }
+}

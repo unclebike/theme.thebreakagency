@@ -1,0 +1,17 @@
+<custom-socials class="socials">
+    {{#if @site.facebook}}
+        <a href="{{facebook_url @site.facebook}}" target="_blank" class="social" aria-label="Facebook">
+            <div class="social-inner">
+                {{> "icons/facebook-icon"}}
+            </div>
+        </a>
+    {{/if}}   
+
+    {{#if @site.twitter}}
+        <a href="{{twitter_url @site.twitter}}" target="_blank" class="social" aria-label="X/Twitter">
+            <div class="social-inner">
+                {{> "icons/twitter-icon"}}
+            </div>
+        </a>
+    {{/if}}   
+</custom-socials>

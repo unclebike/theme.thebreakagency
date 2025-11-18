@@ -1,0 +1,71 @@
+<link rel="stylesheet" type="text/css" href="{{asset "css/footer-creative.css"}}" />
+
+<footer class="footer-wrapper" id="creative-footer">
+    <div class="footer-outer">
+        <custom-footer class="footer" data-is-creative="true">
+            <div class="footer-animation">
+                {{>"components/footer-overlay"}}
+            </div>
+
+            <div class="wide-container">
+                <div class="footer-inner">
+                    <nav class="footer-top">
+                        <div class="footer-links-column left-aligned">
+                            <div class="subtitle light">
+                                {{t "(Navigation)"}}
+                            </div>
+
+                            <ul class="footer-normal-links">
+                                {{navigation type="secondary" is_creative=true }}
+                            </ul>
+                        </div>
+                        <div class="footer-links-column right-aligned">
+
+                            <ul class="footer-secondary-links">
+                                
+                            </ul>
+                        </div>
+                    </nav>
+                    <div class="footer-slider-wrapper">
+                        <a {{#if @custom.use_custom_account_pages}}href="{{@site.url}}/{{#unless @member}}subscribe{{else}}all-posts{{/unless}}"{{else}}{{#unless @member}}href="javascript:" data-portal="subscribe"{{else}}href="{{@site.url}}/all-posts"{{/unless}}{{/if}} class="all-posts-link footer-center-link flex-center">
+                            <div class="heading-1 dark creative-post-card-title flex-center">{{#unless @member}}{{t "Subscribe"}}{{else}}{{t "All Posts"}}{{/unless}}</div>
+                            <div class="arrow-link-button flex-center">
+                                <div class="arrow-link-button-wrapper smaller flex-center">
+                                    {{> "icons/big-arrow-icon"}}
+                                </div>
+                            </div>
+                        </a>
+
+                        <div class="footer-slider">
+                            {{#get "posts" limit="8"}}
+                                {{#foreach posts}}
+                                    <div class="footer-slide">
+                                        {{#if feature_image}} 
+                                            <figure>
+                                                <img   
+                                                    class="card-image-inner"                  
+                                                    srcset="{{img_url feature_image size="s" format="webp"}} 300w,
+                                                            {{img_url feature_image size="m" format="webp"}} 720w,
+                                                            {{img_url feature_image size="l" format="webp"}} 960w"
+                                                    src="{{img_url feature_image size="l"}}"
+                                                    alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
+                                                >              
+                                            </figure>
+                                        {{else}}
+                                            <div class="placeholder flex-center">
+                                                {{> "icons/placeholder-icon" }}
+                                            </div>               
+                                        {{/if}}
+                                    </div>
+                                {{/foreach}} 
+                            {{/get}}
+                            <div class="footer-project-overlay"></div>
+                        </div>
+                    </div>
+                    
+                    {{> "components/footer-bottom" }}
+                </div>
+            </div>
+        </custom-footer>
+    </div>
+</footer>

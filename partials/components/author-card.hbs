@@ -1,0 +1,47 @@
+<div class="card">
+    <a href="{{url}}" class="card-image-wrapper hover-image-animation" aria-label="{{name}}">
+        {{#if profile_image }} 
+            <figure>
+                <img   
+                    class="card-image-inner"                  
+                    srcset="{{img_url profile_image  size="s" format="webp"}} 300w,
+                            {{img_url profile_image  size="m" format="webp"}} 720w,
+                            {{img_url profile_image  size="l" format="webp"}} 960w"
+                    src="{{img_url profile_image  size="l"}}"
+                    alt="{{name}}"
+                >              
+            </figure>
+        {{else}}
+            <div class="placeholder flex-center">
+                {{> "icons/placeholder-icon" }}
+            </div>               
+        {{/if}}
+    </a>
+
+    <div class="card-content">
+        <div class="card-top">
+            <div class="bracket-subtitle">
+                <div class="medium-text left-bracket">{{t "["}}</div>
+                <div class="bracket-button-text">
+                    <div class="medium-text main">{{plural count.posts empty=(t "No Posts") singular=(t "1 Post") plural=(t "% Posts")}}</div>
+                </div>                                
+                <div class="medium-text right-bracket">{{t "["}}</div>
+            </div>
+        </div>
+
+        <div class="card-title-and-circle-wrapper">
+            <div class="card-circle"></div>
+            <div class="card-title-wrapper">
+                <a href="{{url}}" class="medium-text card-text">
+                    {{name}}{{#if location}}, {{location}}{{/if}}
+                </a>
+            </div>
+        </div>
+
+        <div class="card-excerpt">
+            <p class="paragraph three-lines">
+                {{bio}}
+            </p>
+        </div>
+    </div>
+</div>

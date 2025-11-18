@@ -1,0 +1,84 @@
+{{!--
+    Parameters:
+    - type: String
+    - account_page: Boolean
+    - has_link: Boolean
+--}}
+
+<div class="wide-container form-page-wrapper">
+    <div class="form-page-content">
+        <h1 class="{{#if @custom.use_page_load_animations}}ease-in-animation{{/if}}">
+            {{title}}
+        </h1>
+
+        <div class="form-page-paragraph{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+            <p class="paragraph light">
+                {{custom_excerpt}}
+            </p>
+        </div>  
+
+        {{#if @site.members_enabled}}
+            {{#if account_page}}
+                 <custom-form class="form-container{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                    <form data-members-form="{{type}}" data-members-autoredirect="false" class="page-form-element">
+                        {{#match type "signin"}}
+                            <div class="page-subscribe-wrapper">
+                                <input data-members-email type="email" required="true" placeholder="{{t 'Your email'}}" class="subscribe-input"/>
+                                <button class="unstyled-button arrow-button-circle" type="submit" aria-label="Submit button">
+                                    <div class="arrow-button-circle-inner">
+                                        <span class="arrow-button-icon main flex-center">{{> "icons/small-arrow-icon"}}</span>
+                                    </div>
+                                </button>
+                                <div class="page-subscribe-wrapper-overlay"></div>
+                            </div>
+                        {{else}}
+                            <div class="vertical-form">
+                                <div class="input-wrapper">
+                                    <input data-members-name type="text" required="true" placeholder="{{t 'Your name'}}"/>
+                                    <div class="page-subscribe-wrapper-overlay"></div>
+                                </div>
+                                <div class="input-wrapper">
+                                    <input data-members-email type="email" required="true" placeholder="{{t 'Your email'}}"/>
+                                    <div class="page-subscribe-wrapper-overlay"></div>
+                                </div>
+                                <button class="button" type="submit">{{#match type "signup"}}{{t "Continue"}}{{else}}{{t "Subscribe"}}{{/match}}</button>
+                            </div>                                 
+                        {{/match}}
+                    
+                        <div class="form-alerts">
+                            <small class="form-alert loading-alert">{{t "Processing your request..."}}</small>
+                            <small class="form-alert error-alert" data-members-error></small>
+                        </div> 
+
+                        {{#if has_link}}
+                            {{#unless @site.members_invite_only}}
+                                <small class="under-form-text">
+                                    <span class="lower-opacity-text">
+                                        {{#match type "signin"}}{{t "Don't have an account yet?"}}{{else}}{{t "Already have an account?"}}{{/match}}
+                                    </span>
+                                    <a {{#if @custom.use_custom_account_pages}} href="{{@site.url}}/{{#match type "signin"}}signup{{else}}signin{{/match}}/" {{else}}href="javascript:" data-portal="{{#match type "signin"}}signup{{else}}signin{{/match}}"{{/if}}>{{#match type "signin"}}{{t "Sign up"}}{{else}}{{t "Sign in"}}{{/match}}</a>
+                                </small>
+                            {{/unless}}
+                        {{/if}}
+                    </form>
+
+                    <a href="{{@site.url}}" class="button form-success-button">{{t "Back to homepage"}}</a>
+
+                    <span id="form-success-heading-text" class="hidden" data-success-heading="{{t 'Great!'}}"></span>
+                    <span id="form-success-paragraph-text" class="hidden" data-success-paragraph="
+                        {{#match type "signup"}}{{t 'Please check your inbox and click the link to confirm your signup.'}}{{/match}}
+                        {{#match type "signin"}}{{t 'Please check your inbox and click the link to complete signin.'}}{{/match}}
+                        {{#match type "subscribe"}}{{t 'Please check your inbox and click the link to confirm your subscription.'}}{{/match}}
+                        ">
+                    </span>
+                </custom-form>
+            {{/if}}
+        {{/if}}
+
+        {{#match type "404"}}
+            <div class="form-container{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                <a class="button page-not-found-button" href="{{@site.url}}">{{t "Back to homepage"}}</a>
+            </div>
+        {{/match}}
+    </div>
+</div>

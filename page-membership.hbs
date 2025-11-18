@@ -1,0 +1,87 @@
+<link rel="stylesheet" type="text/css" href="{{asset "css/secondary-hero.css"}}" />
+<link rel="stylesheet" type="text/css" href="{{asset "css/membership.css"}}" />
+
+{{!< default}}
+
+<main data-accent-navigation="true">
+    <section class="secondary-hero">
+        <div class="wide-container">         
+            <div class="secondary-hero-content">
+                <div class="secondary-heading-wrapper">
+                    <div class="tags-wrapper dark{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                        <div class="bracket-subtitle">
+                            <div class="medium-text left-bracket">{{t "["}}</div>
+                            <div class="bracket-button-text">
+                                <div class="medium-text main">{{#get "tiers"}}{{plural pagination.total empty=(t "No Plans") singular=(t "1 Plan") plural=(t "% Plans")}}{{/get}}</div>
+                            </div>
+                            <div class="medium-text right-bracket">{{t "["}}</div>                    
+                        </div>
+                    </div>
+                    {{#post}}
+                        <h1 class="dark{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                            {{title}}
+                        </h1>
+                    {{/post}}
+                </div>
+
+                <div class="membership-tab-buttons{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                    <div class="save-container">
+                        <p class="paragraph save-text flex-center">
+                            <span>{{t "("}}</span>
+                            <span>{{t "save up to"}}&nbsp;</span>
+                            <span id="save-number"></span>
+                            <span>{{t ")"}}</span>
+                        </p>
+                        <div class="save-arrow flex-center">
+                            {{> "icons/save-arrow-icon" }}
+                        </div>
+                    </div>
+                    <button class="button membership-button" data-tab="yearly">{{t "Yearly"}}</button>
+                    <button class="button membership-button" data-inactive="true" data-tab="monthly">{{t "Monthly"}}</button>                   
+                </div>
+            </div>            
+        </div>
+    </section>
+
+    {{#get "tiers"}}
+        <section class="last-section">
+            <div class="wide-container">
+                <custom-membership class="membership-container">
+                    <div class="membership-tiers" data-tab-content="yearly">
+                        <div id="pagination-grid" class="grid grid-with-border{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">               
+                            {{#foreach tiers}}
+                                {{#if @member}}
+                                    {{#match type "paid"}}
+                                        {{> "components/tier-card" yearly=true}}
+                                    {{/match}}
+                                {{else}}
+                                    {{> "components/tier-card" yearly=true}}
+                                {{/if}}
+                            {{/foreach}}      
+                        </div> 
+                    </div>
+
+                    <div class="membership-tiers" data-inactive="true" data-tab-content="monthly">
+                        <div id="pagination-grid" class="grid grid-with-border">
+                            {{#foreach tiers}}
+                                {{#if @member}}
+                                    {{#match type "paid"}}
+                                        {{> "components/tier-card" }}
+                                    {{/match}}
+                                {{else}}
+                                    {{> "components/tier-card" }}
+                                {{/if}}
+                            {{/foreach}}
+                        </div>
+                    </div>
+                </custom-membership>
+            </div>
+        </section>
+    {{/get}}
+</main>
+
+{{#match @custom.footer_type "Creative"}}
+    {{> "components/footer-creative"}}
+{{else}}
+    {{> "components/footer-normal"}}
+{{/match}}

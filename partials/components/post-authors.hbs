@@ -1,0 +1,37 @@
+<link rel="stylesheet" type="text/css" href="{{asset "css/post-authors.css"}}" />
+
+<div class="post-authors">
+    <div class="post-author-images">
+        {{#foreach authors}}                                
+            <a href="{{url}}" class="post-author-image" aria-label="{{name}}">
+                {{#if profile_image}}
+                    <img class="image hover-image-opacity"
+                        src="{{img_url profile_image size="xxs"}}" 
+                        alt="{{name}}" 
+                        loading="lazy">
+                {{else}}
+                    <div class="author-avatar-wrapper">
+                        {{> "icons/avatar-icon"}}
+                    </div>
+                {{/if}}
+            </a>
+        {{/foreach}}
+    </div>
+    
+    <div class="post-authors-text">
+        <div class="post-authors-inner" id="authors">
+            <small class="post-author-name">
+                {{authors separator=" & "}}
+            </small>
+        </div>
+        <small class="date-small-text">
+            <span>
+                <time>
+                    {{date published_at format="MMM DD, YYYY"}}
+                </time>
+            </span>
+            &nbsp;-&nbsp;
+            <span>{{reading_time minute=(t "1 min read") minutes=(t "% min read")}}</span>
+        </small>
+    </div>     
+</div>

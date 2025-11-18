@@ -1,0 +1,161 @@
+<link rel="stylesheet" type="text/css" href="{{asset "css/hero-section.css"}}" />
+<link rel="stylesheet" type="text/css" href="{{asset "css/post-card.css"}}" />
+
+{{!< default}}
+
+<main {{#author}}{{#unless profile_image }}data-accent-navigation="true" class="hero-section-no-image"{{/unless}}{{/author}}>
+    {{#author}}
+        <section class="hero-section author-hero{{#if profile_image }}{{#match @custom.content_position_on_background_media "Center"}} hero-center{{/match}}{{/if}}">
+            <div class="wide-container">
+                <div class="hero-content">
+                    <div class="hero-content-inner">
+                    <div class="hero-text-content">
+                        <div class="tags-wrapper{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                            <div class="bracket-subtitle">
+                                <div class="medium-text left-bracket">{{t "["}}</div>
+                                <div class="bracket-button-text">
+                                    <div class="medium-text main">
+                                        {{#get "posts" filter="authors:{{slug}}+id:-{{id}}" limit="all"}}{{plural pagination.total empty=(t "No Posts") singular=(t "1 Post") plural=(t "% Posts")}}{{/get}}{{#if location}}, {{location}}{{/if}}
+                                    </div>
+                                </div> 
+                                <div class="medium-text right-bracket">{{t "["}}</div>
+                            </div>
+                        </div>
+
+                        <div class="heading-1-and-bio">
+                            <div class="heading-1-wrapper{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}" data-content-length="{{@custom.content_length_on_background_media}}">
+                                <h1>{{name}}</h1>
+                            </div>
+
+                            <div class="post-summary-wrapper{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                                <p class="paragraph overlay">{{bio}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="socials author-socials{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                        {{#if facebook}}
+                            <a href="{{social_url type="facebook"}}" target="_blank" class="social" aria-label="Facebook">
+                                <div class="social-inner">
+                                    {{> "icons/facebook-icon"}}
+                                </div>
+                            </a>
+                        {{/if}} 
+
+                        {{#if twitter}}
+                            <a href="{{social_url type="twitter"}}" target="_blank" class="social" aria-label="Twitter/X">
+                                <div class="social-inner">
+                                    {{> "icons/twitter-icon"}}
+                                </div>
+                            </a>
+                        {{/if}}  
+
+                        {{#if linkedin}}
+                            <a href="{{social_url type="linkedin"}}" target="_blank" class="social" aria-label="Linkedin">
+                                <div class="social-inner">
+                                    {{> "icons/linkedin-icon"}}
+                                </div>
+                            </a>
+                        {{/if}} 
+
+                        {{#if bluesky}}
+                            <a href="{{social_url type="bluesky"}}" target="_blank" class="social" aria-label="Bluesky">
+                                <div class="social-inner">
+                                    {{> "icons/bluesky-icon"}}
+                                </div>
+                            </a>
+                        {{/if}} 
+
+                        {{#if threads}}
+                            <a href="{{social_url type="threads"}}" target="_blank" class="social" aria-label="Threads">
+                                <div class="social-inner">
+                                    {{> "icons/threads-icon"}}
+                                </div>
+                            </a>
+                        {{/if}} 
+
+                        {{#if mastodon}}
+                            <a href="{{social_url type="mastodon"}}" target="_blank" class="social" aria-label="Mastodon">
+                                <div class="social-inner">
+                                    {{> "icons/mastodon-icon"}}
+                                </div>
+                            </a>
+                        {{/if}} 
+
+                        {{#if tiktok}}
+                            <a href="{{social_url type="tiktok"}}" target="_blank" class="social" aria-label="TikTok">
+                                <div class="social-inner">
+                                    {{> "icons/tiktok-icon"}}
+                                </div>
+                            </a>
+                        {{/if}}
+
+                        {{#if youtube}}
+                            <a href="{{social_url type="youtube"}}" target="_blank" class="social" aria-label="YouTube">
+                                <div class="social-inner">
+                                    {{> "icons/youtube-icon"}}
+                                </div>
+                            </a>
+                        {{/if}}
+
+                        {{#if instagram}}
+                            <a href="{{social_url type="instagram"}}" target="_blank" class="social" aria-label="Instagram">
+                                <div class="social-inner">
+                                    {{> "icons/instagram-icon"}}
+                                </div>
+                            </a>
+                        {{/if}}
+
+                        {{#if website}}
+                            <a href="{{website}}" target="_blank" class="social" aria-label="Website URL">
+                                <div class="social-inner social-inner-bigger">
+                                    {{> "icons/link-icon"}}
+                                </div>
+                            </a>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+
+            {{#if profile_image }}
+                <div class="background-image{{#if @custom.use_page_load_animations}} image-animation{{/if}}">
+                    <figure class="parallax-image">
+                        <img             
+                            srcset="{{img_url profile_image  size="s" format="webp"}} 320w,
+                                    {{img_url profile_image  size="xm" format="webp"}} 440w,
+                                    {{img_url profile_image  size="m" format="webp"}} 720w,
+                                    {{img_url profile_image  size="l" format="webp"}} 960w,
+                                    {{img_url profile_image  size="xl" format="webp"}} 1200w,
+                                    {{img_url profile_image  size="xxl" format="webp"}} 2000w,
+                                    {{img_url profile_image  size="2k" format="webp"}} 2560w,
+                                    {{img_url profile_image  size="4k" format="webp"}} 3840w"
+                            src="{{img_url profile_image  size="xxl"}}"
+                            alt="{{name}}"
+                        >              
+                    </figure>
+                    <div class="dark-overlay"></div>
+                </div>
+            {{/if}}
+        </section>
+    {{/author}}
+
+    <section class="section-relative last-section">
+        <div class="wide-container">
+            <div class="latest-posts author-posts section-padding-top">
+                <div id="pagination-grid" class="grid{{#author}}{{#unless profile_image }}{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}{{/unless}}{{/author}}">               
+                    {{#foreach posts}}
+                        {{>"components/post-card"}}
+                    {{/foreach}}              
+                </div>    
+
+                {{pagination}}              
+            </div>
+        </div>
+    </section>
+</main>
+
+{{#match @custom.footer_type "Creative"}}
+    {{> "components/footer-creative"}}
+{{else}}
+    {{> "components/footer-normal"}}
+{{/match}}

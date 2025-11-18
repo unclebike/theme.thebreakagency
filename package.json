@@ -1,0 +1,274 @@
+{
+    "name": "snook",
+    "description": "Snook is a bold and creative Ghost theme designed for those who dare to stand out. With its striking design and seamless user experience, Snook helps your blog break away from the ordinary. It challenges the norm, giving you the freedom to express your content with confidence and originality.",
+    "demo": "https://snook.kusa-projects.com/",
+    "version": "1.0.5",
+    "private": true,
+    "engines": {
+        "ghost": ">=5.0.0"
+    },
+    "author": {
+        "name": "KUSA Projects",
+        "email": "kusaprojects.agency@gmail.com",
+        "url": "https://www.kusa-projects.com/"
+    },
+    "gpm": {
+        "type": "theme",
+        "categories": [
+            "Blog",
+            "Magazine"
+        ]
+    },
+    "keywords": [
+        "ghost",
+        "theme",
+        "ghost-theme"
+    ],
+    "docs": "https://www.kusa-projects.com/snook-documentation",
+    "config": {
+        "posts_per_page": 6,
+        "image_sizes": {
+            "xxs": {
+                "width": 100
+            },
+            "xs": {
+                "width": 150
+            },
+            "s": {
+                "width": 320
+            },
+            "xm": {
+                "width": 440
+            },
+            "m": {
+                "width": 720
+            },
+            "l": {
+                "width": 960
+            },
+            "xl": {
+                "width": 1200
+            },
+            "xxl": {
+                "width": 2000
+            },
+            "2k": {
+                "width": 2560
+            },
+            "4k": {
+                "width": 3840
+            }
+        },
+        "card_assets": {
+            "exclude": [
+                "toggle",
+                "button",
+                "header",
+                "blockquote",
+                "audio",
+                "bookmark",
+                "callout",
+                "file",
+                "gallery",
+                "product",
+                "signup",
+                "video"
+            ]
+        },
+        "custom": {
+            "accent_logo": {
+                "type": "image",
+                "description": "This logo is used on secondary pages and in the mobile menu. To ensure it functions correctly, please make sure the primary logo is also set."
+            },
+            "logo_scale": {
+                "type": "select",
+                "options": [
+                    "0.2",
+                    "0.4",
+                    "0.6",
+                    "0.8",
+                    "1",
+                    "1.2",
+                    "1.4",
+                    "1.6",
+                    "1.8",
+                    "2",
+                    "2.4",
+                    "2.8",
+                    "3.2",
+                    "3.6",
+                    "4"
+                ],
+                "default": "1"
+            },
+            "colors": {
+                "type": "text",
+                "default": "#1e1e1e, #ffffff, #ffffff, #1e1e1e",
+                "description": "Text color, background color, overlay text color, overlay button text color. Instructions in our docs."
+            },
+            "fonts": {
+                "type": "text",
+                "default": "Thunder, Roboto",
+                "description": "This setting allows you to add 2 different Google Fonts and only applies if the Heading font and Body font are not specified in the brand settings. Instructions in our docs."
+            },
+            "text_style": {
+                "type": "select",
+                "options": [
+                    "uppercase",
+                    "capitalize",
+                    "lowercase",
+                    "none"
+                ],
+                "default": "uppercase"
+            },
+            "heading_font_scale": {
+                "type": "select",
+                "options": [
+                    "0.5",
+                    "0.55",
+                    "0.6",
+                    "0.65",
+                    "0.7",
+                    "0.75",
+                    "0.8",
+                    "0.85",
+                    "0.9",
+                    "0.95",
+                    "1"          
+                ],
+                "default": "1"
+            },
+            "heading_font_line_height_scale": {
+                "type": "select",
+                "options": [
+                    "0.8",
+                    "0.85",
+                    "0.9",
+                    "0.95",
+                    "1",
+                    "1.1",
+                    "1.2",
+                    "1.3",
+                    "1.4",
+                    "1.5",
+                    "1.6",
+                    "1.7",       
+                    "1.8",
+                    "1.9",
+                    "2"
+                ],
+                "default": "1"
+            },
+            "use_custom_account_pages": {
+                "type": "boolean",
+                "default": true
+            },
+            "use_page_load_animations": {
+                "type": "boolean",
+                "default": true
+            },
+            "use_smooth_scrolling": {
+                "type": "boolean",
+                "default": true
+            },
+            "button_style_on_background_media": {
+                "type": "select",
+                "options": [
+                    "Bracket",
+                    "Solid",
+                    "Bracket Desktop/Solid Mobile",
+                    "None"
+                ],
+                "default": "Bracket Desktop/Solid Mobile"
+            },
+            "content_position_on_background_media": {
+                "type": "select",
+                "options": [
+                    "Bottom Left",
+                    "Center"
+                ],
+                "default": "Bottom Left"
+            },
+            "content_length_on_background_media": {
+                "type": "select",
+                "options": [
+                    "Narrow",
+                    "Wide",
+                    "Full Width"
+                ],
+                "default": "Narrow"
+            },
+            "post_card_image_aspect_ratio": {
+                "type": "select",
+                "options": [
+                    "1/1",
+                    "16/9",
+                    "5/4",
+                    "4/3",                  
+                    "3/2",                  
+                    "4/5",
+                    "3/4",                    
+                    "2/3"        
+                ],
+                "default": "4/3"
+            },
+            "show_post_card_extra_info": {
+                "type": "boolean",
+                "default": false,
+                "description": "Shows post author and date"
+            },
+            "show_featured_post_preview": {
+                "type": "boolean",
+                "default": false,
+                "description": "Show a featured post preview on mobile devices, or navigate directly to the featured post on the first click",
+                "group": "homepage"
+            },
+            "homepage_circles_content": {
+                "type": "select",
+                "options": [
+                    "Tags",
+                    "Testimonials",
+                    "None"       
+                ],
+                "group": "homepage",
+                "default": "None"
+            },
+            "homepage_post_card_style": {
+                "type": "select",
+                "options": [
+                    "Creative",
+                    "Default"       
+                ],
+                "group": "homepage",
+                "default": "Creative"
+            },
+            "footer_type": {
+                "type": "select",
+                "options": [
+                    "Creative",
+                    "Normal"       
+                ],
+                "default": "Creative"
+            },
+            "post_header_type": {
+                "type": "select",
+                "options": [
+                    "Wide",
+                    "Wide Centered",
+                    "Narrow",
+                    "Narrow Centered",
+                    "Background Media",
+                    "Background Media Centered"
+                ],
+                "description": "Narrow and Narrow Centered options only work on Default and Default with video post template",
+                "default": "Wide",
+                "group": "post"
+            }
+        }
+    },
+    "type": "module",
+    "devDependencies": {
+        "gulp": "^4.0.2",
+        "gulp-zip": "^6.0.0"
+    }
+}

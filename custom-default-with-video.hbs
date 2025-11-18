@@ -1,0 +1,25 @@
+{{!< default}}
+
+<main data-accent-navigation="{{#post}}{{#unless feature_image}}true{{else}}{{#match @custom.post_header_type "Background Media"}}false{{else match @custom.post_header_type "Background Media Centered"}}false{{else}}true{{/match}}{{/unless}}{{/post}}">
+    {{#if page}}
+        {{#post}}
+            {{> "components/article" has_video=true}}
+        {{/post}}
+    {{else}}
+        {{#post}}
+            {{> "components/article" is_post=true has_video=true}}
+        {{/post}}
+    {{/if}}
+</main>
+
+<style>
+    .post-content-inner-wrapper video:first-of-type {
+        display: none;
+    }
+</style>
+
+{{#match @custom.footer_type "Creative"}}
+    {{> "components/footer-creative"}}
+{{else}}
+    {{> "components/footer-normal"}}
+{{/match}}

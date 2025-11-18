@@ -1,0 +1,66 @@
+<link rel="stylesheet" type="text/css" href="{{asset "css/navbar.css"}}"/>
+
+<custom-header class="navbar-outer{{#if @custom.use_page_load_animations}} opacity-animation{{/if}}">
+    <div class="navbar">
+      <div class="wide-container">
+        <div class="navbar-inner">
+          <a href="{{@site.url}}" class="logo-wrapper flex-center">
+            {{#if @site.logo}}
+                <div class="logo-image-wrapper flex-center">
+                    <img class="logo-image main" src="{{@site.logo}}" alt="{{@site.title}}">
+                    {{#if @custom.accent_logo}}
+                      <img class="logo-image accent" src="{{img_url @custom.accent_logo size="s"}}" alt="{{@site.title}}"/>
+                    {{/if}}
+                </div>               
+            {{else}}
+                <div class="medium-text navbar-logo-text">
+                    {{@site.title}}
+                </div>
+            {{/if}}
+          </a>
+
+          <a href="javascript:" data-ghost-search class="hide-on-desktop mobile-search flex-center" aria-label="{{t "Search button"}}">
+            <div class="search-icon flex-center">
+              {{> "icons/search-icon"}}
+            </div>
+          </a>
+
+          <button class="unstyled-button menu-button" aria-label="{{t "Menu button"}}">
+            <div class="menu-line first-line"></div>
+            <div class="menu-line mobile-line"></div>
+            <div class="menu-line second-line"></div>
+          </button>
+
+          <div class="navbar-links-outer">
+            <div class="navbar-links-inner">
+              {{navigation}}
+
+              <ul class="cta-navbar-links">
+                <li class="hide-on-mobile">
+                    <a href="javascript:" data-ghost-search class="nav-link medium-text smaller" aria-label="{{t "Search button"}}">
+                        {{t "Search"}}
+                    </a>
+                </li>
+
+                {{#if @site.members_enabled}}
+                    {{#unless @member}}
+                        <li>
+                            <a {{#if @custom.use_custom_account_pages}}href="{{@site.url}}/signin/"{{else}}href="javascript:" data-portal="signin"{{/if}} class="nav-link medium-text smaller last">
+                                {{t "Sign in"}}                            
+                            </a>
+                        </li>
+                    {{else}}
+                        <li>
+                            <a {{#if @custom.use_custom_account_pages}}href="{{@site.url}}/account/"{{else}}href="javascript:" data-portal="account"{{/if}} class="nav-link medium-text smaller last">
+                                {{t "Account"}}                             
+                            </a>
+                        </li>
+                    {{/unless}} 
+                {{/if}}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</custom-header>

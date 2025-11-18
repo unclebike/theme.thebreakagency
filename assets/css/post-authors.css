@@ -1,0 +1,122 @@
+.post-authors {
+    display: flex;
+    align-items: center;
+}
+
+.post-author-images {
+    display: flex;
+}
+
+.post-author-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: max(48px, calc(3.33vw * var(--scale)));
+    width: max(48px, calc(3.33vw * var(--scale)));
+    height: max(48px, calc(3.33vw * var(--scale)));
+    border-radius: 100%;
+    border: 1px solid var(--text-color);
+    overflow: hidden;
+    background-color: var(--background-color);
+    transition: all .2s ease;
+    transform: translateY(0%);
+}
+
+.post-author-image:hover {
+    transform: translateY(-4%);
+}
+
+.post-author-image {
+    margin-left: calc(-1 * max(28px, calc(1.94vw * var(--scale))));
+}
+
+.post-author-image:first-of-type {
+    margin-left: 0px;
+    z-index: 5;
+}
+
+.post-author-image:nth-child(2){
+    z-index: 4;
+}
+
+.post-author-image:nth-child(3){
+    z-index: 3;
+}
+
+.post-author-image:nth-child(4){
+    z-index: 2;
+}
+
+.post-author-image:nth-child(5){
+    z-index: 1;
+}
+
+.post-author-image:last-of-type {
+    margin-right: max(12px, calc(0.83vw * var(--scale)));
+}
+
+.post-authors-text {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.post-authors-inner {
+    display: flex;
+}
+
+.post-author-name {
+    font-size: max(14px, calc(0.97vw * var(--scale)));
+    line-height: 150%;
+    font-weight: 400;
+}
+
+.post-author-name a {
+    display: inline-flex;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.post-author-name a:hover {
+    text-decoration: underline;
+}
+
+.date-small-text {
+    display: flex;
+    align-items: center;
+    line-height: 150%;
+    white-space: nowrap;
+    font-size: max(12px, calc(0.83vw * var(--scale)));
+    opacity: 0.6;
+}
+
+.author-avatar-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: max(25px, calc(1.74vw * var(--scale)));
+    width: max(25px, calc(1.74vw * var(--scale)));
+    height: max(25px, calc(1.74vw * var(--scale)));
+    color: var(--text-color);
+}
+
+.hero-section .date-small-text,
+.hero-section a,
+.hero-section .post-author-name,
+.hero-section .author-avatar-wrapper {
+    color: var(--overlay-text-color)
+}
+
+.hero-section .post-author-image {
+    border: 1px solid var(--overlay-text-color);
+}
+
+@media screen and (max-width: 1080px) {
+    .post-author-name a:hover {
+        text-decoration: none;
+    }
+
+    .post-author-image:hover {
+        transform: translateY(0%);
+    }
+}

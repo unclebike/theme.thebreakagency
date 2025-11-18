@@ -1,0 +1,61 @@
+<link rel="stylesheet" type="text/css" href="{{asset "css/secondary-hero.css"}}" />
+
+<section class="secondary-hero">
+    <div class="secondary-hero-inner {{#match @custom.post_header_type "Wide"}}wide-container{{else match @custom.post_header_type "Wide Centered"}}wide-container{{else}}{{#unless right_aligned_template}} narrow-container{{else}} wide-container{{/unless}}{{/match}}{{#unless feature_image}}{{#unless right_aligned_template}} narrow-container{{/unless}}{{/unless}}">         
+        <div class="secondary-hero-content">
+            <div class="secondary-heading-wrapper">
+                <div class="tags-wrapper dark{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                    {{#foreach tags limit="2"}}                                            
+                        <a href="{{url}}" class="bracket-button">
+                            <div class="medium-text left-bracket">{{t "["}}</div>
+                            <div class="bracket-button-text">
+                                <div class="medium-text main">{{name}}</div>
+                                <div class="medium-text absolute">{{name}}</div>
+                            </div>
+                            <div class="medium-text right-bracket">{{t "["}}</div>
+                        </a>
+                    {{/foreach}}
+                </div>
+
+                <h1 class="dark{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                    {{title}}
+                </h1>
+            </div>
+
+            <div class="excerpt-and-authors{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                {{#if custom_excerpt}}
+                    <div class="secondary-paragraph-wrapper">
+                        <p class="paragraph">
+                            {{custom_excerpt}}
+                        </p>
+                    </div>
+                {{/if}}
+
+                {{#if is_post}}    
+                    {{> "components/post-authors" }}
+                {{/if}}
+            </div>
+
+            {{#if feature_image}}
+                <div class="post-main-image-wrapper{{#if @custom.use_page_load_animations}} ease-in-animation-no-stagger{{/if}}">
+                    <figure>
+                        <img             
+                            srcset="{{img_url feature_image size="s" format="webp"}} 320w,
+                                    {{img_url feature_image size="xm" format="webp"}} 440w,
+                                    {{img_url feature_image size="m" format="webp"}} 720w,
+                                    {{img_url feature_image size="l" format="webp"}} 960w,
+                                    {{img_url feature_image size="xl" format="webp"}} 1200w,
+                                    {{img_url feature_image size="xxl" format="webp"}} 2000w,
+                                    {{img_url feature_image size="2k" format="webp"}} 2560w,
+                                    {{img_url feature_image size="4k" format="webp"}} 3840w"
+                            src="{{img_url feature_image size="xxl"}}"
+                            alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
+                        >              
+                    </figure>
+                </div>
+            {{else}}
+                <div class="hero-border{{#if @custom.use_page_load_animations}} opacity-animation{{/if}}"></div>
+            {{/if}}
+        </div>         
+    </div>
+</section>

@@ -1,0 +1,34 @@
+{{#if isSecondary}}
+    {{#if is_creative}}
+        <ul class="footer-nav">
+            {{#foreach navigation type="secondary" }}
+                <li class="footer-nav-{{slug}}{{#if current}} nav-current{{/if}}" data-label="{{label}}">  
+                    <a class="footer-nav-link" href="{{url absolute="true"}}">
+                        <div class="footer-link-circle"></div>
+                        <div class="footer-text light">
+                            {{label}}
+                        </div>
+                    </a>
+                </li>
+            {{/foreach}}
+        </ul>
+    {{else}}
+        <ul class="footer-nav">
+            {{#foreach navigation type="secondary" }}
+                <li class="footer-nav-{{slug}}{{#if current}} nav-current{{/if}}" data-label="{{label}}">  
+                    <a class="footer-nav-link" href="{{url absolute="true"}}">
+                        {{label}}
+                    </a>
+                </li>
+            {{/foreach}}
+        </ul>
+    {{/if}}
+{{else}}
+    <ul class="nav">
+        {{#foreach navigation}}
+            <li class="nav-{{slug}}{{#if current}} nav-current{{/if}}" data-label="{{label}}">  
+                <a class="nav-link medium-text smaller" href="{{url absolute="true"}}">{{label}}</a>
+            </li>
+        {{/foreach}}
+    </ul>
+{{/if}}

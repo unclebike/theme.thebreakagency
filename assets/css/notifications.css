@@ -1,0 +1,97 @@
+.notification {
+    z-index: 8999;
+    position: fixed;
+    display: none;
+    visibility: hidden;
+    top: 0;
+    left: calc(50%);
+    transform: translateX(-50%);
+    padding: max(12px, calc(0.83vw * var(--scale))) max(22px, calc(1.53vw * var(--scale)));
+    border: 1px solid var(--text-color);
+    background-color: var(--background-color);
+    width: max-content;
+    justify-content: center;
+    align-items: center;
+}
+
+.notification p {
+    opacity: 1;
+    color: var(--text-color);
+    line-height: 150%;
+    font-family: var(--font2);
+}
+
+.notification-icon {
+    width: max(22px, calc(1.53vw * var(--scale)));
+    min-width: max(22px, calc(1.53vw * var(--scale)));
+    height: max(22px, calc(1.53vw * var(--scale)));
+    min-height: max(22px, calc(1.53vw * var(--scale)));
+    margin-right: max(8px, calc(0.56vw * var(--scale)));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.global-notifications.subscribe-false .subscribe-false,
+.global-notifications.signin-false .signin-false,
+.global-notifications.subscribe-true .subscribe-true,
+.global-notifications.signin-true .signin-true,
+.global-notifications.stripe-success .stripe-success,
+.global-notifications.signup-true .signup-true,
+.global-notifications.signup-false .signup-false {
+    display: flex;
+    visibility: visible;
+    animation-name: slide-in-down;
+    animation-duration: 4s;
+    animation-fill-mode: forwards;
+} 
+
+/* Hide default global notifications */
+.gh-portal-notification-iframe {
+    display: none;
+}
+
+@keyframes slide-in-down {
+    0% {
+      transform: translateY(-100%) translateX(-50%);
+    }
+    12% {
+      transform: translateY(70%) translateX(-50%);
+    }
+    88% {
+      transform: translateY(70%) translateX(-50%);
+    }
+    100% {
+      transform: translateY(-100%) translateX(-50%);
+    }
+}
+
+@media (max-width: 1080px) {
+    .notification {
+        max-width: calc(100vw - 52px);
+        display: flex;
+        align-items: flex-start;
+    }
+
+    @keyframes slide-in-down {
+        0% {
+          transform: translateY(-100%) translateX(-50%);
+        }
+        12% {
+          transform: translateY(40%) translateX(-50%);
+        }
+        88% {
+          transform: translateY(40%) translateX(-50%);
+        }
+        100% {
+          transform: translateY(-100%) translateX(-50%);
+        }
+    }
+}
+
+@media screen and (max-width: 767px) { 
+    .notification {
+        max-width: calc(100vw - 36px);
+        padding: 12px 18px;
+    }   
+}

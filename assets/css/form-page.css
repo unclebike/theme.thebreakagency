@@ -1,0 +1,205 @@
+.full-page-section {
+    height: 100svh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+.full-page-section h1 {
+    margin-bottom: max(16px, calc(1.11vw * var(--scale)));
+}
+
+html[data-primary-font="Thunder"]  .full-page-section h1 {
+    margin-bottom: 0px !important;
+}
+
+.footer-bottom-outer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-bottom-dark * {
+    color: var(--overlay-button-text-color);
+}
+
+.form-page-wrapper {
+    padding-top: 5vh;
+    position: relative;
+    z-index: 3;
+    width: fit-content;
+}
+
+.form-page-wrapper * {
+    color: var(--overlay-text-color);
+}
+
+.form-page-paragraph {
+    max-width: max(445px, calc(30.9vw * var(--scale)));
+}
+
+.page-subscribe-wrapper {
+    max-width: max(360px, calc(25vw * var(--scale)));
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: max(9px, calc(0.63vw * var(--scale)));
+}
+
+.form-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-container input {
+    padding-right: max(19px, calc(1.32vw* var(--scale)));
+}
+
+.page-subscribe-wrapper-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--overlay-text-color);
+    opacity: 0.2;
+    z-index: -1;
+}
+
+.form-container form {
+    margin-top: max(16px, calc(1.11vw * var(--scale)));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.page-subscribe-wrapper {
+    width: 100%;
+}
+
+.form-container .arrow-button-circle {
+    background-color: var(--overlay-text-color);
+}
+
+.form-container .arrow-button-icon path {
+    color: var(--overlay-button-text-color);
+}
+
+.under-form-text {
+    margin-top: max(12px, calc(0.83vw * var(--scale)));
+}
+
+.lower-opacity-text {
+    opacity: 0.7;
+}
+
+.under-form-text a {
+    text-decoration: none;
+}
+
+.under-form-text a:hover {
+    text-decoration: underline;
+}
+
+.form-success-button {
+    display: none;
+}
+
+.form-page-wrapper .button {
+    text-transform: none;
+    background-color: var(--overlay-text-color);
+    color: var(--overlay-button-text-color);
+    text-decoration: none;
+    width: fit-content;
+    margin-top: max(16px, calc(1.11vw * var(--scale)));
+    line-height: 110%;
+}
+
+.socials,
+.return-button-wrapper,
+.copyright-border {
+    display: none !important;
+}
+
+.footer-bottom {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: 1fr !important;
+}
+
+.vertical-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    gap: max(12px, calc(0.83vw * var(--scale)));
+}
+
+.input-wrapper {
+    position: relative;
+    max-width: max(360px, calc(25vw * var(--scale)));
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.vertical-form .button {
+    margin-top: max(8px, calc(0.56vw * var(--scale)));
+}
+
+.full-page[data-accent-navigation="true"] * {
+    color: var(--text-color);
+}
+
+.full-page[data-accent-navigation="true"] .page-subscribe-wrapper-overlay {
+    background-color: var(--text-color);
+    opacity: 0.1;
+}
+
+input,
+input::placeholder {
+    color: var(--overlay-text-color);
+}
+
+.full-page[data-accent-navigation="true"] input,
+.full-page[data-accent-navigation="true"] input::placeholder {
+    color: var(--text-color);
+}
+
+.full-page[data-accent-navigation="true"] .arrow-button-circle {
+    background-color: var(--text-color);
+}
+
+.full-page[data-accent-navigation="true"] .form-container .arrow-button-icon path {
+    color: var(--background-color);
+}
+
+.full-page[data-accent-navigation="true"] .form-page-wrapper .button {
+    background-color: var(--text-color);
+    color: var(--background-color);
+}
+
+.copyright-text-wrapper .paragraph.light,
+.copyright-text-wrapper .paragraph.light * {
+    color: var(--overlay-text-color);
+}
+
+.full-page[data-accent-navigation="true"] .copyright-text-wrapper .paragraph.light,
+.full-page[data-accent-navigation="true"] .copyright-text-wrapper .paragraph.light * {
+    color: var(--text-color);
+}
+
+@media screen and (max-width: 1080px) {
+    .full-page-section h1 {
+        margin-bottom: 14px;
+    }
+}

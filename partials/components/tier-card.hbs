@@ -1,0 +1,49 @@
+{{!--
+    Parameters:
+    - yearly: boolean
+--}}
+
+<div class="tier-card" data-yearly="{{price yearly_price}}" data-monthly="{{price monthly_price}}">
+    <div class="tier-card-top">
+        <div class="tier-name subtitle">
+            {{t "("}}{{name}}{{t ")"}}
+        </div>
+
+        <div class="tier-price">
+            <h2>
+                {{#match type "paid"}}{{#if yearly}}{{price yearly_price currency=currency}}{{else}}{{price monthly_price currency=currency}}{{/if}}{{else}}$0{{/match}}{{#if yearly}}/{{t "Year"}}{{else}}/{{t "Month"}}{{/if}}
+            </h2>
+        </div>
+
+        {{#if description}}
+            <p class="tier-description">
+                {{description}}
+            </p>
+        {{/if}}
+    </div>
+
+    {{#if benefits}}
+        <div class="benefits-outer">
+            <ul class="benefits-list">
+                {{#foreach benefits}}
+                    <li class="benefit-list-item">
+                        <div class="benefit-icon-outer flex-center">
+                            <span class="benefit-icon flex-center">
+                                {{>"icons/check-icon"}}
+                            </span>
+                        </div>                             
+                        <p>
+                            {{this}}
+                        </p>                         
+                    </li>
+                {{/foreach}}
+            </ul>
+        </div>
+    {{/if}}
+
+    <div class="tier-button-wrapper">
+        <a class="button flex-center" {{#match type "paid"}}href="javascript:" data-portal="signup/{{id}}/{{#if yearly}}yearly{{else}}monthly{{/if}}"{{else}}{{#if @custom.use_custom_account_pages}}href="{{@site.url}}/signup/"{{else}}href="javascript:" data-portal="signup"{{/if}}{{/match}}>
+            {{t "Subscribe now"}}
+        </a>
+    </div>
+</div>

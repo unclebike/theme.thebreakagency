@@ -1,0 +1,25 @@
+<div class="circle-pair">
+    {{#if feature_image}}
+        <a href="{{url}}" class="circle-element"> 
+            <figure>
+                <img                  
+                    srcset="{{img_url feature_image size="s" format="webp"}} 440w,
+                            {{img_url feature_image size="xm" format="webp"}} 1200w,
+                            {{img_url feature_image size="m" format="webp"}} 2000w"
+                    src="{{img_url feature_image size="xm"}}"
+                    alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{name}}{{/if}}"
+                >              
+            </figure>  
+        </a>
+    {{/if}}
+
+    <a href="{{url}}" class="circle-element content">
+        <div class="medium-text card-text">
+            {{name}}
+        </div>
+
+        <p class="paragraph smaller five-lines">
+            {{description}}
+        </p>
+    </a>
+</div>

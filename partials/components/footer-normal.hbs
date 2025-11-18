@@ -1,0 +1,68 @@
+<link rel="stylesheet" type="text/css" href="{{asset "css/footer-normal.css"}}" />
+
+<footer class="footer-wrapper" id="normal-footer">
+    <custom-footer class="footer wide-container" data-is-creative="false">
+        <div class="footer-content">
+            <div class="footer-description">
+                <a class="footer-logo flex-center" href="{{@site.url}}">
+                    {{#if @site.logo}}
+                        <img class="footer-logo-image" src="{{@site.logo}}" alt="{{@site.title}}">
+                    {{else}}
+                        <div class="footer-logo-text">
+                            {{@site.title}}
+                        </div>                       
+                    {{/if}}
+                </a>
+
+                <div class="footer-paragraph-wrapper">
+                    <p class="paragraph light">{{@site.description}}</p>
+                </div>
+
+                {{#if @site.members_enabled}}
+                    {{#unless @site.members_invite_only}}
+                        {{#unless @member}}
+                            <div class="newsletter-outer">
+                                <form data-members-form="subscribe" class="subscribe-form">
+                                    <div class="subscribe-with-alerts">
+                                        <div class="subscribe-wrapper">
+                                            <div class="subscribe-inner">
+                                                <input data-members-email type="email" required="true" placeholder="{{t 'Your email'}}" class="subscribe-input"/>
+                                                <button class="unstyled-button submit-button flex-center" type="submit" aria-label="{{t 'Submit button'}}">
+                                                    <div class="submit-button-inner flex-center">
+                                                        {{> "icons/small-arrow-icon"}}
+                                                    </div>
+                                                </button>
+                                            </div>                                      
+                                        </div>
+
+                                        <div class="form-alerts">
+                                            <small class="form-alert loading-alert">{{t "Processing your request..."}}</small>
+                                            <small class="form-alert success-alert">{{t "Please check your inbox and click the link to confirm your subscription."}}</small>
+                                            <small class="form-alert error-alert" data-members-error></small>
+                                        </div> 
+                                    </div>            
+                                </form>
+                            </div>
+                        {{/unless}}
+                    {{/unless}}
+                {{/if}}
+            </div>
+
+            <nav class="footer-navigation">
+                <ul class="footer-normal-links-group footer-links-group">
+                    <li class="footer-nav-navigation">
+                        <div class="subtitle light">
+                            {{t "(Navigation)"}}
+                        </div>
+                        <ul class="footer-secondary-links footer-normal-links">
+
+                        </ul>
+                    </li>
+                </ul>
+                {{navigation type="secondary" }}
+            </nav>
+        </div>
+
+        {{> "components/footer-bottom" }}
+    </custom-footer>
+</footer>

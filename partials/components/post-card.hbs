@@ -1,0 +1,70 @@
+<div class="card">
+    <a href="{{url}}" class="card-image-wrapper hover-image-animation" aria-label="{{title}}">
+        {{#if feature_image}} 
+            <figure>
+                <img   
+                    class="card-image-inner"                  
+                    srcset="{{img_url feature_image size="s" format="webp"}} 300w,
+                            {{img_url feature_image size="m" format="webp"}} 720w,
+                            {{img_url feature_image size="l" format="webp"}} 960w"
+                    src="{{img_url feature_image size="l"}}"
+                    alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
+                >              
+            </figure>
+        {{else}}
+            <div class="placeholder flex-center">
+                {{> "icons/placeholder-icon" }}
+            </div>               
+        {{/if}}
+    </a>
+
+    <div class="card-content">
+        <div class="card-top">
+            {{#unless access}}
+                <div class="bracket-subtitle bracket-no-gap">
+                    <div class="medium-text left-bracket">{{t "["}}</div>
+                    <span class="restricted-access-icon flex-center">
+                        {{> "icons/lock-icon"}}
+                    </span>
+                    <div class="medium-text right-bracket">{{t "["}}</div>
+                </div>
+            {{/unless}}
+            {{#foreach tags limit="2"}}                                            
+                <a href="{{url}}" class="bracket-button">
+                    <div class="medium-text left-bracket">{{t "["}}</div>
+                    <div class="bracket-button-text">
+                        <div class="medium-text main">{{name}}</div>
+                        <div class="medium-text absolute">{{name}}</div>
+                    </div>
+                    <div class="medium-text right-bracket">{{t "["}}</div>
+                </a>
+            {{/foreach}}
+        </div>
+
+        <div class="card-title-and-circle-wrapper">
+            <div class="card-circle"></div>
+            <div class="card-title-wrapper">
+                <a href="{{url}}" class="medium-text card-text">
+                    {{title}}
+                </a>
+            </div>
+        </div>
+
+        <div class="card-excerpt">
+            <p class="paragraph three-lines">
+                {{excerpt}}
+            </p>
+        </div>
+
+        <div class="card-extra-info card-small-text">
+            <p class="paragraph">
+                <span>
+                    {{authors separator=" & " prefix="by "}},
+                </span>
+                <span>
+                    {{date published_at format="MMM DD, YYYY"}}
+                </span>
+            </p>
+        </div>
+    </div>
+</div>

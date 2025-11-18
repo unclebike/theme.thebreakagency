@@ -1,0 +1,9 @@
+<custom-pagination id="custom-pagination" data-current-page="1" data-is-archivepage="{{is_archivepage}}">
+    <nav class="pagination-nav flex-center">
+        {{#if next}}
+            <button id="load-more-btn" class="pagination-button button" style="display: {{#if pagination.next}}flex{{else}}none{{/if}}">
+                {{t "Load more"}}
+            </button>
+        {{/if}}
+    </nav>
+</custom-pagination>

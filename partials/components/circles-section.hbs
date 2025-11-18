@@ -1,0 +1,84 @@
+<link rel="stylesheet" type="text/css" href="{{asset "css/circles-section.css"}}" />
+
+{{!--
+    Parameters:
+    - circles_data: String
+--}}
+
+<circles-component data-circles-content="{{circles_data}}">
+    <section class="circles-section">
+        <div class="wide-container">
+            <div class="big-title-wrapper">
+                <h2 class="heading-2">
+                    {{#match circles_data "Tags"}}
+                        {{t "Browse by popular tags"}}
+                    {{else}}
+                        {{t "What our readers say"}}
+                    {{/match}}
+                </h2>
+            </div>
+        </div>
+
+        {{#match circles_data "Tags"}}
+            {{#get "tags" limit="16"}}
+                <div class="circle-scrollers">
+                    <div class="infinite-scroll">
+                        <div class="infinite-scroll-wrapper">
+                            <div class="infinite-scroll-content">
+                                {{#foreach tags}}
+                                    {{>"components/circle-pair"}}
+                                {{/foreach}} 
+                            </div>
+                            <div class="infinite-scroll-content">
+                                {{#foreach tags}}
+                                    {{>"components/circle-pair"}}
+                                {{/foreach}} 
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="infinite-scroll reversed">
+                        <div class="infinite-scroll-wrapper">
+                            <div class="infinite-scroll-content">
+                                {{#foreach tags}}
+                                    {{>"components/circle-pair"}}
+                                {{/foreach}} 
+                            </div>
+                            <div class="infinite-scroll-content">
+                                {{#foreach tags}}
+                                    {{>"components/circle-pair"}}
+                                {{/foreach}} 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/get}}
+        {{else}}
+            <div class="circle-scrollers">
+                <div class="infinite-scroll">
+                    <div class="infinite-scroll-wrapper">
+                        <div class="infinite-scroll-content">
+
+                        </div>
+                        <div class="infinite-scroll-content">
+ 
+                        </div>
+                    </div>
+                </div>
+
+                <div class="infinite-scroll reversed">
+                    <div class="infinite-scroll-wrapper reversed">
+                        <div class="infinite-scroll-content reversed">
+
+                        </div>
+                        <div class="infinite-scroll-content reversed">
+ 
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{>"components/circle-pair-template"}}
+        {{/match}}
+    </section>
+</circles-component>

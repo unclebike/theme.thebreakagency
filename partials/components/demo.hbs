@@ -1,0 +1,221 @@
+<link rel="stylesheet" type="text/css" href="{{asset "css/demo.css"}}" />
+
+<settings-sidebar class="settings-sidebar">
+    <div class="settings-inner lenis">
+        <div class="settings-item">
+            <label for="text-color" class="settings-label">
+                Text color
+            </label>
+            <div class="color-picker-wrapper">
+                <div class="colorpicker-overlay colorpicker-overlay-text"></div>
+                <input type="color" id="text-color" name="text-color" value="#1e1e1e" colorpick-eyedropper-active="false">
+            </div>
+        </div>
+
+        <div class="settings-item">
+            <label for="background-color" class="settings-label">
+                Background color
+            </label>
+            <div class="color-picker-wrapper">
+                <div class="colorpicker-overlay"></div>
+                <input type="color" id="background-color" name="background-color" value="#ffffff" colorpick-eyedropper-active="false">
+            </div>
+        </div>
+
+        <div class="settings-item">
+            <label for="overlay-text-color" class="settings-label">
+                Overlay text color
+            </label>
+            <div class="color-picker-wrapper">
+                <div class="colorpicker-overlay colorpicker-overlay-text-overlay"></div>
+                <input type="color" id="overlay-text-color" name="overlay-text-color" value="#ffffff" colorpick-eyedropper-active="false">
+            </div>
+        </div>
+
+        <div class="settings-item">
+            <label for="overlay-button-text-color" class="settings-label">
+                Overlay button text color
+            </label>
+            <div class="color-picker-wrapper">
+                <div class="colorpicker-overlay colorpicker-overlay-button-text-overlay"></div>
+                <input type="color" id="overlay-button-text-color" name="overlay-button-text-color" value="#1e1e1e" colorpick-eyedropper-active="false">
+            </div>
+        </div>
+
+        <div class="settings-item">
+            <label for="text-style" class="settings-label">
+                Text style
+            </label>
+            <select class="settings-select" name="text-style" id="text-style">
+                <option value="uppercase">uppercase</option>
+                <option value="capitalize">capitalize</option>
+                <option value="lowercase">lowercase</option>
+                <option value="none">none</option>              
+            </select>
+       </div>
+
+       <div class="settings-item">
+            <label for="heading-font-scale" class="settings-label">
+                Heading font scale
+            </label>
+            <select class="settings-select" name="heading-font-scale" id="heading-font-scale">
+                <option value="1">1</option>
+                <option value="0.95">0.95</option>
+                <option value="0.9">0.9</option>
+                <option value="0.85">0.85</option>
+                <option value="0.8">0.8</option>
+                <option value="0.75">0.75</option>      
+            </select>
+       </div>
+
+       <div class="settings-item">
+            <label for="heading-font-line-height-scale" class="settings-label">
+                Heading font line height scale
+            </label>
+            <select class="settings-select" name="heading-font-line-height-scale" id="heading-font-line-height-scale">
+                <option value="0.9">0.9</option>
+                <option value="1" selected>1</option>
+                <option value="1.1">1.1</option>
+                <option value="1.2">1.2</option>
+            </select>
+       </div>
+
+       <div class="settings-item">
+            <label for="smooth-scrolling" class="settings-label">
+                Smooth scrolling
+            </label>
+            <select class="settings-select" name="smooth-scrolling" id="smooth-scrolling">
+                 <option value="true" selected>True</option>
+                 <option value="false">False</option>
+            </select>
+       </div>
+
+       <div class="settings-item">
+            <label for="button-style-on-background-media" class="settings-label">
+                Button style on background media
+            </label>
+            <select class="settings-select" name="button-style-on-background-media" id="button-style-on-background-media">
+                <option value="Bracket Desktop/Solid Mobile">Bracket Desktop/Solid Mobile</option>
+                <option value="Bracket">Bracket</option>
+                <option value="Solid">Solid</option>
+                <option value="None">None</option>
+            </select>
+       </div>
+
+       <div class="settings-item">
+            <label for="content-position-on-background-media" class="settings-label">
+                Content position on background media
+            </label>
+            <select class="settings-select" name="content-position-on-background-media" id="content-position-on-background-media">
+                <option value="Bottom Left">Bottom Left</option>
+                <option value="Center">Center</option>
+            </select>
+       </div>
+
+       <div class="settings-item">
+            <label for="content-length-on-background-media" class="settings-label">
+                Content length on background media
+            </label>
+            <select class="settings-select" name="content-length-on-background-media" id="content-length-on-background-media">
+                <option value="Narrow">Narrow</option>
+                <option value="Wide">Wide</option>
+                <option value="Full Width">Full Width</option>
+            </select>
+       </div>
+
+       <div class="settings-item">
+            <label for="post-card-image-aspect-ratio" class="settings-label">
+                Post card image aspect ratio
+            </label>
+            <select class="settings-select" name="post-card-image-aspect-ratio" id="post-card-image-aspect-ratio">
+                <option value="1/1">1/1</option>
+                <option value="16/9">16/9</option>
+                <option value="5/4">5/4</option>
+                <option value="4/3" selected>4/3</option>
+                <option value="3/2">3/2</option>
+                <option value="4/5">4/5</option>
+                <option value="3/4">3/4</option>
+                <option value="2/3">2/3</option>
+            </select>
+       </div>
+
+       <div class="settings-item">
+            <label for="show-post-card-extra-info" class="settings-label">
+                Show post card extra info
+            </label>
+            <select class="settings-select" name="show-post-card-extra-info" id="show-post-card-extra-info">
+                 <option value="true">True</option>
+                 <option value="false" selected>False</option>
+            </select>
+       </div>
+
+       <div class="settings-item">
+            <label for="footer-type" class="settings-label">
+                Footer type
+            </label>
+            <div class="settings-links" name="footer-type" id="footer-type">
+                  <a class="settings-link" href="{{@site.url}}/tags#creative-footer">Creative</a>
+                  <a class="settings-link" href="{{@site.url}}/tags-normal-footer#normal-footer">Normal</a>     
+            </div>
+       </div>
+
+       <div class="settings-item">
+            <label for="footer-type" class="settings-label">
+                Homepage circles content
+            </label>
+            <div class="settings-links" name="footer-type" id="footer-type">
+                  <a class="settings-link" href="{{@site.url}}">Testimonials</a>
+                  <a class="settings-link" href="{{@site.url}}/homepage-tag-circles">Tags</a>
+                  <a class="settings-link" href="{{@site.url}}/homepage-no-circles">None</a>       
+            </div>
+       </div>
+
+       <div class="settings-item">
+            <label for="homepage-post-card-style" class="settings-label">
+                Homepage post card style
+            </label>
+            <div class="settings-links" name="homepage-post-card-style" id="homepage-post-card-style">
+                  <a class="settings-link" href="{{@site.url}}">Creative</a>
+                  <a class="settings-link" href="{{@site.url}}/homepage-normal-posts">Default</a>     
+            </div>
+       </div>
+
+       <div class="settings-item">
+            <label for="post-header-type" class="settings-label">
+                Post header type
+            </label>
+            <div class="settings-links" name="post-header-type" id="post-header-type">               
+                <a class="settings-link" href="{{@site.url}}/unleash-your-creativity?post-layout=wide">Right Aligned (Wide)</a>
+                <a class="settings-link" href="{{@site.url}}/unleash-your-creativity?post-layout=wide-centered">Right Aligned (Wide Centered)</a>
+                <a class="settings-link" href="{{@site.url}}/uncovering-hidden-places-demo?post-layout=background-media">Right Aligned (Background Media)</a>
+                <a class="settings-link" href="{{@site.url}}/uncovering-hidden-places-demo?post-layout=background-media-centered">Right Aligned (Background Media Centered)</a>
+                <a class="settings-link" href="{{@site.url}}/increase-inner-happiness?post-layout=wide">Default (Wide)</a>
+                <a class="settings-link" href="{{@site.url}}/increase-inner-happiness?post-layout=wide-centered">Default (Wide Centered)</a>
+                <a class="settings-link" href="{{@site.url}}/increase-inner-happiness?post-layout=narrow">Default (Narrow)</a>
+                <a class="settings-link" href="{{@site.url}}/increase-inner-happiness?post-layout=narrow-centered">Default (Narrow Centered)</a>
+                <a class="settings-link" href="{{@site.url}}/exploring-our-boundaries-demo?post-layout=background-media">Default (Background Media)</a>
+                <a class="settings-link" href="{{@site.url}}/exploring-our-boundaries-demo?post-layout=background-media-centered">Default (Background Media Centered)</a>
+            </div>
+       </div>
+
+       <div class="buy-button-wrapper">
+            <a href="https://kusa-projects.lemonsqueezy.com/buy/e44b8616-0fd9-49bc-af46-c1c1d00230b2" class="button buy-button" target="_blank">Buy Snook</a>
+       </div>
+    </div>
+</settings-sidebar>
+
+<script src="{{asset "js/demo.js"}}"></script>
+
+<div class="demo-buttons-container{{#if @custom.use_page_load_animations}} opacity-animation{{/if}}">
+    <a href="https://kusa-projects.lemonsqueezy.com/buy/e44b8616-0fd9-49bc-af46-c1c1d00230b2" class="demo-button flex-center" aria-label="Buy Snook" target="_blank">
+        <div class="demo-button-inner flex-center">
+            {{> "icons/download-icon"}}
+        </div>        
+    </a>
+
+    <button id="settings-button" class="unstyled-button demo-button flex-center" aria-label="Snook Settings">
+        <div class="demo-button-inner flex-center">
+            {{> "icons/settings-icon"}}
+        </div>        
+    </button>
+</div>

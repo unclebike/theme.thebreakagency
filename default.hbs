@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="{{@site.locale}}" data-show-card-extra-info="{{#if @custom.show_post_card_extra_info}}true{{else}}false{{/if}}" data-footer-type="{{@custom.footer_type}}" data-lower-opacity-text="false">
+    <head>
+        <title>{{meta_title}}</title>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="{{asset "css/global.css"}}"/>
+        <link rel="stylesheet" type="text/css" href="{{asset "css/notifications.css"}}" />
+
+        <script src="{{asset "js/global.js"}}"></script>
+        <script src="{{asset "js/custom-elements.js"}}"></script>
+
+        {{#if @custom.use_smooth_scrolling}}
+            <script src="https://unpkg.com/lenis@1.1.5/dist/lenis.min.js"></script> 
+            <script>            
+                document.addEventListener('DOMContentLoaded', () => {
+                    setSmoothScroll();
+                })
+            </script> 
+        {{/if}}
+
+        <script>          
+            loadColors("{{@custom.colors}}");
+            document.addEventListener('DOMContentLoaded', () => {
+                setToggle();
+                hexToRgba();
+                pageLoadAnimations();
+                setCreativePostImages();
+                setImageParallax();
+                
+                let oldWidth = window.innerWidth;
+
+                window.addEventListener('resize', debounce(() => {
+                    if(oldWidth == window.innerWidth) return;
+                    oldWidth = window.innerWidth;
+                    setImageParallax(); 
+                }, 100));  
+            })
+        </script>
+
+        <style>
+            :root {
+                --text-style: {{@custom.text_style}};
+                --heading-font-scale: {{@custom.heading_font_scale}};
+                --heading-font-line-height-scale: {{@custom.heading_font_line_height_scale}};
+                --logo-scale: {{@custom.logo_scale}};
+                --font1: var(--gh-font-heading, Thunder);
+                --font2: var(--gh-font-body, Roboto);
+                --circle-scale: calc((1 - var(--heading-font-scale)) / 2 );
+            }  
+
+            .featured-post-image-wrapper,
+            .creative-post-card-image-wrapper {
+                aspect-ratio: 4/5;
+            }
+            
+            .card-image-wrapper {
+                aspect-ratio: {{@custom.post_card_image_aspect_ratio}};
+            }
+        </style>
+
+        {{!-- Always last --}}
+        {{ghost_head}}
+    </head>
+    <body>
+        <div class="site-name" {{#unless @custom.use_page_load_animations}}style="display: none;"{{/unless}}>Snook by KUSA Projects</div>
+
+        <div class="viewport">
+            <div class="site-content">
+                {{> "components/navbar"}}
+                <div class="site-main">
+                    {{{body}}}
+                </div>
+
+                <div class="background-blur"></div>
+            </div>
+        </div> 
+
+        {{> "components/notifications"}}
+
+        {{!-- Demo content --}}
+        {{#match @site.url "http://localhost:2368"}}
+            {{> "components/demo"}}
+        {{/match}}
+
+        {{#match @site.url "https://snook.kusa-projects.com"}}
+            {{> "components/demo"}}
+        {{/match}}
+
+        {{!-- Always last --}}
+        {{ghost_foot}}
+
+        <script>
+            loadFonts("{{@custom.fonts}}");
+        </script>
+    </body>
+</html>
+

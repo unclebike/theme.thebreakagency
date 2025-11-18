@@ -1,0 +1,276 @@
+#email,
+#phone,
+#address {
+    display: none;
+}
+
+.kg-image-card {
+    max-width: 100%;
+    width: auto;
+}
+
+.kg-image-card img {
+    width: auto;
+    max-width: 100%;
+}
+
+.kg-image-card.kg-width-wide img {
+    width: 100%;
+}
+
+.kg-image-card.kg-width-full figcaption {
+    text-align: center;
+}
+
+.kg-width-wide {
+    width: 100%;
+    max-width: 100%;
+}
+
+.post-content-inner > * {
+    margin-bottom: max(18px, calc(1.25vw * var(--scale)));
+}
+
+.post-content-inner-wrapper {
+    margin-top: max(56px, calc(3.89vw * var(--scale)));
+    width: 100%;
+}
+
+.post-content-inner {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: max(24px, calc(1.67vw * var(--scale)));
+}
+
+.post-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.post-content > * {
+    letter-spacing: 0em;
+    font-family: var(--font2);
+}
+
+.post-content * {
+    text-transform: none !important;
+}
+
+.post-content h1,
+.post-content h2:not(.subtitle),
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6,
+.post-content blockquote {
+    font-family: var(--font1);
+    line-height: calc(100% * var(--heading-font-line-height-scale));
+}
+
+.post-content figure {
+    overflow: initial;
+}
+
+strong,
+strong * {
+    font-weight: 700;
+}
+
+em {
+    font-style: italic;
+}
+
+hr {
+    height: 1px;
+    width: 100%;
+    background-color: var(--text-color);
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.right-aligned-post-content {
+    margin-right: 0px;
+}
+
+.right-aligned-post-content blockquote,
+.right-aligned-post-content .kg-width-wide {
+    align-self: flex-end;
+    min-width: 1050px;
+    width: calc(73vw * var(--scale));
+}
+
+.right-aligned-post-content .post-content-inner > h2 {
+    position: relative;
+    max-width: max(280px, calc(19.44vw * var(--scale)));
+    width: max(280px, calc(19.44vw * var(--scale)));
+    right: var(--post-container-width, 100vw);
+    transform: translateX(calc(100% + max(52px, 3.6vw)));
+    align-self: flex-end;
+    height: 0px;
+    margin-bottom: 0px;
+}
+
+.right-aligned-post-content .kg-width-wide {
+    max-width: none !important;
+}
+
+.right-aligned-post-content .kg-blockquote-alt,
+.right-aligned-post-content .post-content-inner > h2 {
+    font-style: normal;
+    line-height: calc(80% * var(--heading-font-line-height-scale)) !important;
+    text-transform: var(--text-style) !important;
+    text-align: left;
+}
+
+.right-aligned-post-content hr {
+    width: calc(var(--post-container-width, 100vw) - max(52px, 3.6vw));
+    align-self: flex-end;
+}
+
+html[data-primary-font="Thunder"] .right-aligned-post-content .post-content-inner > h2 {
+    top: max(12px, calc(0.83vw * var(--scale)));
+}
+
+.right-aligned-post-content .narrow-container {
+    margin-right: 0px;
+}
+
+.right-aligned-post-content .kg-width-full {
+    align-self: flex-end;
+    right: 0 !important;
+    left: max(26px, 1.8vw) !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.right-aligned-post-content .post-content-inner > h2.contact-subtitle {
+    text-transform: none !important;
+    line-height: 0% !important;
+}
+
+.narrow-container h1 {
+    font-size: max(calc(92px * var(--heading-font-scale)), calc(6.39vw * var(--scale) * var(--heading-font-scale)))
+}
+
+.narrow-container .heading-1-and-bio {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.hero-border {
+    height: 1px;
+    width: 100%;
+    background-color: var(--text-color);
+    margin-top: max(56px, calc(3.89vw * var(--scale)));
+}
+
+.hero-section-no-image .author-socials {
+    margin-bottom: 0px !important;
+}
+
+html:not([data-primary-font="Thunder"]) .contact-page.hero-section-no-image .post-summary-wrapper {
+    margin-bottom: 0px !important;
+    margin-top: 0px !important;
+}
+
+html[data-primary-font="Thunder"] .hero-section-no-image .post-summary-wrapper {
+    margin-top: 0px;
+}
+
+@media screen and (max-width: 1190px) {
+    .right-aligned-post-content {
+        margin-right: auto;
+    }
+    
+    .right-aligned-post-content blockquote,
+    .right-aligned-post-content .kg-width-wide {
+        align-self: flex-start;
+        min-width: 100%;
+        width: 100%;
+    }
+    
+    .right-aligned-post-content .post-content-inner > h2.contact-subtitle  {
+        position: static;
+        max-width: 100%;
+        width: auto;
+        right: 0;
+        transform: translateX(0%);
+        align-self: flex-start;
+        height: auto;
+        margin-bottom: 43px;
+    }
+    
+    .right-aligned-post-content .kg-width-wide {
+        max-width: 100% !important;
+    }
+
+    .right-aligned-post-content .kg-blockquote-alt {
+        font-style: italic;
+        text-align: center;
+    }
+    
+    .right-aligned-post-content hr {
+        width: 100%;
+        align-self: flex-start;
+    }
+    
+    html[data-primary-font="Thunder"] .right-aligned-post-content .post-content-inner > h2 {
+        top: 0px;
+    }
+    
+    .right-aligned-post-content .narrow-container {
+        margin-right: auto;
+    }
+    
+    .right-aligned-post-content .kg-width-full {
+        align-self: unset;
+        left: 50% !important;
+        right: 50% !important;
+        margin-left: -50vw !important;
+        margin-right: -50vw !important;
+    }
+
+    .right-aligned-post-content .post-content-inner > h2.contact-subtitle {
+        line-height: 130% !important;
+    }
+}
+
+@media screen and (max-width: 1080px) {
+    .narrow-container h1 {
+        font-size: calc(78px * var(--heading-font-scale));
+    }
+
+    .post-content-inner > * {
+        margin-bottom: 13px;
+    }
+
+    .post-content-inner-wrapper {
+        margin-top: max(46px, calc(3.89vw * var(--scale)));
+    }
+
+    .right-aligned-post-content .post-content-inner > h2.contact-subtitle  {
+        margin-bottom: 32px;
+    }
+
+    .hero-border {
+        margin-top: 46px;
+    }
+
+}
+
+@media screen and (max-width: 767px) {
+    .narrow-container h1 {
+        font-size: calc(52px * var(--heading-font-scale));
+    }
+
+    .post-content-inner-wrapper {
+        margin-top: max(32px, calc(3.89vw * var(--scale)));
+    }  
+
+    .hero-border {
+        margin-top: 32px;
+    }
+}

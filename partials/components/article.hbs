@@ -1,0 +1,201 @@
+{{!--
+    Parameters:
+    - is_post: Boolean
+    - right_aligned_template: Boolean
+    - has_video: Boolean
+--}}
+
+<link rel="stylesheet" type="text/css" href="{{asset "css/post-content.css"}}" />
+<link rel="stylesheet" type="text/css" href="{{asset "css/post.css"}}" />
+<link rel="stylesheet" type="text/css" href="{{asset "css/toggle-card.css"}}" />
+
+{{#if right_aligned_template}}
+    <style>
+        :root {
+            --margin-right: 0px;
+        }
+    </style>
+{{/if}}
+
+<article class="article" data-is-post="{{#if is_post}}true{{else}}false{{/if}}" data-post-header-type="{{@custom.post_header_type}}" data-has-featured-image="{{#if feature_image}}true{{else}}false{{/if}}" 
+data-right-aligned-template="{{#if right_aligned_template}}true{{else}}false{{/if}}" data-has-video="{{#if has_video}}true{{else}}false{{/if}}" data-has-header="{{#match @page.show_title_and_feature_image}}true{{else}}false{{/match}}">
+    {{#match @page.show_title_and_feature_image}}
+        {{#if feature_image}}
+            {{#match @custom.post_header_type "Background Media"}}
+                {{>"components/background-media-post-header"}}
+            {{else match @custom.post_header_type "Background Media Centered"}}
+                {{>"components/background-media-post-header"}}
+            {{else match slug "uncovering-hidden-places-demo"}}
+                {{>"components/background-media-post-header"}}
+            {{else match slug "exploring-our-boundaries-demo"}}
+                {{>"components/background-media-post-header"}}
+            {{else}}
+                {{>"components/default-post-header"}}
+            {{/match}}
+        {{else}}
+            {{>"components/default-post-header"}}
+        {{/if}}
+    {{/match}}
+
+    <div class="post-content narrow-container{{#if right_aligned_template}}{{#if access}} right-aligned-post-content{{/if}}{{/if}}{{#if @custom.use_page_load_animations}} hidden-post-content{{/if}}">
+        <div class="post-content-inner-wrapper">
+            <div class="post-content-inner">
+                {{content}}
+
+                {{#if is_post}}
+                    {{#if access}}
+                        <div class="post-share">
+                            <div class="socials post-share-icons">
+                                <a href="https://www.facebook.com/sharer.php?u={{url absolute='true'}}" target="_blank" rel="noopener" class="social" aria-label="Share on Facebook">
+                                    <div class="social-inner">
+                                        {{> "icons/facebook-icon"}}
+                                    </div>
+                                </a>
+
+                                <a href="https://twitter.com/intent/tweet?url={{url absolute='true'}}&amp;text={{encode title}}" target="_blank" rel="noopener" class="social" aria-label="Share on Twitter/X">
+                                    <div class="social-inner">
+                                        {{> "icons/twitter-icon"}}
+                                    </div>
+                                </a>
+                                
+                                <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url={{url absolute='true'}}&amp;title={{encode title}}" target="_blank" rel="noopener" class="social" aria-label="Share on Linkedin">
+                                    <div class="social-inner">
+                                        {{> "icons/linkedin-icon"}}
+                                    </div>
+                                </a>
+
+                                    <a class="social clipboard-link" href="javascript:" aria-label="Copy Link">
+                                    <div class="social-inner social-inner-bigger">
+                                        {{> "icons/link-icon"}}
+                                    </div>
+                                </a>
+
+                                <div class="clipboard-alert">
+                                    <small>{{t "The link has been copied!"}}</small>
+                                </div>  
+                            </div>
+                        </div>
+                    {{/if}}
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    {{#if is_post}}
+        <footer class="article-footer{{#if right_aligned_template}}{{#if access}} right-aligned-post-content{{/if}}{{/if}}">
+            {{#if comments}}
+                <section class="comments-section">
+                    {{#if @member}}
+                        <div class="narrow-container">
+                            <div class="subtitle-wrapper subtitle-with-margin">
+                                <h2 class="subtitle">{{t "(Member's discussion)"}}</h2>
+                            </div>
+                        </div>
+                    {{/if}}
+                    
+                    <div class="comments-container">
+                        {{comments title="" count=false}}
+                    </div> 
+                </section>
+            {{/if}}
+
+            <div class="related-posts last-section narrow-container">
+                <div class="related-post-wrapper">
+                    {{#prev_post}}
+                        <a href="{{url}}" class="related-post">
+                            <span class="related-post-arrow flex-center rotated">
+                                {{> "icons/small-arrow-icon"}}
+                            </span>
+                            <p>
+                               {{t "Previous post"}} 
+                            </p>                          
+                        </a>
+                    {{/prev_post}}
+                </div>
+
+                <div class="related-post-wrapper">
+                    {{#next_post}}
+                        <a href="{{url}}" class="related-post">
+                            <p>
+                               {{t "Next post"}} 
+                            </p>  
+                            <span class="related-post-arrow flex-center">
+                                {{> "icons/small-arrow-icon"}}
+                            </span>                        
+                        </a>
+                    {{/next_post}}
+                </div>             
+            </div>
+        </footer>
+    {{/if}}
+</article>
+
+<script src="https://cdn.jsdelivr.net/npm/lightense-images@1.0.17/dist/lightense.min.js"></script>
+<script>
+    setLightense();
+</script>
+
+{{#if right_aligned_template}}
+    <script>
+        setH2position();
+        window.addEventListener('resize', debounce(() => {
+            setH2position();
+        }, 200));
+    </script>
+{{/if}}
+
+{{#if has_video}}
+    <script>
+        window.addEventListener("load", () => {
+            setVideo();
+        })
+    </script>
+{{/if}}
+
+<script src="{{asset "js/post-content.js"}}"></script>
+
+{{#if is_post}}
+    {{#if access}}
+        <script>
+            copyUrlToClipboard("post-share-icons");
+
+            window.addEventListener("load", () => {
+                const iframe = document.querySelector('#ghost-comments-root iframe');
+                if(!iframe) return;
+                
+                var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                var targetHead = iframe.contentDocument.head;
+    
+                var newLink = document.createElement("link");
+                newLink.setAttribute("rel", "stylesheet");
+                newLink.setAttribute("type", "text/css");
+                newLink.setAttribute("href", "{{asset 'css/comments.css'}}");
+
+                let section = iframeDoc.querySelector('section');
+                section.id = "comments-section"
+
+                const rootStyles = getComputedStyle(document.documentElement);
+
+                //initial variables
+                iframeDoc.documentElement.style.setProperty('--text-color', rootStyles.getPropertyValue('--text-color'))
+                iframeDoc.documentElement.style.setProperty('--background-color', rootStyles.getPropertyValue('--background-color'))
+                iframeDoc.documentElement.style.setProperty('--text-style', rootStyles.getPropertyValue('--text-style'))
+                iframeDoc.documentElement.style.setProperty('--heading-font-scale', rootStyles.getPropertyValue('--heading-font-scale'))
+                iframeDoc.documentElement.style.setProperty('--heading-font-line-height-scale', rootStyles.getPropertyValue('--heading-font-line-height-scale'))
+                iframeDoc.documentElement.style.setProperty('--font1', rootStyles.getPropertyValue('--font1'))
+                iframeDoc.documentElement.style.setProperty('--font2', rootStyles.getPropertyValue('--font2'))
+                iframeDoc.documentElement.style.setProperty('--margin-right', rootStyles.getPropertyValue('--margin-right'))
+
+                targetHead.appendChild(newLink);
+                loadFonts("{{@custom.fonts}}", iframeDoc);
+
+                const linkElement = document.querySelector('link[href*="fonts.bunny.net/css"]');
+
+                if(linkElement){          
+                    const clone = linkElement.cloneNode(true);
+                    targetHead.appendChild(clone);
+                }
+            });
+        </script>
+    {{/if}}
+{{/if}}

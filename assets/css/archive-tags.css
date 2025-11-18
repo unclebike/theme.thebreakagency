@@ -1,0 +1,141 @@
+.archive-page .secondary-heading-wrapper {
+    max-width: calc((100% - 3 * max(26px, 1.8vw)) / 3);
+    width: 100%;
+}
+
+.archive-page .secondary-hero-content {
+    gap: 0px;
+}
+
+.archive-tags-outer {
+   overflow: hidden; 
+   width: 100%;  
+   position: relative;
+   padding-bottom: 1px;
+}
+
+.archive-page .secondary-hero .wide-container {
+    padding-right: 0px;
+}
+
+html[data-primary-font="Thunder"] .archive-tags-outer {
+    margin-bottom: max(calc(16px* var(--heading-font-scale)* var(--heading-font-line-height-scale)), calc(1.11vw* var(--scale)* var(--heading-font-scale)* var(--heading-font-line-height-scale)));
+}
+
+archive-tags {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    width: 100%;
+    display: flex;
+    gap: max(6px, calc(0.42vw * var(--scale)));
+    padding-left: max(26px, 1.8vw);
+    padding-right: max(26px, 1.8vw);
+}
+
+archive-tags::-webkit-scrollbar {
+    display: none;
+}
+
+.tags-gradient {
+    z-index: 3;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: max(26px, 1.8vw);
+    height: 100%;
+}
+
+.hero-text-wrapper {
+    flex-direction: column;
+}
+
+.archive-tag-button {
+    padding: max(6px, calc(0.42vw * var(--scale))) max(20px, calc(1.39vw * var(--scale)));
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-transform: none;
+    background-color: transparent;
+    border: 1px solid var(--text-color);
+    color: var(--text-color);
+}
+
+.radio-button-text {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+    white-space: nowrap;
+    transform: rotateZ(0.01deg);
+}
+
+.archive-tag-button input[type='radio'] {
+    -webkit-appearance:none;
+    margin: 0px;
+    padding: 0px;
+    display: inline-flex;
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: transparent;
+    cursor: pointer;
+    z-index: 0;
+}
+
+.archive-tag-button input[type='radio']:checked {
+    background-color: var(--text-color);
+}
+
+.archive-tag-button input[type='radio']:checked ~ .radio-button-text {
+    color: var(--background-color);
+}
+
+@media screen and (max-width: 1080px) { 
+    .archive-page .secondary-hero .wide-container {
+        padding-left: 0px;
+    }
+
+    .tags-gradient {
+        display: none;
+    }
+
+    .archive-page .secondary-heading-wrapper {
+        max-width: 100%;
+        width: auto;
+        padding-left: 26px;
+        padding-right: 26px;
+    }
+    
+    .archive-page .secondary-hero .wide-container {
+        padding-right: 0px;
+    }
+
+    .archive-tags-outer {
+        margin-bottom: 6px;
+        margin-top: 18px;
+    }
+    
+    html[data-primary-font="Thunder"] .archive-tags-outer {
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+}
+
+@media screen and (max-width: 767px) { 
+    .archive-page .secondary-heading-wrapper {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+    
+    archive-tags {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+}
