@@ -1,0 +1,30 @@
+name: Deploy Theme
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+         # fetch-depth: 0  # Ensures the full repo is checked out
+          ref: main
+      
+      - name: Debug Paths
+        run: pwd && ls -R
+
+      - name: Deploy Ghost Theme
+        uses: TryGhost/action-deploy-theme@v1
+        with:
+          api-url: ${{ secrets.GHOST_ADMIN_API_URL }}
+          api-key: ${{ secrets.GHOST_ADMIN_API_KEY }}
+          # working-directory: ..
+      
+      #- name: Upload compiled zip
+       # uses: actions/upload-artifact@v4
+        #with:
+         # name: thebreak-zip
+          #path: thebreak.zip
