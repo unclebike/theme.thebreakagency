@@ -4,7 +4,7 @@
 {{!< default}}
 
 <main>
-    {{#get "pages" filter="featured:true+tag:hero" include="tags" limit="1"}}
+    {{#get "pages" filter="featured:true+tag:hash-hero" include="tags" limit="1"}}
         {{#foreach page}} 
             <section class="background-media hero-section{{#match @custom.content_position_on_background_media "Center"}} hero-center{{/match}}" data-slug="{{slug}}">
                 <div class="wide-container">
