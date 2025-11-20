@@ -75,7 +75,70 @@
         {{/foreach}} 
     {{/get}}
 
-    {{#get "pages" filter="featured:true+tag:-hash-hero" include="tags,authors" limit="all" order="published_at desc"}}
+    {{#get "pages" filter="tag:hash-our-selection" include="tags" limit="8"}}
+        {{#if pages}}
+            <div class="subtitle-wrapper subtitle-with-margin no-top">
+                <h2 class="subtitle centered-text">{{t "(Our selection)"}}</h2>
+            </div>
+        {{/if}}
+
+        <div id="circles-section" class="slider-with-circles{{#unless posts}} no-slider{{/unless}}" data-circles-content="{{@custom.homepage_circles_content}}">
+            <div class="slider-with-circles-inner">      
+                {{#if pages}}
+                    {{>"components/slider-component"}}
+                {{/if}}
+
+                {{^match @custom.homepage_circles_content "None"}}
+                    <div class="circle-wrapper">
+                        <div class="circle-outer">
+                            <div class="circle-animation">
+                                {{>"components/circles-section" circles_data=@custom.homepage_circles_content }}
+                            </div>
+                        </div>
+                    </div>
+                {{/match}}
+            </div>
+        </div>
+    {{/get}}
+
+    {{#match @custom.homepage_post_card_style "Creative"}}
+        <link rel="stylesheet" type="text/css" href="{{asset "css/creative-post-card.css"}}" />
+        {{#get "pages" filter="featured:true+tag:-hash-hero" limit="10"}}
+            <section class="section section-relative creative-latest-posts-homepage section-bigger-bottom-padding">
+                <div class="wide-container">
+                    <div class="subtitle-wrapper subtitle-with-margin z-5">
+                        <h2 class="subtitle centered-text">{{t "(Latest posts)"}}</h2>
+                    </div>
+                    <div class="latest-posts">
+                        <div class="latest-posts-inner">               
+                            {{#foreach pages}}
+                                {{>"components/creative-post-card"}}
+                            {{/foreach}}               
+                        </div>
+                        <div class="heading-1 creative-post-card-title dark dot">.</div>
+<!-- 
+                        <div class="heading-1 creative-post-card-title dark dot">.</div>
+                        <div class="heading-1 creative-post-card-title dark dot">.</div>
+ -->
+                        <!-- 
+<a href="{{@site.url}}/archive/" class="all-posts-link flex-center">
+                            <div class="heading-1 dark creative-post-card-title flex-center">{{t "View all posts"}}</div>
+                            <div class="arrow-link-button flex-center">
+                                <div class="arrow-link-button-wrapper smaller flex-center">
+                                    {{> "icons/big-arrow-icon"}}
+                                </div>
+                            </div>
+                        </a>
+ -->
+                    </div>
+                </div>
+            </section>
+        {{/get}}
+    {{else}}
+        <link rel="stylesheet" type="text/css" href="{{asset "css/post-card.css"}}" />
+    {{/match}}
+    
+        {{#get "pages" filter="featured:true+tag:-hash-hero" include="tags,authors" limit="all" order="published_at desc"}}
         {{#if pages}}
             <featured-posts class="section no-padding" data-enable-preview="{{@custom.show_featured_post_preview}}">         
                 <div class="wide-container">
@@ -188,69 +251,6 @@
             </featured-posts>
         {{/if}}
     {{/get}}
-
-    {{#get "pages" filter="tag:hash-our-selection" include="tags" limit="8"}}
-        {{#if pages}}
-            <div class="subtitle-wrapper subtitle-with-margin no-top">
-                <h2 class="subtitle centered-text">{{t "(Our selection)"}}</h2>
-            </div>
-        {{/if}}
-
-        <div id="circles-section" class="slider-with-circles{{#unless posts}} no-slider{{/unless}}" data-circles-content="{{@custom.homepage_circles_content}}">
-            <div class="slider-with-circles-inner">      
-                {{#if pages}}
-                    {{>"components/slider-component"}}
-                {{/if}}
-
-                {{^match @custom.homepage_circles_content "None"}}
-                    <div class="circle-wrapper">
-                        <div class="circle-outer">
-                            <div class="circle-animation">
-                                {{>"components/circles-section" circles_data=@custom.homepage_circles_content }}
-                            </div>
-                        </div>
-                    </div>
-                {{/match}}
-            </div>
-        </div>
-    {{/get}}
-
-    {{#match @custom.homepage_post_card_style "Creative"}}
-        <link rel="stylesheet" type="text/css" href="{{asset "css/creative-post-card.css"}}" />
-        {{#get "pages" filter="featured:true+tag:-hash-hero" limit="10"}}
-            <section class="section section-relative creative-latest-posts-homepage section-bigger-bottom-padding">
-                <div class="wide-container">
-                    <div class="subtitle-wrapper subtitle-with-margin z-5">
-                        <h2 class="subtitle centered-text">{{t "(Latest posts)"}}</h2>
-                    </div>
-                    <div class="latest-posts">
-                        <div class="latest-posts-inner">               
-                            {{#foreach pages}}
-                                {{>"components/creative-post-card"}}
-                            {{/foreach}}               
-                        </div>
-                        <div class="heading-1 creative-post-card-title dark dot">.</div>
-<!-- 
-                        <div class="heading-1 creative-post-card-title dark dot">.</div>
-                        <div class="heading-1 creative-post-card-title dark dot">.</div>
- -->
-                        <!-- 
-<a href="{{@site.url}}/archive/" class="all-posts-link flex-center">
-                            <div class="heading-1 dark creative-post-card-title flex-center">{{t "View all posts"}}</div>
-                            <div class="arrow-link-button flex-center">
-                                <div class="arrow-link-button-wrapper smaller flex-center">
-                                    {{> "icons/big-arrow-icon"}}
-                                </div>
-                            </div>
-                        </a>
- -->
-                    </div>
-                </div>
-            </section>
-        {{/get}}
-    {{else}}
-        <link rel="stylesheet" type="text/css" href="{{asset "css/post-card.css"}}" />
-    {{/match}}
 
     <section class="section-padding-top section-relative last-section{{#match @custom.homepage_post_card_style "Creative"}} hide-posts{{/match}}">
         <div class="wide-container">
