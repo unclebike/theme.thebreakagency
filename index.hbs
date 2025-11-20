@@ -4,8 +4,8 @@
 {{!< default}}
 
 <main>
-    {{#get "posts" include="tags" limit="1"}}
-        {{#foreach posts}} 
+    {{#get "pages" filter="featured:true+tag:hero" include="tags" limit="1"}}
+        {{#foreach pages}} 
             <section class="background-media hero-section{{#match @custom.content_position_on_background_media "Center"}} hero-center{{/match}}" data-slug="{{slug}}">
                 <div class="wide-container">
                     <div class="hero-content">
@@ -153,6 +153,7 @@
                                                             </p>
                                                         </div>
 
+<!-- 
                                                         <div class="card-extra-info card-small-text">
                                                             <p class="paragraph">
                                                                 <span>
@@ -163,6 +164,7 @@
                                                                 </span>
                                                             </p>
                                                         </div>
+ -->
 
                                                         <a href="{{url}}" class="small-arrow-button">
                                                             <div class="small-arrow-button-text">{{t "Discover more"}}</div>
