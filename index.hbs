@@ -189,8 +189,8 @@
         {{/if}}
     {{/get}}
 
-    {{#get "posts" filter="tag:hash-our-selection" include="tags" limit="8"}}
-        {{#if posts}}
+    {{#get "pages" filter="tag:hash-our-selection" include="tags" limit="8"}}
+        {{#if pages}}
             <div class="subtitle-wrapper subtitle-with-margin no-top">
                 <h2 class="subtitle centered-text">{{t "(Our selection)"}}</h2>
             </div>
@@ -225,7 +225,7 @@
                     </div>
                     <div class="latest-posts">
                         <div class="latest-posts-inner">               
-                            {{#foreach posts}}
+                            {{#foreach pages}}
                                 {{>"components/creative-post-card"}}
                             {{/foreach}}               
                         </div>
@@ -251,12 +251,12 @@
     <section class="section-padding-top section-relative last-section{{#match @custom.homepage_post_card_style "Creative"}} hide-posts{{/match}}">
         <div class="wide-container">
             <div class="subtitle-wrapper subtitle-with-margin{{#match @custom.homepage_circles_content "None"}} space-between-subtitle{{/match}}">
-                <h2 class="subtitle{{^match @custom.homepage_circles_content "None"}} centered-text{{/match}}">{{t "(Latest posts)"}}</h2>
+                <!-- <h2 class="subtitle{{^match @custom.homepage_circles_content "None"}} centered-text{{/match}}">{{t "(Latest posts)"}}</h2> -->
                 {{#match @custom.homepage_circles_content "None"}}<h2 class="subtitle">{{t "("}}{{plural pagination.total empty=(t "No Posts") singular=(t "1 Post") plural=(t "% Posts")}}{{t ")"}}</h2>{{/match}}
             </div>
             <div class="latest-posts">
                 <div id="pagination-grid" class="grid">               
-                    {{#foreach posts}}
+                    {{#foreach pages}}
                         {{>"components/post-card"}}
                     {{/foreach}}              
                 </div>    
