@@ -198,7 +198,7 @@
 
         <div id="circles-section" class="slider-with-circles{{#unless posts}} no-slider{{/unless}}" data-circles-content="{{@custom.homepage_circles_content}}">
             <div class="slider-with-circles-inner">      
-                {{#if posts}}
+                {{#if pages}}
                     {{>"components/slider-component"}}
                 {{/if}}
 
@@ -217,7 +217,7 @@
 
     {{#match @custom.homepage_post_card_style "Creative"}}
         <link rel="stylesheet" type="text/css" href="{{asset "css/creative-post-card.css"}}" />
-        {{#get "posts" limit="10"}}
+        {{#get "pages" limit="10"}}
             <section class="section section-relative creative-latest-posts-homepage section-bigger-bottom-padding">
                 <div class="wide-container">
                     <div class="subtitle-wrapper subtitle-with-margin z-5">
