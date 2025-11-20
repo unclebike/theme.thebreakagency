@@ -75,15 +75,16 @@
         {{/foreach}} 
     {{/get}}
 
-    {{#get "pages" filter="featured:true+tag:-hash-hero" include="tags,authors" limit="all"}}
+    {{#get "pages" filter="featured:true+tag:-hash-hero" include="tags,authors" limit="all" order="published_at desc"}}
         {{#if pages}}
             <featured-posts class="section no-padding" data-enable-preview="{{@custom.show_featured_post_preview}}">         
                 <div class="wide-container">
                     <div class="featured-posts">
                         <div class="featured-posts-inner">
-                            <div class="subtitle-wrapper subtitle-with-margin">
-                                <h2 class="subtitle">{{t "***"}}</h2>
-                            </div>
+                            <!-- 
+<div class="subtitle-wrapper subtitle-with-margin">
+                                <h2 class="subtitle">{{t "Featured Pages"}}</h2>
+                            </div> -->
 
                             <div class="featured-posts-wrapper">
                                 <div class="featured-posts-list">
