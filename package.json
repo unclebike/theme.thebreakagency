@@ -227,7 +227,7 @@
                 "type": "select",
                 "options": [
                     "Tags",
-                    "Testimonials",
+                    "Brands",
                     "None"       
                 ],
                 "group": "homepage",

@@ -106,7 +106,7 @@ body {
 }
 
 .slider-with-circles[data-circles-content="Tags"],
-.slider-with-circles[data-circles-content="Testimonials"] {
+.slider-with-circles[data-circles-content="Brands"] {
     height: 240vh;
 }
 
@@ -115,7 +115,7 @@ body {
 }
 
 .slider-with-circles[data-circles-content="Tags"] .slider-with-circles-inner,
-.slider-with-circles[data-circles-content="Testimonials"] .slider-with-circles-inner {
+.slider-with-circles[data-circles-content="Brands"] .slider-with-circles-inner {
     height: 100vh;
     position: sticky;
     top: 0;
@@ -210,12 +210,12 @@ circles-component {
     }
     
     .slider-with-circles[data-circles-content="Tags"],
-    .slider-with-circles[data-circles-content="Testimonials"] {
+    .slider-with-circles[data-circles-content="Brands"] {
         height: auto;
     }
     
     .slider-with-circles[data-circles-content="Tags"] .slider-with-circles-inner,
-    .slider-with-circles[data-circles-content="Testimonials"] .slider-with-circles-inner {
+    .slider-with-circles[data-circles-content="Brands"] .slider-with-circles-inner {
         height: auto;
         position: static;
     }

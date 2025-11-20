@@ -974,7 +974,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.container = this;
                     this.type = this.container.getAttribute('data-circles-content');
                     this.baseNumber;
-                    this.type == "Testimonials" ? this.setTestimonials() : this.init();
+                    this.type == "Brands" ? this.setBrands() : this.init();
                 }
 
                 init() {
@@ -987,15 +987,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     }, 100));
                 }
 
-                setTestimonials(){
-                    const url = window.location.origin + "/testimonials/"
+                setBrands(){
+                    const url = window.location.origin + "/brands/"
                     const temp = document.querySelector('#circle-pair-template');
                     fetch(url)
                         .then(response => response.text())
                         .then(data => {
                             let parser = new DOMParser();
                             let html = parser.parseFromString(data, "text/html");
-                            let content = html.querySelector('.testimonials-main');
+                            let content = html.querySelector('.brands-main');
 
                             if(!content) return;
 
@@ -1031,7 +1031,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             }
                         })
                         .catch(error => {
-                            console.error("Error loading testimonials:", error);
+                            console.error("Error loading brands:", error);
                         });                   
                 }
 

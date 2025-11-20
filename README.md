@@ -25,7 +25,7 @@ Snook is a bold and creative Ghost theme designed for those who dare to stand ou
 
 # Theme Pages
 
-* [Home page circles content (Testimonials)](https://snook.kusa-projects.com/)
+* [Home page circles content (Brands)](https://snook.kusa-projects.com/)
 * [Home page circles content (Tags)](https://snook.kusa-projects.com/homepage-tag-circles/)
 * [Home page circles content (None)](https://snook.kusa-projects.com/homepage-no-circles/)
 * [Home page normal posts](https://snook.kusa-projects.com/homepage-normal-posts/)
@@ -73,7 +73,7 @@ Snook is a bold and creative Ghost theme designed for those who dare to stand ou
 * Custom setting for Content length on background media (Narrow, Wide, Full Width)
 * Card image aspect ratios (2/3, 3/4, 4/5, 16/9, 4/3, 3/2, 5/4, 1/1)
 * You can show or hide excerpt/author bio under cards
-* Different content types on homepage circles (Testimonials, Tags, None)
+* Different content types on homepage circles (Brands, Tags, None)
 * Homepage card styles (Creative, Default)
 * Different Post/Page templates (Right Aligned With Video, Right Aligned, Default, Default With Video)
 * Post header types (Wide, Wide Centered, Narrow, Narrow Centered, Background Media, Background Media Centered)
