@@ -75,8 +75,8 @@
         {{/foreach}} 
     {{/get}}
 
-    {{#get "posts" filter="featured:true" include="tags,authors" limit="all"}}
-        {{#if posts}}
+    {{#get "pages" filter="featured:true" include="tags,authors" limit="all"}}
+        {{#if pages}}
             <featured-posts class="section no-padding" data-enable-preview="{{@custom.show_featured_post_preview}}">         
                 <div class="wide-container">
                     <div class="featured-posts">
