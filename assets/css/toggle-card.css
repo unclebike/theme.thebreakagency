@@ -12,6 +12,23 @@
     margin-bottom: 0px !important;
 }
 
+.kg-toggle-card > img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: max(14px, calc(0.97vw * var(--scale)));
+}
+
+.kg-toggle-card > figcaption {
+    font-family: var(--font2);
+    font-size: max(16px, calc(1.11vw * var(--scale)));
+    line-height: 150%;
+    color: var(--text-color-70);
+    margin-top: max(12px, calc(0.83vw * var(--scale)));
+    margin-bottom: max(8px, calc(0.56vw * var(--scale)));
+    max-width: 90%;
+}
+
 html[data-primary-font="Thunder"] .kg-toggle-card {
     padding-top: max(22px, calc(1.53vw * var(--scale)))
 }
@@ -109,7 +126,7 @@ html[data-primary-font="Thunder"] .kg-toggle-card-icon {
 @media (max-width: 1080px) {
     .kg-toggle-card h4.kg-toggle-heading-text,
     .kg-toggle-card h4.kg-toggle-heading-text * {
-        font-size: calc(28px * var(--heading-font-scale)); 
+        font-size: calc(28px * var(--heading-font-scale));
     }
 
     .kg-toggle-content {
@@ -133,6 +150,11 @@ html[data-primary-font="Thunder"] .kg-toggle-card-icon {
     .kg-toggle-card-icon .dropdown-icon {
         position: static;
         transform: translateX(0px);
+    }
+
+    .kg-toggle-card > figcaption {
+        font-size: 14px;
+        max-width: 100%;
     }
 }
 

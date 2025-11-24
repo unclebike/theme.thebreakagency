@@ -105,8 +105,8 @@ function moveImagesToToggleCards() {
     const matchingToggle = toggleMap.get(beforeSemicolon);
 
     if (matchingToggle) {
-      const toggleContent = matchingToggle.querySelector('.kg-toggle-content');
-      if (toggleContent) {
+      const toggleHeading = matchingToggle.querySelector('.kg-toggle-heading');
+      if (toggleHeading) {
         const img = figure.querySelector('img');
         if (img) {
           img.classList.add('no-lightense');
@@ -114,11 +114,15 @@ function moveImagesToToggleCards() {
 
         if (afterSemicolon) {
           caption.textContent = afterSemicolon;
+          toggleHeading.insertAdjacentElement('afterend', caption);
         } else {
           caption.remove();
         }
 
-        toggleContent.appendChild(figure);
+        figure.removeChild(caption);
+        toggleHeading.insertAdjacentElement('beforebegin', img);
+
+        figure.remove();
       }
     }
   });
