@@ -977,10 +977,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 connectedCallback() {
-                    // Wait for next frame to ensure DOM is fully ready
-                    requestAnimationFrame(() => {
+                    // Use setTimeout instead of requestAnimationFrame for more reliable timing
+                    setTimeout(() => {
                         this.type == "Brands" ? this.setBrands() : this.init();
-                    });
+                    }, 20);
                 }
 
                 init() {
@@ -1042,15 +1042,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 setAnimationSpeed(){
-                    this.baseNumber = this.container.querySelectorAll('.infinite-scroll-content')[0].querySelectorAll('.circle-element').length;
+                    const scrollContents = this.container.querySelectorAll('.infinite-scroll-content');
+                    if (!scrollContents || scrollContents.length === 0) return;
 
-                    this.querySelectorAll('.infinite-scroll-content').forEach(el => {
+                    const firstContent = scrollContents[0];
+                    if (!firstContent) return;
+
+                    const circleElements = firstContent.querySelectorAll('.circle-element');
+                    if (!circleElements || circleElements.length === 0) return;
+
+                    this.baseNumber = circleElements.length;
+
+                    scrollContents.forEach(el => {
                         if(el.parentNode.parentNode.classList.contains('reversed')){
                             el.style.animation = `scroll-right ${6 * this.baseNumber}s linear infinite`;
                         }else{
                             el.style.animation = `scroll-left ${6 * this.baseNumber}s linear infinite`;
                         }
-                    })
+                    });
                 }
 
                 setCircleAnimation() {
