@@ -1062,24 +1062,30 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                     if(!container.classList.contains('no-slider')){
-                        gsap.to('.slider-with-circles .circle-animation', {
-                            scrollTrigger: {
-                                trigger: container,
-                                start: "top top",
-                                end: () => {
-                                    const vmax = Math.max(innerWidth, innerHeight);
-                                    const aspectRatio = innerHeight / innerWidth;
-                                    const scrollMultiplier = aspectRatio > 1 ? 3 : 2;
-                                    return `${vmax * scrollMultiplier}px top`;
+                        const circleAnimation = document.querySelector('.slider-with-circles .circle-animation');
+                        if (circleAnimation) {
+                            gsap.to(circleAnimation, {
+                                scrollTrigger: {
+                                    trigger: container,
+                                    start: "top top",
+                                    end: () => {
+                                        const vmax = Math.max(innerWidth, innerHeight);
+                                        const aspectRatio = innerHeight / innerWidth;
+                                        const scrollMultiplier = aspectRatio > 1 ? 3 : 2;
+                                        return `${vmax * scrollMultiplier}px top`;
+                                    },
+                                    scrub: true,
                                 },
-                                scrub: true,
-                            },
-                            width: "100%",
-                            height: "100%",
-                        });
+                                width: "100%",
+                                height: "100%",
+                            });
+                        }
                     }
-                
-                    const height = container.querySelector('.infinite-scroll').offsetHeight;
+
+                    const infiniteScroll = container.querySelector('.infinite-scroll');
+                    if (!infiniteScroll) return;
+
+                    const height = infiniteScroll.offsetHeight;
                     const angle = 10 * (Math.PI / 180);
                     const rotatedHeight = Math.abs(height * Math.cos(angle)) + Math.abs(innerWidth * Math.sin(angle));
                 
