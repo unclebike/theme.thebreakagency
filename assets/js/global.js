@@ -75,20 +75,33 @@ function setToggle() {
 }
 
 function moveImagesToToggleCards() {
-  // Only run if page has the togglefix tag
-  const hasToggleFixTag = document.querySelector('meta[property="article:tag"][content="togglefix"]') ||
-                          document.querySelector('.post-card-tags a[href*="/tag/togglefix/"]') ||
-                          document.querySelector('article[class*="tag-togglefix"]');
+  // Only run if page has the togglefix internal tag
+  const article = document.querySelector('article.article');
+  if (!article) return;
+
+  const internalTags = article.getAttribute('data-internal-tags');
+  if (!internalTags) return;
+
+  const tagsArray = internalTags.split(',').map(tag => tag.trim());
+  const hasToggleFixTag = tagsArray.includes('togglefix');
 
   if (!hasToggleFixTag) return;
 
   const toggleCards = document.querySelectorAll('.kg-toggle-card');
   if (toggleCards.length === 0) return;
 
-  const allImageFigures = document.querySelectorAll('.post-content .kg-image-card:not(.kg-gallery-image)');
+  const allImageFigures = document.querySelectorAll('.post-content .kg-image-card');
   const imageFigures = Array.from(allImageFigures).filter(figure => {
-    // Use matches() with :not() pseudo-class for better performance
-    return !figure.matches('.kg-gallery-card *, .kg-gallery-container *, circles-component *, .circles-section *, .circle-scrollers *, .parallax-image *, .image-animation *, .ease-in-animation *, .opacity-animation *');
+    return !figure.classList.contains('kg-gallery-image') &&
+           !figure.closest('.kg-gallery-card') &&
+           !figure.closest('.kg-gallery-container') &&
+           !figure.closest('circles-component') &&
+           !figure.closest('.circles-section') &&
+           !figure.closest('.circle-scrollers') &&
+           !figure.closest('.parallax-image') &&
+           !figure.closest('.image-animation') &&
+           !figure.closest('.ease-in-animation') &&
+           !figure.closest('.opacity-animation');
   });
 
   if (imageFigures.length === 0) return;
