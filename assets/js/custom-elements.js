@@ -988,6 +988,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     this.setCircleAnimation();
 
+                    // Refresh ScrollTrigger to ensure correct positions after animation setup
+                    setTimeout(() => {
+                        ScrollTrigger.refresh();
+                    }, 50);
+
                     window.addEventListener('resize', debounce(() => {
                         this.setCircleAnimation();
                     }, 100));
