@@ -974,16 +974,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.container = this;
                     this.type = this.container.getAttribute('data-circles-content');
                     this.baseNumber;
-                    this.type == "Brands" ? this.setBrands() : this.init();
+                }
+
+                connectedCallback() {
+                    // Wait for next frame to ensure DOM is fully ready
+                    requestAnimationFrame(() => {
+                        this.type == "Brands" ? this.setBrands() : this.init();
+                    });
                 }
 
                 init() {
-                    this.setAnimationSpeed();                 
+                    this.setAnimationSpeed();
 
-                    this.setCircleAnimation();   
-                    
+                    this.setCircleAnimation();
+
                     window.addEventListener('resize', debounce(() => {
-                        this.setCircleAnimation(); 
+                        this.setCircleAnimation();
                     }, 100));
                 }
 
