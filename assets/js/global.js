@@ -368,8 +368,6 @@ function killScrollTrigger(selector) {
 function creativeLatestPostsTrigger(){
   let selector = '.creative-post-card, .all-posts-link';
 
-  gsap.registerPlugin(ScrollTrigger);
-
   killScrollTrigger(selector);
 
   document.querySelectorAll(selector).forEach(heading => {

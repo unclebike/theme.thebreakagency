@@ -758,9 +758,7 @@ document.addEventListener('DOMContentLoaded', function () {
             allPostsMobileTrigger(){
                 let container = this.container;
                 let selector = '.all-posts-item';
-              
-                gsap.registerPlugin(ScrollTrigger);
-              
+
                 killScrollTrigger(selector);
               
                 document.querySelectorAll(selector).forEach(heading => {
