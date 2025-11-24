@@ -110,6 +110,10 @@ function moveImagesToToggleCards() {
         const img = figure.querySelector('img');
         if (img) {
           img.classList.add('no-lightense');
+          img.style.cursor = 'pointer';
+          img.addEventListener('click', function() {
+            toggleHeading.click();
+          });
           toggleHeading.insertAdjacentElement('beforebegin', img);
         }
 
