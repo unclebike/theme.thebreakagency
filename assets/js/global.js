@@ -36,6 +36,10 @@ function debounce(fn, delay) {
 }
 
 function setToggle() {
+  // Only run on post/page templates (not home page)
+  const postContent = document.querySelector('.post-content');
+  if (!postContent) return;
+
   const toggleHeadingElements = document.getElementsByClassName("kg-toggle-heading");
 
   const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
