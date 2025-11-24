@@ -75,6 +75,13 @@ function setToggle() {
 }
 
 function moveImagesToToggleCards() {
+  // Only run if page has the togglefix tag
+  const hasToggleFixTag = document.querySelector('meta[property="article:tag"][content="togglefix"]') ||
+                          document.querySelector('.post-card-tags a[href*="/tag/togglefix/"]') ||
+                          document.querySelector('article[class*="tag-togglefix"]');
+
+  if (!hasToggleFixTag) return;
+
   const toggleCards = document.querySelectorAll('.kg-toggle-card');
   if (toggleCards.length === 0) return;
 
