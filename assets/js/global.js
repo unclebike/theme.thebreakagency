@@ -78,18 +78,10 @@ function moveImagesToToggleCards() {
   const toggleCards = document.querySelectorAll('.kg-toggle-card');
   if (toggleCards.length === 0) return;
 
-  const allImageFigures = document.querySelectorAll('.post-content .kg-image-card');
+  const allImageFigures = document.querySelectorAll('.post-content .kg-image-card:not(.kg-gallery-image)');
   const imageFigures = Array.from(allImageFigures).filter(figure => {
-    return !figure.classList.contains('kg-gallery-image') &&
-           !figure.closest('.kg-gallery-card') &&
-           !figure.closest('.kg-gallery-container') &&
-           !figure.closest('circles-component') &&
-           !figure.closest('.circles-section') &&
-           !figure.closest('.circle-scrollers') &&
-           !figure.closest('.parallax-image') &&
-           !figure.closest('.image-animation') &&
-           !figure.closest('.ease-in-animation') &&
-           !figure.closest('.opacity-animation');
+    // Use matches() with :not() pseudo-class for better performance
+    return !figure.matches('.kg-gallery-card *, .kg-gallery-container *, circles-component *, .circles-section *, .circle-scrollers *, .parallax-image *, .image-animation *, .ease-in-animation *, .opacity-animation *');
   });
 
   if (imageFigures.length === 0) return;
