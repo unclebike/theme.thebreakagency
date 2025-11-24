@@ -1052,14 +1052,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     const innerWidth = window.innerWidth;
                     const container = document.querySelector('.slider-with-circles');
 
+                    if (!container) return;
+
                     killScrollTrigger('.slider-with-circles');
-                
-                    if (window.matchMedia('(max-width: 1080px)').matches) {                    
+
+                    if (window.matchMedia('(max-width: 1080px)').matches) {
                         container.style.marginBottom = '';
                         return;
                     }
-                
-                    if(!document.querySelector('.slider-with-circles').classList.contains('no-slider')){
+
+                    if(!container.classList.contains('no-slider')){
                         gsap.to('.slider-with-circles .circle-animation', {
                             scrollTrigger: {
                                 trigger: container,

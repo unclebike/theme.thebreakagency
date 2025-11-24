@@ -18,8 +18,7 @@
 {{/if}}
 
 <article class="article" data-is-post="{{#if is_post}}true{{else}}false{{/if}}" data-post-header-type="{{@custom.post_header_type}}" data-has-featured-image="{{#if feature_image}}true{{else}}false{{/if}}"
-data-right-aligned-template="{{#if right_aligned_template}}true{{else}}false{{/if}}" data-has-video="{{#if has_video}}true{{else}}false{{/if}}" data-has-header="{{#match @page.show_title_and_feature_image}}true{{else}}false{{/match}}"
-data-internal-tags="{{#foreach tags visibility="internal"}}{{slug}}{{#unless @last}},{{/unless}}{{/foreach}}">
+data-right-aligned-template="{{#if right_aligned_template}}true{{else}}false{{/if}}" data-has-video="{{#if has_video}}true{{else}}false{{/if}}" data-has-header="{{#match @page.show_title_and_feature_image}}true{{else}}false{{/match}}">
     {{#match @page.show_title_and_feature_image}}
         {{#if feature_image}}
             {{#match @custom.post_header_type "Background Media"}}

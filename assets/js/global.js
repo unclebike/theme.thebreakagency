@@ -75,17 +75,9 @@ function setToggle() {
 }
 
 function moveImagesToToggleCards() {
-  // Only run if page has the togglefix internal tag
-  const article = document.querySelector('article.article');
-  if (!article) return;
-
-  const internalTags = article.getAttribute('data-internal-tags');
-  if (!internalTags) return;
-
-  const tagsArray = internalTags.split(',').map(tag => tag.trim());
-  const hasToggleFixTag = tagsArray.includes('togglefix');
-
-  if (!hasToggleFixTag) return;
+  // Only run on post/page templates (not home page)
+  const postContent = document.querySelector('.post-content');
+  if (!postContent) return;
 
   const toggleCards = document.querySelectorAll('.kg-toggle-card');
   if (toggleCards.length === 0) return;
