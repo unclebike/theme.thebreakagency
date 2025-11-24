@@ -56,9 +56,9 @@ function setToggle() {
 
       container.appendChild(clonedSvg);
   })
-  
+
   const toggleFn = function(event) {
-      
+
       const targetElement = event.target;
       const parentElement = targetElement.closest('.kg-toggle-card');
       var toggleState = parentElement.getAttribute("data-kg-toggle-state");
@@ -72,6 +72,56 @@ function setToggle() {
   for (let i = 0; i < toggleHeadingElements.length; i++) {
       toggleHeadingElements[i].addEventListener('click', toggleFn, false);
   }
+}
+
+function moveImagesToToggleCards() {
+  const toggleCards = document.querySelectorAll('.kg-toggle-card');
+  if (toggleCards.length === 0) return;
+
+  const imageFigures = document.querySelectorAll('.post-content .kg-image-card');
+  if (imageFigures.length === 0) return;
+
+  const toggleMap = new Map();
+  toggleCards.forEach(card => {
+    const headingText = card.querySelector('.kg-toggle-heading-text');
+    if (headingText) {
+      const normalizedHeading = headingText.textContent.trim().toLowerCase();
+      toggleMap.set(normalizedHeading, card);
+    }
+  });
+
+  imageFigures.forEach(figure => {
+    const caption = figure.querySelector('figcaption');
+    if (!caption) return;
+
+    const captionText = caption.textContent;
+    const semicolonIndex = captionText.indexOf(';');
+
+    if (semicolonIndex === -1) return;
+
+    const beforeSemicolon = captionText.substring(0, semicolonIndex).trim().toLowerCase();
+    const afterSemicolon = captionText.substring(semicolonIndex + 1).trim();
+
+    const matchingToggle = toggleMap.get(beforeSemicolon);
+
+    if (matchingToggle) {
+      const toggleContent = matchingToggle.querySelector('.kg-toggle-content');
+      if (toggleContent) {
+        const img = figure.querySelector('img');
+        if (img) {
+          img.classList.add('no-lightense');
+        }
+
+        if (afterSemicolon) {
+          caption.textContent = afterSemicolon;
+        } else {
+          caption.remove();
+        }
+
+        toggleContent.appendChild(figure);
+      }
+    }
+  });
 }
 
 function hexToRgba() {

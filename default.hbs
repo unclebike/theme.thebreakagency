@@ -28,22 +28,23 @@
             </script> 
         {{/if}}
 
-        <script>          
+        <script>
             loadColors("{{@custom.colors}}");
             document.addEventListener('DOMContentLoaded', () => {
                 setToggle();
+                moveImagesToToggleCards();
                 hexToRgba();
                 pageLoadAnimations();
                 setCreativePostImages();
                 setImageParallax();
-                
+
                 let oldWidth = window.innerWidth;
 
                 window.addEventListener('resize', debounce(() => {
                     if(oldWidth == window.innerWidth) return;
                     oldWidth = window.innerWidth;
-                    setImageParallax(); 
-                }, 100));  
+                    setImageParallax();
+                }, 100));
             })
         </script>
 
