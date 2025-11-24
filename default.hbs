@@ -30,18 +30,13 @@
 
         <script>
             loadColors("{{@custom.colors}}");
-            window.addEventListener('load', () => {
+            document.addEventListener('DOMContentLoaded', () => {
                 setToggle();
                 moveImagesToToggleCards();
                 hexToRgba();
                 pageLoadAnimations();
                 setCreativePostImages();
                 setImageParallax();
-
-                // Refresh ScrollTrigger after initialization to handle hash navigation and ensure correct positions
-                setTimeout(() => {
-                    ScrollTrigger.refresh();
-                }, 100);
 
                 let oldWidth = window.innerWidth;
 

@@ -974,35 +974,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.container = this;
                     this.type = this.container.getAttribute('data-circles-content');
                     this.baseNumber;
-                }
-
-                connectedCallback() {
-                    this.initialized = false;
-
-                    // Use IntersectionObserver to initialize animations when element is visible
-                    const observer = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting && !this.initialized) {
-                                this.initialized = true;
-                                this.type == "Brands" ? this.setBrands() : this.init();
-                                observer.disconnect(); // Stop observing after initialization
-                            }
-                        });
-                    }, {
-                        threshold: 0.01 // Trigger when at least 1% of element is visible
-                    });
-
-                    observer.observe(this);
+                    this.type == "Brands" ? this.setBrands() : this.init();
                 }
 
                 init() {
                     this.setAnimationSpeed();
-                    this.setCircleAnimation();
 
-                    // Refresh ScrollTrigger after animation setup
-                    requestAnimationFrame(() => {
-                        ScrollTrigger.refresh();
-                    });
+                    this.setCircleAnimation();
 
                     window.addEventListener('resize', debounce(() => {
                         this.setAnimationSpeed();
