@@ -78,7 +78,16 @@ function moveImagesToToggleCards() {
   const toggleCards = document.querySelectorAll('.kg-toggle-card');
   if (toggleCards.length === 0) return;
 
-  const imageFigures = document.querySelectorAll('.post-content .kg-image-card');
+  const allImageFigures = document.querySelectorAll('.post-content .kg-image-card');
+  const imageFigures = Array.from(allImageFigures).filter(figure => {
+    return !figure.classList.contains('kg-gallery-image') &&
+           !figure.closest('.kg-gallery-card') &&
+           !figure.closest('.kg-gallery-container') &&
+           !figure.closest('circles-component') &&
+           !figure.closest('.circles-section') &&
+           !figure.closest('.circle-scrollers');
+  });
+
   if (imageFigures.length === 0) return;
 
   const toggleMap = new Map();
