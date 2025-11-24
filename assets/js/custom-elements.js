@@ -988,12 +988,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     this.setCircleAnimation();
 
+                    // Retry setAnimationSpeed after a longer delay to ensure animations start on narrow screens
+                    setTimeout(() => {
+                        this.setAnimationSpeed();
+                    }, 100);
+
                     // Refresh ScrollTrigger to ensure correct positions after animation setup
                     setTimeout(() => {
                         ScrollTrigger.refresh();
-                    }, 50);
+                    }, 150);
 
                     window.addEventListener('resize', debounce(() => {
+                        this.setAnimationSpeed();
                         this.setCircleAnimation();
                     }, 100));
                 }
