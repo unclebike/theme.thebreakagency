@@ -110,17 +110,13 @@ function moveImagesToToggleCards() {
         const img = figure.querySelector('img');
         if (img) {
           img.classList.add('no-lightense');
+          toggleHeading.insertAdjacentElement('beforebegin', img);
         }
 
         if (afterSemicolon) {
           caption.textContent = afterSemicolon;
           toggleHeading.insertAdjacentElement('afterend', caption);
-        } else {
-          caption.remove();
         }
-
-        figure.removeChild(caption);
-        toggleHeading.insertAdjacentElement('beforebegin', img);
 
         figure.remove();
       }
