@@ -977,26 +977,32 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 connectedCallback() {
-                    // Use setTimeout instead of requestAnimationFrame for more reliable timing
-                    setTimeout(() => {
-                        this.type == "Brands" ? this.setBrands() : this.init();
-                    }, 20);
+                    this.initialized = false;
+
+                    // Use IntersectionObserver to initialize animations when element is visible
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting && !this.initialized) {
+                                this.initialized = true;
+                                this.type == "Brands" ? this.setBrands() : this.init();
+                                observer.disconnect(); // Stop observing after initialization
+                            }
+                        });
+                    }, {
+                        threshold: 0.01 // Trigger when at least 1% of element is visible
+                    });
+
+                    observer.observe(this);
                 }
 
                 init() {
                     this.setAnimationSpeed();
-
                     this.setCircleAnimation();
 
-                    // Retry setAnimationSpeed after a longer delay to ensure animations start on narrow screens
-                    setTimeout(() => {
-                        this.setAnimationSpeed();
-                    }, 100);
-
-                    // Refresh ScrollTrigger to ensure correct positions after animation setup
-                    setTimeout(() => {
+                    // Refresh ScrollTrigger after animation setup
+                    requestAnimationFrame(() => {
                         ScrollTrigger.refresh();
-                    }, 150);
+                    });
 
                     window.addEventListener('resize', debounce(() => {
                         this.setAnimationSpeed();
