@@ -83,24 +83,45 @@ document.addEventListener('DOMContentLoaded', function () {
                 let targetY = window.innerHeight / 2;
                 let currentY = targetY;
                 const ease = 0.11;
-            
-                window.addEventListener('mousemove', (event) => {
+                let animationFrameId = null;
+                let announcementBarHeight = 0;
+
+                // Cache announcement bar height
+                const updateAnnouncementBarHeight = () => {
                     let announcementBar = document.querySelector('#announcement-bar-root');
-                    let announcementBarHeight = 0;
-                    if(announcementBar){
-                        announcementBarHeight = parseFloat(window.getComputedStyle(announcementBar).height);
-                    }
+                    announcementBarHeight = announcementBar ? parseFloat(window.getComputedStyle(announcementBar).height) : 0;
+                };
+
+                updateAnnouncementBarHeight();
+
+                window.addEventListener('mousemove', (event) => {
                     targetY = event.clientY - this.navHeight - this.navbarTopPadding - 3 - announcementBarHeight;
                 });
-            
+
+                // Update announcement bar height on resize
+                window.addEventListener('resize', debounce(() => {
+                    updateAnnouncementBarHeight();
+                }, 100));
+
                 const animate = () => {
-                    currentY += (targetY - currentY) * ease;
-                    this.circles.forEach(circle => {
-                        circle.style.top = `${currentY}px`;  
-                    })                          
-                    requestAnimationFrame(animate);
+                    const delta = Math.abs(targetY - currentY);
+
+                    // Only animate if there's a meaningful difference
+                    if (delta > 0.5) {
+                        currentY += (targetY - currentY) * ease;
+                        this.circles.forEach(circle => {
+                            circle.style.top = `${currentY}px`;
+                        });
+                        animationFrameId = requestAnimationFrame(animate);
+                    } else {
+                        currentY = targetY;
+                        this.circles.forEach(circle => {
+                            circle.style.top = `${currentY}px`;
+                        });
+                        animationFrameId = requestAnimationFrame(animate);
+                    }
                 };
-            
+
                 animate();
             }
 
@@ -625,25 +646,33 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.setActivePost(this.container.querySelectorAll('.featured-post')[0]); 
 
                 this.setCircle();
-                
+
                 if(window.matchMedia('(max-width: 1080px)').matches) return;
                 this.container.style.minHeight = `max(calc(54px + ${this.cardMaxHeight}px), calc((3.75vw + ${this.cardMaxHeight}px) * var(--scale)))`;
-            }  
-            
-            setCircle() {             
+            }
+
+            setCircle() {
+                if (!this.circle) return;
                 let currentY = targetY;
-                const ease = 0.11;      
-            
+                const ease = 0.11;
+                let animationFrameId = null;
+
                 const animate = () => {
-                    currentY += (targetY - currentY) * ease;
-                    this.circle.style.top = `${currentY}px`;         
-                    requestAnimationFrame(animate);
+                    const delta = Math.abs(targetY - currentY);
+
+                    // Only update if there's a meaningful difference
+                    if (delta > 0.5) {
+                        currentY += (targetY - currentY) * ease;
+                        this.circle.style.top = `${currentY}px`;
+                    }
+
+                    animationFrameId = requestAnimationFrame(animate);
                 };
-            
+
                 animate();
             }
-            
-            
+
+
             setActivePost(post){
                 let activePost = this.container.querySelector('.active-post');
 
@@ -727,22 +756,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this.setCircle();
                 this.allPostsMobileTrigger();
-            }  
-            
-            setCircle() {             
+            }
+
+            setCircle() {
+                if (!this.circle) return;
                 let currentY = targetY;
-                const ease = 0.11;      
-            
+                const ease = 0.11;
+                let animationFrameId = null;
+
                 const animate = () => {
-                    currentY += (targetY - currentY) * ease;
-                    this.circle.style.top = `${currentY}px`;         
-                    requestAnimationFrame(animate);
+                    const delta = Math.abs(targetY - currentY);
+
+                    // Only update if there's a meaningful difference
+                    if (delta > 0.5) {
+                        currentY += (targetY - currentY) * ease;
+                        this.circle.style.top = `${currentY}px`;
+                    }
+
+                    animationFrameId = requestAnimationFrame(animate);
                 };
-            
+
                 animate();
             }
-            
-            
+
+
             setActivePost(post){
                 if(window.matchMedia('(max-width: 1080px)').matches) return;
                 

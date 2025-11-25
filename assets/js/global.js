@@ -329,22 +329,29 @@ function setCreativePostImages() {
 
   let getSelectors = document.querySelectorAll(selector);
   if(getSelectors.length == 0) return;
-  
+
   let currentX = targetX;
   let currentY = targetY;
   const ease = 0.11;
+  let animationFrameId = null;
 
   creativeLatestPostsTrigger();
 
   const animate = () => {
-    currentX += (targetX - currentX) * ease;
-    currentY += (targetY - currentY) * ease;
+    const deltaX = Math.abs(targetX - currentX);
+    const deltaY = Math.abs(targetY - currentY);
 
-    document.querySelectorAll('.creative-post-card-image-container').forEach(img => {
-      img.style.transform = `translate(${currentX}px, ${currentY}px)`;
-    });
+    // Only update if there's a meaningful difference
+    if (deltaX > 0.5 || deltaY > 0.5) {
+      currentX += (targetX - currentX) * ease;
+      currentY += (targetY - currentY) * ease;
 
-    requestAnimationFrame(animate);
+      document.querySelectorAll('.creative-post-card-image-container').forEach(img => {
+        img.style.transform = `translate(${currentX}px, ${currentY}px)`;
+      });
+    }
+
+    animationFrameId = requestAnimationFrame(animate);
   };
 
   animate();
