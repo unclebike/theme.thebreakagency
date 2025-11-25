@@ -76,33 +76,6 @@
         {{/foreach}} 
     {{/get}}
 
-    {{#get "pages" filter="tag:hash-events" include="tags" limit="8"}}
-        {{#if pages}}
-           <!-- 
- <div class="subtitle-wrapper subtitle-with-margin no-top">
-                <h2 class="subtitle centered-text">{{t "(Our selection)"}}</h2>
-            </div>
- -->
-        {{/if}}
-
-        <div id="circles-section" class="slider-with-circles{{#unless pages}} no-slider{{/unless}}" data-circles-content="{{@custom.homepage_circles_content}}">
-            <div class="slider-with-circles-inner">      
-                {{#if pages}}
-                    {{>"components/slider-component"}}
-                {{/if}}
-
-                {{^match @custom.homepage_circles_content "None"}}
-                    <div class="circle-wrapper">
-                        <div class="circle-outer">
-                            <div class="circle-animation">
-                                {{>"components/circles-section" circles_data=@custom.homepage_circles_content }}
-                            </div>
-                        </div>
-                    </div>
-                {{/match}}
-            </div>
-        </div>
-    {{/get}}
 
     {{#match @custom.homepage_post_card_style "Creative"}}
         <link rel="stylesheet" type="text/css" href="{{asset "css/creative-post-card.css"}}" />
@@ -140,6 +113,34 @@
     {{else}}
         <link rel="stylesheet" type="text/css" href="{{asset "css/post-card.css"}}" />
     {{/match}}
+    
+        {{#get "pages" filter="tag:hash-events" include="tags" limit="8"}}
+        {{#if pages}}
+           <!-- 
+ <div class="subtitle-wrapper subtitle-with-margin no-top">
+                <h2 class="subtitle centered-text">{{t "(Our selection)"}}</h2>
+            </div>
+ -->
+        {{/if}}
+
+        <div id="circles-section" class="slider-with-circles{{#unless pages}} no-slider{{/unless}}" data-circles-content="{{@custom.homepage_circles_content}}">
+            <div class="slider-with-circles-inner">      
+                {{#if pages}}
+                    {{>"components/slider-component"}}
+                {{/if}}
+
+                {{^match @custom.homepage_circles_content "None"}}
+                    <div class="circle-wrapper">
+                        <div class="circle-outer">
+                            <div class="circle-animation">
+                                {{>"components/circles-section" circles_data=@custom.homepage_circles_content }}
+                            </div>
+                        </div>
+                    </div>
+                {{/match}}
+            </div>
+        </div>
+    {{/get}}
     
         {{#get "pages" filter="featured:true+tag:-hash-hero" include="tags,authors" limit="all" order="published_at desc"}}
         {{#if pages}}
