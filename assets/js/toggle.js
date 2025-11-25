@@ -46,12 +46,6 @@ function moveImagesToToggleCards() {
     return !figure.classList.contains('kg-gallery-image') &&
            !figure.closest('.kg-gallery-card') &&
            !figure.closest('.kg-gallery-container') &&
-           !figure.closest('circles-component') &&
-           !figure.closest('.circles-section') &&
-           !figure.closest('.circle-scrollers') &&
-           !figure.closest('.parallax-image') &&
-           !figure.closest('.image-animation') &&
-           !figure.closest('.ease-in-animation') &&
            !figure.closest('.opacity-animation');
   });
 
