@@ -974,7 +974,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.container = this;
                     this.type = this.container.getAttribute('data-circles-content');
                     this.baseNumber;
-                    this.type == "Testimonials" ? this.setTestimonials() : this.init();
+                    this.type == "Brands" ? this.setBrands() : this.init();
                 }
 
                 init() {
@@ -987,7 +987,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }, 100));
                 }
 
-                setTestimonials(){
+                setBrands(){
                     const url = window.location.origin + "/brands/"
                     const temp = document.querySelector('#circle-pair-template');
                     fetch(url)
