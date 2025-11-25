@@ -6,7 +6,12 @@ window.addEventListener('mousemove', (event) => {
   targetY = event.clientY;
 });
 
-gsap.registerPlugin(ScrollTrigger);
+// Ensure GSAP is loaded before registering plugin
+if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+} else {
+  console.error('GSAP or ScrollTrigger not loaded');
+}
 
 function resetScrollTriggers(){
   ScrollTrigger.refresh();
