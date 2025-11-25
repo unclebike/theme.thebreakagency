@@ -83,45 +83,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 let targetY = window.innerHeight / 2;
                 let currentY = targetY;
                 const ease = 0.11;
-                let animationFrameId = null;
-                let announcementBarHeight = 0;
-
-                // Cache announcement bar height
-                const updateAnnouncementBarHeight = () => {
-                    let announcementBar = document.querySelector('#announcement-bar-root');
-                    announcementBarHeight = announcementBar ? parseFloat(window.getComputedStyle(announcementBar).height) : 0;
-                };
-
-                updateAnnouncementBarHeight();
-
+            
                 window.addEventListener('mousemove', (event) => {
+                    let announcementBar = document.querySelector('#announcement-bar-root');
+                    let announcementBarHeight = 0;
+                    if(announcementBar){
+                        announcementBarHeight = parseFloat(window.getComputedStyle(announcementBar).height);
+                    }
                     targetY = event.clientY - this.navHeight - this.navbarTopPadding - 3 - announcementBarHeight;
                 });
-
-                // Update announcement bar height on resize
-                window.addEventListener('resize', debounce(() => {
-                    updateAnnouncementBarHeight();
-                }, 100));
-
+            
                 const animate = () => {
-                    const delta = Math.abs(targetY - currentY);
-
-                    // Only animate if there's a meaningful difference
-                    if (delta > 0.5) {
-                        currentY += (targetY - currentY) * ease;
-                        this.circles.forEach(circle => {
-                            circle.style.top = `${currentY}px`;
-                        });
-                        animationFrameId = requestAnimationFrame(animate);
-                    } else {
-                        currentY = targetY;
-                        this.circles.forEach(circle => {
-                            circle.style.top = `${currentY}px`;
-                        });
-                        animationFrameId = requestAnimationFrame(animate);
-                    }
+                    currentY += (targetY - currentY) * ease;
+                    this.circles.forEach(circle => {
+                        circle.style.top = `${currentY}px`;  
+                    })                          
+                    requestAnimationFrame(animate);
                 };
-
+            
                 animate();
             }
 
@@ -646,33 +625,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.setActivePost(this.container.querySelectorAll('.featured-post')[0]); 
 
                 this.setCircle();
-
+                
                 if(window.matchMedia('(max-width: 1080px)').matches) return;
                 this.container.style.minHeight = `max(calc(54px + ${this.cardMaxHeight}px), calc((3.75vw + ${this.cardMaxHeight}px) * var(--scale)))`;
-            }
-
-            setCircle() {
-                if (!this.circle) return;
+            }  
+            
+            setCircle() {             
                 let currentY = targetY;
-                const ease = 0.11;
-                let animationFrameId = null;
-
+                const ease = 0.11;      
+            
                 const animate = () => {
-                    const delta = Math.abs(targetY - currentY);
-
-                    // Only update if there's a meaningful difference
-                    if (delta > 0.5) {
-                        currentY += (targetY - currentY) * ease;
-                        this.circle.style.top = `${currentY}px`;
-                    }
-
-                    animationFrameId = requestAnimationFrame(animate);
+                    currentY += (targetY - currentY) * ease;
+                    this.circle.style.top = `${currentY}px`;         
+                    requestAnimationFrame(animate);
                 };
-
+            
                 animate();
             }
-
-
+            
+            
             setActivePost(post){
                 let activePost = this.container.querySelector('.active-post');
 
@@ -756,30 +727,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this.setCircle();
                 this.allPostsMobileTrigger();
-            }
-
-            setCircle() {
-                if (!this.circle) return;
+            }  
+            
+            setCircle() {             
                 let currentY = targetY;
-                const ease = 0.11;
-                let animationFrameId = null;
-
+                const ease = 0.11;      
+            
                 const animate = () => {
-                    const delta = Math.abs(targetY - currentY);
-
-                    // Only update if there's a meaningful difference
-                    if (delta > 0.5) {
-                        currentY += (targetY - currentY) * ease;
-                        this.circle.style.top = `${currentY}px`;
-                    }
-
-                    animationFrameId = requestAnimationFrame(animate);
+                    currentY += (targetY - currentY) * ease;
+                    this.circle.style.top = `${currentY}px`;         
+                    requestAnimationFrame(animate);
                 };
-
+            
                 animate();
             }
-
-
+            
+            
             setActivePost(post){
                 if(window.matchMedia('(max-width: 1080px)').matches) return;
                 
@@ -795,7 +758,9 @@ document.addEventListener('DOMContentLoaded', function () {
             allPostsMobileTrigger(){
                 let container = this.container;
                 let selector = '.all-posts-item';
-
+              
+                gsap.registerPlugin(ScrollTrigger);
+              
                 killScrollTrigger(selector);
               
                 document.querySelectorAll(selector).forEach(heading => {
@@ -1009,21 +974,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.container = this;
                     this.type = this.container.getAttribute('data-circles-content');
                     this.baseNumber;
-                    this.type == "Brands" ? this.setBrands() : this.init();
+                    this.type == "Testimonials" ? this.setTestimonials() : this.init();
                 }
 
                 init() {
-                    this.setAnimationSpeed();
+                    this.setAnimationSpeed();                 
 
-                    this.setCircleAnimation();
-
+                    this.setCircleAnimation();   
+                    
                     window.addEventListener('resize', debounce(() => {
-                        this.setAnimationSpeed();
-                        this.setCircleAnimation();
+                        this.setCircleAnimation(); 
                     }, 100));
                 }
 
-                setBrands(){
+                setTestimonials(){
                     const url = window.location.origin + "/brands/"
                     const temp = document.querySelector('#circle-pair-template');
                     fetch(url)
@@ -1072,24 +1036,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 setAnimationSpeed(){
-                    const scrollContents = this.container.querySelectorAll('.infinite-scroll-content');
-                    if (!scrollContents || scrollContents.length === 0) return;
+                    this.baseNumber = this.container.querySelectorAll('.infinite-scroll-content')[0].querySelectorAll('.circle-element').length;
 
-                    const firstContent = scrollContents[0];
-                    if (!firstContent) return;
-
-                    const circleElements = firstContent.querySelectorAll('.circle-element');
-                    if (!circleElements || circleElements.length === 0) return;
-
-                    this.baseNumber = circleElements.length;
-
-                    scrollContents.forEach(el => {
+                    this.querySelectorAll('.infinite-scroll-content').forEach(el => {
                         if(el.parentNode.parentNode.classList.contains('reversed')){
                             el.style.animation = `scroll-right ${6 * this.baseNumber}s linear infinite`;
                         }else{
                             el.style.animation = `scroll-left ${6 * this.baseNumber}s linear infinite`;
                         }
-                    });
+                    })
                 }
 
                 setCircleAnimation() {
@@ -1097,40 +1052,32 @@ document.addEventListener('DOMContentLoaded', function () {
                     const innerWidth = window.innerWidth;
                     const container = document.querySelector('.slider-with-circles');
 
-                    if (!container) return;
-
                     killScrollTrigger('.slider-with-circles');
-
-                    if (window.matchMedia('(max-width: 1080px)').matches) {
+                
+                    if (window.matchMedia('(max-width: 1080px)').matches) {                    
                         container.style.marginBottom = '';
                         return;
                     }
-
-                    if(!container.classList.contains('no-slider')){
-                        const circleAnimation = document.querySelector('.slider-with-circles .circle-animation');
-                        if (circleAnimation) {
-                            gsap.to(circleAnimation, {
-                                scrollTrigger: {
-                                    trigger: container,
-                                    start: "top top",
-                                    end: () => {
-                                        const vmax = Math.max(innerWidth, innerHeight);
-                                        const aspectRatio = innerHeight / innerWidth;
-                                        const scrollMultiplier = aspectRatio > 1 ? 3 : 2;
-                                        return `${vmax * scrollMultiplier}px top`;
-                                    },
-                                    scrub: true,
+                
+                    if(!document.querySelector('.slider-with-circles').classList.contains('no-slider')){
+                        gsap.to('.slider-with-circles .circle-animation', {
+                            scrollTrigger: {
+                                trigger: container,
+                                start: "top top",
+                                end: () => {
+                                    const vmax = Math.max(innerWidth, innerHeight);
+                                    const aspectRatio = innerHeight / innerWidth;
+                                    const scrollMultiplier = aspectRatio > 1 ? 3 : 2;
+                                    return `${vmax * scrollMultiplier}px top`;
                                 },
-                                width: "100%",
-                                height: "100%",
-                            });
-                        }
+                                scrub: true,
+                            },
+                            width: "100%",
+                            height: "100%",
+                        });
                     }
-
-                    const infiniteScroll = container.querySelector('.infinite-scroll');
-                    if (!infiniteScroll) return;
-
-                    const height = infiniteScroll.offsetHeight;
+                
+                    const height = container.querySelector('.infinite-scroll').offsetHeight;
                     const angle = 10 * (Math.PI / 180);
                     const rotatedHeight = Math.abs(height * Math.cos(angle)) + Math.abs(innerWidth * Math.sin(angle));
                 
