@@ -117,12 +117,14 @@
     {{/match}}
     
      {{#get "pages" filter="tag:hash-events" include="tags" limit="8"}}
-        {{#if pages}}
+    <!-- 
+    {{#if pages}}
             <div class="subtitle-wrapper subtitle-with-margin no-top">
                 <h2 class="subtitle centered-text">{{t "(Upcoming Events)"}}</h2>
             </div>
 
         {{/if}}
+ -->
 
         <div id="circles-section" class="slider-with-circles{{#unless pages}} no-slider{{/unless}}" data-circles-content="{{@custom.homepage_circles_content}}">
             <div class="slider-with-circles-inner">      
@@ -130,7 +132,9 @@
                     {{>"components/slider-component"}}
                 {{/if}}
 
-                {{^match @custom.homepage_circles_content "None"}}
+
+            </div>
+                            {{^match @custom.homepage_circles_content "None"}}
                     <div class="circle-wrapper">
                         <div class="circle-outer">
                             <div class="circle-animation">
@@ -139,7 +143,6 @@
                         </div>
                     </div>
                 {{/match}}
-            </div>
         </div>
     {{/get}}   
     
