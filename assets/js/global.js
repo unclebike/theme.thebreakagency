@@ -6,12 +6,7 @@ window.addEventListener('mousemove', (event) => {
   targetY = event.clientY;
 });
 
-// Ensure GSAP is loaded before registering plugin
-if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-} else {
-  console.error('GSAP or ScrollTrigger not loaded');
-}
+gsap.registerPlugin(ScrollTrigger);
 
 function resetScrollTriggers(){
   ScrollTrigger.refresh();
@@ -56,9 +51,7 @@ function hexToRgba() {
 }
 
 window.addEventListener('resize', debounce(() => {
-  if (typeof ScrollTrigger !== 'undefined') {
-    ScrollTrigger.refresh();
-  }
+  ScrollTrigger.refresh();
 }, 800));
 
 function loadColors(colors, doc = document){
@@ -365,12 +358,6 @@ function setCreativePostImages() {
 }
 
 function setImageParallax() {
-  // Safety check: ensure GSAP is loaded
-  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
-    console.error('GSAP or ScrollTrigger not loaded - skipping parallax');
-    return;
-  }
-
   killScrollTrigger('.parallax-image');
 
   document.querySelectorAll('.parallax-image img').forEach((image) => {
@@ -402,12 +389,6 @@ function setImageParallax() {
 }
 
 function pageLoadAnimations() {
-  // Safety check: ensure GSAP is loaded
-  if (typeof gsap === 'undefined') {
-    console.error('GSAP not loaded - skipping page load animations');
-    return;
-  }
-
   let easeInAnimations = document.querySelectorAll('.ease-in-animation');
   let easeInAnimationsNoStagger = document.querySelectorAll('.ease-in-animation-no-stagger');
   let opacityAnimations = document.querySelectorAll('.opacity-animation');
