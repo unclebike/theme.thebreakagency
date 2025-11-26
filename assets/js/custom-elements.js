@@ -984,13 +984,41 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 init() {
-                    this.setAnimationSpeed();                 
+                    this.setAnimationSpeed();
 
-                    this.setCircleAnimation();   
-                    
+                    // Ensure GSAP and ScrollTrigger are ready before initializing animations
+                    this.initCircleAnimation();
+
                     window.addEventListener('resize', debounce(() => {
-                        this.setCircleAnimation(); 
+                        this.setCircleAnimation();
                     }, 100));
+                }
+
+                initCircleAnimation() {
+                    // Check if GSAP and ScrollTrigger are available
+                    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+                        // Retry after a short delay
+                        setTimeout(() => this.initCircleAnimation(), 50);
+                        return;
+                    }
+
+                    // Ensure the circle animation element exists
+                    const circleAnimation = document.querySelector('.circle-animation');
+                    if (!circleAnimation) {
+                        setTimeout(() => this.initCircleAnimation(), 50);
+                        return;
+                    }
+
+                    // Wait for the next frame to ensure DOM is fully laid out
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            this.setCircleAnimation();
+                            // Refresh ScrollTrigger after a short delay to ensure all calculations are correct
+                            setTimeout(() => {
+                                ScrollTrigger.refresh();
+                            }, 100);
+                        });
+                    });
                 }
 
                 setBrands(){
@@ -1057,16 +1085,25 @@ document.addEventListener('DOMContentLoaded', function () {
                     const innerHeight = window.innerHeight;
                     const innerWidth = window.innerWidth;
                     const container = document.querySelector('.slider-with-circles');
+                    const circleAnimation = document.querySelector('.slider-with-circles .circle-animation');
+
+                    if (!container || !circleAnimation) return;
 
                     killScrollTrigger('.slider-with-circles');
-                
-                    if (window.matchMedia('(max-width: 1080px)').matches) {                    
+
+                    if (window.matchMedia('(max-width: 1080px)').matches) {
                         container.style.marginBottom = '';
                         return;
                     }
-                
-                    if(!document.querySelector('.slider-with-circles').classList.contains('no-slider')){
-                        gsap.to('.slider-with-circles .circle-animation', {
+
+                    if(!container.classList.contains('no-slider')){
+                        // Set initial state to ensure circle is visible
+                        gsap.set(circleAnimation, {
+                            width: "0%",
+                            height: "0%"
+                        });
+
+                        gsap.to(circleAnimation, {
                             scrollTrigger: {
                                 trigger: container,
                                 start: "top top",
@@ -1077,16 +1114,17 @@ document.addEventListener('DOMContentLoaded', function () {
                                     return `${vmax * scrollMultiplier}px top`;
                                 },
                                 scrub: true,
+                                immediateRender: false,
                             },
                             width: "100%",
                             height: "100%",
                         });
                     }
-                
+
                     const height = container.querySelector('.infinite-scroll').offsetHeight;
                     const angle = 10 * (Math.PI / 180);
                     const rotatedHeight = Math.abs(height * Math.cos(angle)) + Math.abs(innerWidth * Math.sin(angle));
-                
+
                     (rotatedHeight * 2.15 > innerHeight) ? container.style.marginBottom = `${rotatedHeight * 2.15 - innerHeight}px` : container.style.marginBottom = '0px';
                 }
             }
