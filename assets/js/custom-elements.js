@@ -856,11 +856,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 init() {
+                    // Wait for Flickity to be available
+                    if (typeof Flickity === 'undefined') {
+                        setTimeout(() => this.init(), 50);
+                        return;
+                    }
+
                     this.flkty = new Flickity(this.slider.querySelector('.slider-wrapper'), {
                         cellAlign: 'center',
                         prevNextButtons: false,
                         pageDots: false,
-                        draggable: false,
+                        draggable: true,
                         selectedAttraction: 0.07, //speed
                         friction: 1, //bounciness
                         fade: true,
