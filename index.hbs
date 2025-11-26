@@ -146,17 +146,15 @@
         </div>
     {{/get}}   
     
-        {{#get "tags" include="count.posts" limit="all" order="count.posts desc"}}
+    {{#get "tags" filter="slug:~brand" include="count.posts" limit="all" order="count.posts desc"}}
         {{#if tags}}
             <featured-posts class="section no-padding" data-enable-preview="{{@custom.show_featured_post_preview}}">         
                 <div class="wide-container">
                     <div class="featured-posts">
                         <div class="featured-posts-inner">
-                            <!-- 
-<div class="subtitle-wrapper subtitle-with-margin">
-                                <h2 class="subtitle">{{t "Featured Pages"}}</h2>
-                            </div> -->
-
+                            <div class="subtitle-wrapper subtitle-with-margin">
+                                <h2 class="subtitle">{{t "Featured Brands"}}</h2>
+                            </div>
                             <div class="featured-posts-wrapper">
                                 <div class="featured-posts-list">
                                     <div class="featured-posts-circle"></div>
