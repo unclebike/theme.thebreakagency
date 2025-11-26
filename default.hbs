@@ -29,7 +29,29 @@
 
         <script>
             loadColors("{{@custom.colors}}");
-            document.addEventListener('DOMContentLoaded', () => {
+
+            let retryCount = 0;
+            const maxRetries = 20; // 1 second max wait
+
+            // Ensure GSAP is loaded before running animations
+            function initAnimations() {
+                if (typeof gsap === 'undefined') {
+                    retryCount++;
+                    if (retryCount < maxRetries) {
+                        console.warn('GSAP not loaded yet, retrying...');
+                        setTimeout(initAnimations, 50);
+                        return;
+                    } else {
+                        console.error('GSAP failed to load - showing content without animations');
+                        // Fallback: show content without animations
+                        document.querySelectorAll('.ease-in-animation, .ease-in-animation-no-stagger, .opacity-animation').forEach(el => {
+                            el.style.opacity = '1';
+                            el.style.transform = 'none';
+                        });
+                        return;
+                    }
+                }
+
                 hexToRgba();
                 pageLoadAnimations();
                 setCreativePostImages();
@@ -42,7 +64,9 @@
                     oldWidth = window.innerWidth;
                     setImageParallax();
                 }, 100));
-            })
+            }
+
+            document.addEventListener('DOMContentLoaded', initAnimations);
         </script>
 
         <style>

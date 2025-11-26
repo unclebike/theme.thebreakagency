@@ -56,7 +56,9 @@ function hexToRgba() {
 }
 
 window.addEventListener('resize', debounce(() => {
-  ScrollTrigger.refresh();
+  if (typeof ScrollTrigger !== 'undefined') {
+    ScrollTrigger.refresh();
+  }
 }, 800));
 
 function loadColors(colors, doc = document){
