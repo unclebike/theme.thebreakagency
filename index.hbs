@@ -146,7 +146,7 @@
         </div>
     {{/get}}   
     
-    {{#get "tags" filter="slug:~brand" include="count.posts" limit="all" order="count.posts desc"}}
+    {{#get "tags" filter="slug:~^brand" include="count.posts" limit="all" order="count.posts desc"}}
         {{#if tags}}
             <featured-posts class="section no-padding" data-enable-preview="{{@custom.show_featured_post_preview}}">         
                 <div class="wide-container">
