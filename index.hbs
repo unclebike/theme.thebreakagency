@@ -146,8 +146,8 @@
         </div>
     {{/get}}   
     
-        {{#get "pages" filter="featured:true+tag:-hash-hero" include="tags,authors" limit="all" order="published_at desc"}}
-        {{#if pages}}
+        {{#get "tags" filter="-description:null" include="count.posts" limit="all" order="count.posts desc"}}
+        {{#if tags}}
             <featured-posts class="section no-padding" data-enable-preview="{{@custom.show_featured_post_preview}}">         
                 <div class="wide-container">
                     <div class="featured-posts">
@@ -160,13 +160,13 @@
                             <div class="featured-posts-wrapper">
                                 <div class="featured-posts-list">
                                     <div class="featured-posts-circle"></div>
-                                    {{#foreach pages}}
+                                    {{#foreach tags}}
                                         <div class="featured-post">
                                             <div class="featured-post-inner">
                                                 <div class="featured-post-top">
                                                     <div class="horizontal-line"></div>
 
-                                                    <div class="tags-wrapper dark">
+                                                    <!-- <div class="tags-wrapper dark">
                                                         {{#unless access}}
                                                             <div class="flex-center">
                                                                 <div class="medium-text left-bracket">{{t "["}}</div>
@@ -187,11 +187,12 @@
                                                             </a>
                                                         {{/foreach}}
                                                     </div>
+ -->
                                                 </div>
 
                                                 <div class="featured-post-heading-wrapper">
                                                     <a href="{{url}}" class="big-text featured-post-title">
-                                                        {{title}}
+                                                        {{name}}
                                                     </a>
                                                 </div>
 
@@ -221,7 +222,7 @@
 
                                                         <div class="featured-post-excerpt">                                           
                                                             <p class="paragraph">
-                                                                {{excerpt}}
+                                                                {{description}}
                                                             </p>
                                                         </div>
 
