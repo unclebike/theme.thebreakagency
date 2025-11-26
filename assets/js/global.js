@@ -363,6 +363,12 @@ function setCreativePostImages() {
 }
 
 function setImageParallax() {
+  // Safety check: ensure GSAP is loaded
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+    console.error('GSAP or ScrollTrigger not loaded - skipping parallax');
+    return;
+  }
+
   killScrollTrigger('.parallax-image');
 
   document.querySelectorAll('.parallax-image img').forEach((image) => {
@@ -394,6 +400,12 @@ function setImageParallax() {
 }
 
 function pageLoadAnimations() {
+  // Safety check: ensure GSAP is loaded
+  if (typeof gsap === 'undefined') {
+    console.error('GSAP not loaded - skipping page load animations');
+    return;
+  }
+
   let easeInAnimations = document.querySelectorAll('.ease-in-animation');
   let easeInAnimationsNoStagger = document.querySelectorAll('.ease-in-animation-no-stagger');
   let opacityAnimations = document.querySelectorAll('.opacity-animation');
@@ -411,7 +423,7 @@ function pageLoadAnimations() {
   }
 
   if(easeInAnimationsNoStagger.length > 0){
-    
+
     gsap.to(easeInAnimationsNoStagger, {
       opacity: 1,
       y: 0,
@@ -449,7 +461,7 @@ function pageLoadAnimations() {
   let postContent = document.querySelector('.post-content');
   if(postContent){
       postContent.classList.add('visible-content')
-  }  
+  }
 }
 
 let lenis;
