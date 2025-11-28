@@ -480,14 +480,12 @@ button,
 }
 
 .subtitle {
-    grid-column: 1;
-    grid-row: 1;
     color: var(--text-color);
     text-transform: Uppercase;
     margin-top: 0;
     margin-bottom: 0;
     font-family: var(--font2);
-    font-size: max(28px, calc(1.94vw * var(--scale)));
+    font-size: max(28px, calc(1.14vw * var(--scale)));
     font-weight: 700;
     line-height: 120%;
 }
