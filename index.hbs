@@ -116,13 +116,13 @@
         <link rel="stylesheet" type="text/css" href="{{asset "css/post-card.css"}}" />
     {{/match}}
     
-    {{#get "pages" filter="tag:hash-index" limit="1"}}
-        {{#if pages}}
-            {{#foreach pages}}
+    {{#get "pages" filter="tag:hash-index" limit="1" as |indexResult|}}
+        {{#if indexResult.pages}}
+            {{#foreach indexResult.pages}}
                 {{! Store the index page data in this context }}
-                {{#get "pages" filter="tag:hash-events" include="tags" limit="8"}}
+                {{#get "pages" filter="tag:hash-events" include="tags" limit="8" as |eventsResult|}}
                     <!--
-                    {{#if pages}}
+                    {{#if eventsResult.pages}}
                             <div class="subtitle-wrapper subtitle-with-margin no-top">
                                 <h2 class="subtitle centered-text">{{t "(Upcoming Events)"}}</h2>
                             </div>
@@ -131,11 +131,13 @@
                     -->
 
                     <!--
-                        <div id="circles-section" class="slider-with-circles{{#unless pages}} no-slider{{/unless}}" data-circles-content="{{@custom.homepage_circles_content}}">
+                        <div id="circles-section" class="slider-with-circles{{#unless eventsResult.pages}} no-slider{{/unless}}" data-circles-content="{{@custom.homepage_circles_content}}">
                             <div class="slider-with-circles-inner">
                     -->
-                    {{#if pages}}
-                        {{>"components/slider-component" indexPage=this}}
+                    {{#if eventsResult.pages}}
+                        {{#with eventsResult}}
+                            {{>"components/slider-component" indexPage=@../this}}
+                        {{/with}}
                     {{/if}}
                     <!--             </div> -->
                     <!--
@@ -152,6 +154,39 @@
                         </div>
                 {{/get}}
             {{/foreach}}
+        {{else}}
+            {{! Fallback when no hash-index page exists }}
+            {{#get "pages" filter="tag:hash-events" include="tags" limit="8"}}
+                <!--
+                {{#if pages}}
+                        <div class="subtitle-wrapper subtitle-with-margin no-top">
+                            <h2 class="subtitle centered-text">{{t "(Upcoming Events)"}}</h2>
+                        </div>
+
+                    {{/if}}
+                -->
+
+                <!--
+                    <div id="circles-section" class="slider-with-circles{{#unless pages}} no-slider{{/unless}}" data-circles-content="{{@custom.homepage_circles_content}}">
+                        <div class="slider-with-circles-inner">
+                -->
+                {{#if pages}}
+                    {{>"components/slider-component"}}
+                {{/if}}
+                <!--             </div> -->
+                <!--
+                                {{^match @custom.homepage_circles_content "None"}}
+                        <div class="circle-wrapper">
+                            <div class="circle-outer">
+                                <div class="circle-animation">
+                                    {{>"components/circles-section" circles_data=@custom.homepage_circles_content }}
+                                </div>
+                            </div>
+                        </div>
+                    {{/match}}
+                -->
+                    </div>
+            {{/get}}
         {{/if}}
     {{/get}}   
     
