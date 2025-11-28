@@ -493,7 +493,7 @@ button,
     height: max(192px, calc(1.11vw * var(--scale)));
     width: max(192px, calc(1.11vw * var(--scale))); /* or adjust if your icon is wide/narrow */
     background-image: url('../images/yeti-bridges.png'); /* update this */
-    background-size: fill;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     flex-shrink: 0;
