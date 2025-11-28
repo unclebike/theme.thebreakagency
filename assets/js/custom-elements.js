@@ -530,15 +530,79 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!customElements.get('custom-form')) {
         customElements.define('custom-form', class CustomForm extends HTMLElement {
             constructor() {
-                super(); 
-    
+                super();
+
                 const formElement = this.querySelector('form');
                 const heading = document.querySelector('.form-page-content h1');
                 const description = document.querySelector('.form-page-content .form-page-paragraph p');
                 const homeButton = document.querySelector('.form-success-button');
-                const successHeading = this.querySelector("#form-success-heading-text").getAttribute('data-success-heading');
-                const successParagraph = this.querySelector("#form-success-paragraph-text").getAttribute('data-success-paragraph');
-                
+                const successHeading = this.querySelector("#form-success-heading-text")?.getAttribute('data-success-heading');
+                const successParagraph = this.querySelector("#form-success-paragraph-text")?.getAttribute('data-success-paragraph');
+
+                // Handle user type toggle
+                const toggleInputs = this.querySelectorAll('input[name="user-type"]');
+                const slider = this.querySelector('.toggle-slider');
+
+                if (toggleInputs.length > 0 && slider) {
+                    toggleInputs.forEach((input, index) => {
+                        input.addEventListener('change', (e) => {
+                            if (e.target.value === 'normie') {
+                                // Prevent form submission for normies
+                                e.preventDefault();
+
+                                // Hide the form
+                                formElement.style.display = "none";
+
+                                // Update heading and description
+                                heading.innerHTML = "Let's Connect!";
+                                description.innerHTML = "Thanks for your interest! Please reach out to us directly and we'll get back to you soon.";
+
+                                // Show a contact button instead
+                                const contactButton = document.createElement('a');
+                                contactButton.href = 'mailto:hello@thebreaksales.ca';
+                                contactButton.className = 'button form-success-button';
+                                contactButton.style.display = 'block';
+                                contactButton.textContent = 'Email Us';
+
+                                // Replace or insert the button
+                                const existingButton = this.querySelector('.form-success-button');
+                                if (existingButton) {
+                                    existingButton.replaceWith(contactButton);
+                                } else {
+                                    this.appendChild(contactButton);
+                                }
+
+                                // Automatically open mailto
+                                window.location.href = 'mailto:hello@thebreaksales.ca';
+                            } else if (e.target.value === 'dealer') {
+                                // Show the form again for dealers
+                                formElement.style.display = "flex";
+
+                                // Reset heading and description to original
+                                const originalHeading = document.querySelector('.form-page-content h1').getAttribute('data-original-heading');
+                                const originalDescription = document.querySelector('.form-page-content .form-page-paragraph p').getAttribute('data-original-description');
+
+                                if (originalHeading) {
+                                    heading.innerHTML = originalHeading;
+                                }
+                                if (originalDescription) {
+                                    description.innerHTML = originalDescription;
+                                }
+
+                                // Hide the email button
+                                const emailButton = this.querySelector('.form-success-button');
+                                if (emailButton && emailButton.textContent === 'Email Us') {
+                                    emailButton.style.display = 'none';
+                                }
+                            }
+                        });
+                    });
+
+                    // Store original heading and description
+                    heading.setAttribute('data-original-heading', heading.innerHTML);
+                    description.setAttribute('data-original-description', description.innerHTML);
+                }
+
                 let success = false;
                 const observer = new MutationObserver(function(mutationsList) {
                 for (const mutation of mutationsList) {
@@ -546,18 +610,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     const classList = mutation.target.classList;
                     if (classList.contains('success') && !success) {
                         success = true;
-                
+
                         formElement.style.display = "none";
-    
+
                         heading.innerHTML = successHeading;
                         homeButton.style.display = "block";
-    
+
                         description.innerHTML = successParagraph;
                     }
                     }
                 }
                 });
-                
+
                 observer.observe(formElement, { attributes: true });
             }
         })

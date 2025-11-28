@@ -198,8 +198,90 @@ input::placeholder {
     color: var(--text-color);
 }
 
+/* User Type Toggle Styles */
+.user-type-toggle {
+    position: relative;
+    display: flex;
+    gap: 0;
+    background-color: rgba(var(--overlay-text-color-rgb, 255, 255, 255), 0.2);
+    border-radius: 999px;
+    padding: max(4px, calc(0.28vw * var(--scale)));
+    margin-bottom: max(16px, calc(1.11vw * var(--scale)));
+    width: fit-content;
+}
+
+.full-page[data-accent-navigation="true"] .user-type-toggle {
+    background-color: rgba(var(--text-color-rgb, 0, 0, 0), 0.1);
+}
+
+.toggle-option {
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    padding: max(12px, calc(0.83vw * var(--scale))) max(32px, calc(2.22vw * var(--scale)));
+    transition: color 0.3s ease;
+}
+
+.toggle-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.toggle-label {
+    font-size: max(14px, calc(0.97vw * var(--scale)));
+    font-weight: 500;
+    color: var(--overlay-text-color);
+    transition: color 0.3s ease;
+}
+
+.full-page[data-accent-navigation="true"] .toggle-label {
+    color: var(--text-color);
+}
+
+.toggle-option input[type="radio"]:checked + .toggle-label {
+    color: var(--overlay-button-text-color);
+}
+
+.full-page[data-accent-navigation="true"] .toggle-option input[type="radio"]:checked + .toggle-label {
+    color: var(--background-color);
+}
+
+.toggle-slider {
+    position: absolute;
+    top: max(4px, calc(0.28vw * var(--scale)));
+    left: max(4px, calc(0.28vw * var(--scale)));
+    width: calc(50% - max(4px, calc(0.28vw * var(--scale))));
+    height: calc(100% - max(8px, calc(0.56vw * var(--scale))));
+    background-color: var(--overlay-text-color);
+    border-radius: 999px;
+    transition: transform 0.3s ease;
+    z-index: 1;
+}
+
+.full-page[data-accent-navigation="true"] .toggle-slider {
+    background-color: var(--text-color);
+}
+
+.toggle-option:nth-child(2) input[type="radio"]:checked ~ .toggle-slider,
+.user-type-toggle:has(.toggle-option:nth-child(2) input[type="radio"]:checked) .toggle-slider {
+    transform: translateX(calc(100% + max(4px, calc(0.28vw * var(--scale)))));
+}
+
 @media screen and (max-width: 1080px) {
     .full-page-section h1 {
         margin-bottom: 14px;
+    }
+
+    .user-type-toggle {
+        margin-bottom: 16px;
+    }
+
+    .toggle-option {
+        padding: 12px 32px;
+    }
+
+    .toggle-label {
+        font-size: 14px;
     }
 }

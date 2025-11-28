@@ -20,6 +20,20 @@
         {{#if @site.members_enabled}}
             {{#if account_page}}
                  <custom-form class="form-container{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                    {{#match type "subscribe"}}
+                        <div class="user-type-toggle">
+                            <label class="toggle-option">
+                                <input type="radio" name="user-type" value="dealer" checked>
+                                <span class="toggle-label">Dealer</span>
+                            </label>
+                            <label class="toggle-option">
+                                <input type="radio" name="user-type" value="normie">
+                                <span class="toggle-label">Normie</span>
+                            </label>
+                            <div class="toggle-slider"></div>
+                        </div>
+                    {{/match}}
+
                     <form data-members-form="{{type}}" data-members-autoredirect="false" class="page-form-element">
                         {{#match type "signin"}}
                             <div class="page-subscribe-wrapper">
@@ -42,7 +56,7 @@
                                     <div class="page-subscribe-wrapper-overlay"></div>
                                 </div>
                                 <button class="button" type="submit">{{#match type "signup"}}{{t "Continue"}}{{else}}{{t "Subscribe"}}{{/match}}</button>
-                            </div>                                 
+                            </div>
                         {{/match}}
                     
                         <div class="form-alerts">
