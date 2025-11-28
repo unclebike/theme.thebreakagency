@@ -475,6 +475,9 @@ button,
 }
 
 .subtitle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
     color: var(--text-color);
     text-transform: none;
     margin-top: 0;
@@ -483,6 +486,17 @@ button,
     font-size: max(16px, calc(1.11vw * var(--scale)));
     font-weight: 400;
     line-height: 130%;
+}
+
+.subtitle-icon {
+    display: inline-block;
+    height: 2em;
+    width: 2em; /* or adjust if your icon is wide/narrow */
+    background-image: url("{{asset 'images/yeti-bridges.png'}}"); /* update this */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    flex-shrink: 0;
 }
 
 .space-between-subtitle {
