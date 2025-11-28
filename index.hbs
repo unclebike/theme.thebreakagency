@@ -116,77 +116,36 @@
         <link rel="stylesheet" type="text/css" href="{{asset "css/post-card.css"}}" />
     {{/match}}
     
-    {{#get "pages" filter="tag:[hash-index,hash-events]" include="tags" limit="1" as |indexResult|}}
-        {{#if indexResult.pages}}
-            {{#foreach indexResult.pages as |indexPage|}}
-                {{! indexPage = the page with BOTH #index and #events (provides bg image & title) }}
-                {{#get "pages" filter="tag:hash-events" include="tags" limit="8"}}
-                    <!--
-                    {{#if pages}}
-                            <div class="subtitle-wrapper subtitle-with-margin no-top">
-                                <h2 class="subtitle centered-text">{{t "(Upcoming Events)"}}</h2>
-                            </div>
+    {{#get "pages" filter="tag:hash-events" include="tags" limit="8"}}
+        <!--
+        {{#if pages}}
+                <div class="subtitle-wrapper subtitle-with-margin no-top">
+                    <h2 class="subtitle centered-text">{{t "(Upcoming Events)"}}</h2>
+                </div>
 
-                        {{/if}}
-                    -->
+            {{/if}}
+        -->
 
-                    <!--
-                        <div id="circles-section" class="slider-with-circles{{#unless pages}} no-slider{{/unless}}" data-circles-content="{{@custom.homepage_circles_content}}">
-                            <div class="slider-with-circles-inner">
-                    -->
-                    {{#if pages}}
-                        {{! pages = ALL event pages (used for the list on index slide) }}
-                        {{>"components/slider-component" indexPage=indexPage}}
-                    {{/if}}
-                    <!--             </div> -->
-                    <!--
-                                    {{^match @custom.homepage_circles_content "None"}}
-                            <div class="circle-wrapper">
-                                <div class="circle-outer">
-                                    <div class="circle-animation">
-                                        {{>"components/circles-section" circles_data=@custom.homepage_circles_content }}
-                                    </div>
-                                </div>
-                            </div>
-                        {{/match}}
-                    -->
-                        </div>
-                {{/get}}
-            {{/foreach}}
-        {{else}}
-            {{! Fallback when no page has both #index and #events tags }}
-            {{#get "pages" filter="tag:hash-events" include="tags" limit="8"}}
-                <!--
-                {{#if pages}}
-                        <div class="subtitle-wrapper subtitle-with-margin no-top">
-                            <h2 class="subtitle centered-text">{{t "(Upcoming Events)"}}</h2>
-                        </div>
-
-                    {{/if}}
-                -->
-
-                <!--
-                    <div id="circles-section" class="slider-with-circles{{#unless pages}} no-slider{{/unless}}" data-circles-content="{{@custom.homepage_circles_content}}">
-                        <div class="slider-with-circles-inner">
-                -->
-                {{#if pages}}
-                    {{>"components/slider-component"}}
-                {{/if}}
-                <!--             </div> -->
-                <!--
-                                {{^match @custom.homepage_circles_content "None"}}
-                        <div class="circle-wrapper">
-                            <div class="circle-outer">
-                                <div class="circle-animation">
-                                    {{>"components/circles-section" circles_data=@custom.homepage_circles_content }}
-                                </div>
-                            </div>
-                        </div>
-                    {{/match}}
-                -->
-                    </div>
-            {{/get}}
+        <!--
+            <div id="circles-section" class="slider-with-circles{{#unless pages}} no-slider{{/unless}}" data-circles-content="{{@custom.homepage_circles_content}}">
+                <div class="slider-with-circles-inner">
+        -->
+        {{#if pages}}
+            {{>"components/slider-component"}}
         {{/if}}
+        <!--             </div> -->
+        <!--
+                        {{^match @custom.homepage_circles_content "None"}}
+                <div class="circle-wrapper">
+                    <div class="circle-outer">
+                        <div class="circle-animation">
+                            {{>"components/circles-section" circles_data=@custom.homepage_circles_content }}
+                        </div>
+                    </div>
+                </div>
+            {{/match}}
+        -->
+            </div>
     {{/get}}   
     
     {{#get "tags" filter="slug:~^'brand-'" include="count.posts" limit="all" order="count.posts desc"}}
