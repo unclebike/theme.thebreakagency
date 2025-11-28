@@ -103,6 +103,24 @@
                     </div>
                 </div>
                 <div class="background-image slide-image-animation">
+                    {{#if indexPage.feature_image}}
+                        <figure class="parallax-image{{^match @custom.homepage_circles_content "None"}} parallax-image-mobile{{/match}}">
+                            <img
+                                srcset="{{img_url indexPage.feature_image size="s" format="webp"}} 320w,
+                                    {{img_url indexPage.feature_image size="xm" format="webp"}} 440w,
+                                    {{img_url indexPage.feature_image size="m" format="webp"}} 720w,
+                                    {{img_url indexPage.feature_image size="l" format="webp"}} 960w,
+                                    {{img_url indexPage.feature_image size="xl" format="webp"}} 1200w,
+                                    {{img_url indexPage.feature_image size="xxl" format="webp"}} 2000w,
+                                    {{img_url indexPage.feature_image size="2k" format="webp"}} 2560w,
+                                    {{img_url indexPage.feature_image size="4k" format="webp"}} 3840w"
+                                src="{{img_url indexPage.feature_image size="xxl"}}"
+                                alt="{{#if indexPage.feature_image_alt}}{{indexPage.feature_image_alt}}{{else}}Events Index{{/if}}"
+                            >
+                        </figure>
+                    {{else}}
+                        <div class="gradient-background"></div>
+                    {{/if}}
                     <div class="dark-overlay"></div>
                 </div>
             </div>

@@ -114,7 +114,9 @@
     opacity: 0.7;
 }
 
-.index-slide .background-image {
+.index-slide .background-image .gradient-background {
+    width: 100%;
+    height: 100%;
     background: linear-gradient(135deg, var(--background-color) 0%, color-mix(in srgb, var(--background-color) 90%, var(--text-color)) 100%);
 }
 
