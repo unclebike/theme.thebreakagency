@@ -39,6 +39,8 @@ html[data-primary-font="Thunder"]  .full-page-section h1 {
 
 .form-page-paragraph {
     max-width: max(445px, calc(30.9vw * var(--scale)));
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .page-subscribe-wrapper {
