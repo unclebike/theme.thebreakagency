@@ -483,10 +483,22 @@ button,
     margin-top: 0;
     margin-bottom: 0;
     font-family: var(--font2);
-    font-weight: 700;
-	line-height: calc(80% * var(--heading-font-line-height-scale));
+    font-size: max(16px, calc(1.11vw * var(--scale)));
     font-weight: 700;
     line-height: calc(80% * var(--heading-font-line-height-scale));
+}
+
+.subtitle-caption {
+    display: block;
+    color: var(--text-color);
+    opacity: 0.7;
+    text-transform: none;
+    margin-top: max(8px, calc(0.56vw * var(--scale)));
+    margin-bottom: 0;
+    font-family: var(--font2);
+    font-size: max(14px, calc(0.97vw * var(--scale)));
+    font-weight: 400;
+    line-height: 150%;
 }
 
 .subtitle-icon {
