@@ -2168,13 +2168,40 @@ td {
     margin: 0 !important;
     width: 100%;
     height: 100%;
+    min-height: max(200px, calc(13.9vw * var(--scale)));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(20px, calc(1.39vw * var(--scale)));
+    border-radius: max(8px, calc(0.56vw * var(--scale)));
+    overflow: hidden;
+    position: relative;
 }
 
 .kg-image-masonry-grid .kg-image-card img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    object-position: center;
+    max-height: 100%;
+}
+
+/* For images that span multiple columns, make them taller */
+.kg-image-masonry-grid .kg-image-card:first-child {
+    min-height: max(300px, calc(20.8vw * var(--scale)));
+}
+
+.kg-image-masonry-grid[data-image-count="8"] .kg-image-card:nth-child(2) {
+    min-height: max(300px, calc(20.8vw * var(--scale)));
+}
+
+/* Ensure images with colored backgrounds display properly */
+.kg-image-card.kg-image-with-bg {
+    background-clip: padding-box;
+}
+
+.kg-image-card.kg-image-with-bg img {
+    mix-blend-mode: normal;
 }
 
 @media (min-width: 1920px) {
@@ -2243,6 +2270,17 @@ td {
     /* Reset any spanning on tablet */
     .kg-image-masonry-grid .kg-image-card {
         grid-column: span 1 !important;
+        min-height: 180px;
+        padding: 14px;
+        border-radius: 6px;
+    }
+
+    .kg-image-masonry-grid .kg-image-card:first-child {
+        min-height: 180px;
+    }
+
+    .kg-image-masonry-grid[data-image-count="8"] .kg-image-card:nth-child(2) {
+        min-height: 180px;
     }
 
     /* BOOKMARK */
@@ -2706,6 +2744,20 @@ td {
     .kg-image-masonry-grid[data-image-count="8"],
     .kg-image-masonry-grid[data-image-count="9"] {
         grid-template-columns: 1fr;
+    }
+
+    .kg-image-masonry-grid .kg-image-card {
+        min-height: 160px;
+        padding: 12px;
+        border-radius: 5px;
+    }
+
+    .kg-image-masonry-grid .kg-image-card:first-child {
+        min-height: 160px;
+    }
+
+    .kg-image-masonry-grid[data-image-count="8"] .kg-image-card:nth-child(2) {
+        min-height: 160px;
     }
 
     /* BOOKMARK */

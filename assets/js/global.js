@@ -487,6 +487,16 @@ function applyImageGridPattern() {
   const children = Array.from(postContent.children);
   console.log('Found', children.length, 'children in post-content-inner');
 
+  // Get theme colors
+  const rootStyles = getComputedStyle(document.documentElement);
+  const textColor = rootStyles.getPropertyValue('--text-color').trim();
+  const backgroundColor = rootStyles.getPropertyValue('--background-color').trim();
+  const overlayTextColor = rootStyles.getPropertyValue('--overlay-text-color').trim();
+  const overlayButtonTextColor = rootStyles.getPropertyValue('--overlay-button-text-color').trim();
+
+  // Create array of available colors (excluding background color)
+  const colors = [textColor, overlayTextColor, overlayButtonTextColor].filter(color => color && color !== backgroundColor);
+
   for (let i = 0; i < children.length; i++) {
     const element = children[i];
 
@@ -525,12 +535,19 @@ function applyImageGridPattern() {
         // Insert wrapper before the first image
         images[0].parentNode.insertBefore(wrapper, images[0]);
 
-        // Move all images into the wrapper
-        images.forEach(img => {
+        // Move all images into the wrapper and assign colors
+        images.forEach((img, index) => {
           wrapper.appendChild(img);
+
+          // Assign a background color cycling through available colors
+          const colorIndex = index % colors.length;
+          img.style.backgroundColor = colors[colorIndex];
+
+          // Add a class to indicate it has a colored background
+          img.classList.add('kg-image-with-bg');
         });
 
-        console.log('Masonry grid created successfully');
+        console.log('Masonry grid created successfully with colored backgrounds');
       } else {
         if (images.length < 3) {
           console.log('Not enough images (need 3-9, found', images.length + ')');
