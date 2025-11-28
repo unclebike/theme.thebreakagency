@@ -58,9 +58,9 @@
         </button>
 
         <div class="slider-wrapper">
-            {{#foreach pages as |page allPages|}}
+            {{#foreach pages}}
                 <div
-                    class="slide index-slide-list background-media"
+                    class="slide{{#has tag="#index"}} index-slide{{/has}} background-media"
                     role="group"
                     aria-roledescription="Slide"
                     aria-label="{{@number}} of {{@root.pages.length}}"
@@ -80,29 +80,7 @@
                                             <h1>{{title}}</h1>
                                         </div>
                                         <div class="post-summary-wrapper slide-ease-in-animation">
-                                            <div class="index-slide-list">
-                                                {{#foreach allPages}}
-                                                    {{#has tag="#index"}}
-                                                        {{! Skip this page - it's the index itself }}
-                                                    {{else}}
-                                                        <div class="index-slide-row">
-                                                            <a href="#" class="index-slide-item bracket-button" data-target-slide="{{@number}}">
-                                                                <div class="medium-text left-bracket">{{t "["}}</div>
-                                                                <div class="bracket-button-text">
-                                                                    <div class="medium-text main">{{title}}</div>
-                                                                    <div class="medium-text absolute">{{title}}</div>
-                                                                </div>
-                                                                <div class="medium-text right-bracket">{{t "]"}}</div>
-                                                            </a>
-                                                            {{#if excerpt}}
-                                                                <div class="index-slide-excerpt">
-                                                                    <p class="paragraph overlay">{{excerpt}}</p>
-                                                                </div>
-                                                            {{/if}}
-                                                        </div>
-                                                    {{/has}}
-                                                {{/foreach}}
-                                            </div>
+                                            {{>"components/index-slide-list"}}
                                         </div>
                                     {{else}}
                                         {{! This is a regular event slide }}
@@ -136,7 +114,7 @@
                                         </div>
                                     {{/has}}
                                 </div>
-                                {{#has tag="hash-index"}}
+                                {{#has tag="#index"}}
                                     {{! No button on index slide }}
                                 {{else}}
                                     {{^match @custom.button_style_on_background_media "None"}}
