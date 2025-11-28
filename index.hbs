@@ -116,10 +116,10 @@
         <link rel="stylesheet" type="text/css" href="{{asset "css/post-card.css"}}" />
     {{/match}}
     
-    {{#get "pages" filter="tag:hash-index" limit="1" as |indexResult|}}
+    {{#get "pages" filter="tag:[hash-index,hash-events]" include="tags" limit="1" as |indexResult|}}
         {{#if indexResult.pages}}
             {{#foreach indexResult.pages}}
-                {{! Store the index page data in this context }}
+                {{! This is the page with both hash-index and hash-events tags (e.g., "Events" page) }}
                 {{#get "pages" filter="tag:hash-events" include="tags" limit="8" as |eventsResult|}}
                     <!--
                     {{#if eventsResult.pages}}
