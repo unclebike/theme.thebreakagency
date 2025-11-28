@@ -534,7 +534,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const formElement = this.querySelector('form');
                 const heading = document.querySelector('.form-page-content h1');
-                const description = document.querySelector('.form-page-content .form-page-paragraph p');
+                const description = this.querySelector('.form-page-paragraph p');
                 const homeButton = document.querySelector('.form-success-button');
                 const successHeading = this.querySelector("#form-success-heading-text")?.getAttribute('data-success-heading');
                 const successParagraph = this.querySelector("#form-success-paragraph-text")?.getAttribute('data-success-paragraph');
@@ -553,8 +553,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 // Hide the form
                                 formElement.style.display = "none";
 
-                                // Update heading and description
-                                heading.innerHTML = "Let's Connect!";
+                                // Update description only (heading stays the same)
                                 description.innerHTML = "Thanks for your interest! Please reach out to us directly and we'll get back to you soon.";
 
                                 // Show a contact button instead
@@ -575,13 +574,9 @@ document.addEventListener('DOMContentLoaded', function () {
                                 // Show the form again for dealers
                                 formElement.style.display = "flex";
 
-                                // Reset heading and description to original
-                                const originalHeading = document.querySelector('.form-page-content h1').getAttribute('data-original-heading');
-                                const originalDescription = document.querySelector('.form-page-content .form-page-paragraph p').getAttribute('data-original-description');
+                                // Reset description to original (heading stays the same)
+                                const originalDescription = description.getAttribute('data-original-description');
 
-                                if (originalHeading) {
-                                    heading.innerHTML = originalHeading;
-                                }
                                 if (originalDescription) {
                                     description.innerHTML = originalDescription;
                                 }
@@ -595,8 +590,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         });
                     });
 
-                    // Store original heading and description
-                    heading.setAttribute('data-original-heading', heading.innerHTML);
+                    // Store original description only
                     description.setAttribute('data-original-description', description.innerHTML);
                 }
 
