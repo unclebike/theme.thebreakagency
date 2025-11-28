@@ -2104,6 +2104,79 @@ td {
 
 }
 
+/* MASONRY IMAGE GRID */
+
+.kg-image-masonry-grid {
+    display: grid;
+    gap: max(20px, calc(1.39vw * var(--scale)));
+    width: 100%;
+}
+
+/* 3 images: 2 columns */
+.kg-image-masonry-grid[data-image-count="3"] {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.kg-image-masonry-grid[data-image-count="3"] .kg-image-card:first-child {
+    grid-column: span 2;
+}
+
+/* 4 images: 2x2 grid */
+.kg-image-masonry-grid[data-image-count="4"] {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* 5 images: 3 columns with first spanning 2 */
+.kg-image-masonry-grid[data-image-count="5"] {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.kg-image-masonry-grid[data-image-count="5"] .kg-image-card:first-child {
+    grid-column: span 2;
+}
+
+/* 6 images: 3x2 grid */
+.kg-image-masonry-grid[data-image-count="6"] {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* 7 images: 3 columns with first spanning 2 */
+.kg-image-masonry-grid[data-image-count="7"] {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.kg-image-masonry-grid[data-image-count="7"] .kg-image-card:first-child {
+    grid-column: span 2;
+}
+
+/* 8 images: 3 columns with asymmetric layout */
+.kg-image-masonry-grid[data-image-count="8"] {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.kg-image-masonry-grid[data-image-count="8"] .kg-image-card:nth-child(2) {
+    grid-column: span 2;
+}
+
+/* 9 images: 3x3 grid */
+.kg-image-masonry-grid[data-image-count="9"] {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Make all images in the grid fit properly */
+.kg-image-masonry-grid .kg-image-card {
+    margin: 0 !important;
+    width: 100%;
+    height: 100%;
+}
+
+.kg-image-masonry-grid .kg-image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+}
+
 @media (min-width: 1920px) {
     .kg-width-full .kg-signup-card-text {
         padding: 9.6vmax 20vw;
@@ -2129,7 +2202,7 @@ td {
 
     blockquote {
         padding-left: 22px;
-        font-size: calc(36px * var(--heading-font-scale)); 
+        font-size: calc(36px * var(--heading-font-scale));
         border-left: 2px solid var(--text-color);
     }
 
@@ -2137,7 +2210,7 @@ td {
         font-size: 17px;
         padding: 12px;
     }
-    
+
     td {
         font-size: 16px;
         padding: 12px;
@@ -2148,6 +2221,28 @@ td {
     .kg-gallery-card,
     .kg-image-card {
         --gap: 14px;
+    }
+
+    /* MASONRY IMAGE GRID - MOBILE */
+
+    .kg-image-masonry-grid {
+        gap: 14px;
+    }
+
+    /* All grids become 2 columns on tablet */
+    .kg-image-masonry-grid[data-image-count="3"],
+    .kg-image-masonry-grid[data-image-count="4"],
+    .kg-image-masonry-grid[data-image-count="5"],
+    .kg-image-masonry-grid[data-image-count="6"],
+    .kg-image-masonry-grid[data-image-count="7"],
+    .kg-image-masonry-grid[data-image-count="8"],
+    .kg-image-masonry-grid[data-image-count="9"] {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Reset any spanning on tablet */
+    .kg-image-masonry-grid .kg-image-card {
+        grid-column: span 1 !important;
     }
 
     /* BOOKMARK */
@@ -2594,6 +2689,23 @@ td {
     .kg-gallery-card,
     .kg-image-card {
         --gap: 12px;
+    }
+
+    /* MASONRY IMAGE GRID - MOBILE */
+
+    .kg-image-masonry-grid {
+        gap: 12px;
+    }
+
+    /* Single column on mobile */
+    .kg-image-masonry-grid[data-image-count="3"],
+    .kg-image-masonry-grid[data-image-count="4"],
+    .kg-image-masonry-grid[data-image-count="5"],
+    .kg-image-masonry-grid[data-image-count="6"],
+    .kg-image-masonry-grid[data-image-count="7"],
+    .kg-image-masonry-grid[data-image-count="8"],
+    .kg-image-masonry-grid[data-image-count="9"] {
+        grid-template-columns: 1fr;
     }
 
     /* BOOKMARK */

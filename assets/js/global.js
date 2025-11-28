@@ -476,3 +476,45 @@ function setSmoothScroll() {
 
   requestAnimationFrame(raf);
 }
+
+function applyImageGridPattern() {
+  const postContent = document.querySelector('.post-content-inner');
+  if (!postContent) return;
+
+  const children = Array.from(postContent.children);
+
+  for (let i = 0; i < children.length; i++) {
+    const element = children[i];
+
+    // Check if current element is a kg-header
+    if (element.classList.contains('kg-header-card')) {
+      const images = [];
+      let nextIndex = i + 1;
+
+      // Collect consecutive image cards
+      while (nextIndex < children.length && children[nextIndex].classList.contains('kg-image-card')) {
+        images.push(children[nextIndex]);
+        nextIndex++;
+      }
+
+      // Check if there are 3-9 images and the next element is a divider
+      if (images.length >= 3 && images.length <= 9 &&
+          nextIndex < children.length &&
+          children[nextIndex].tagName === 'HR') {
+
+        // Create a wrapper for the images
+        const wrapper = document.createElement('div');
+        wrapper.className = 'kg-image-masonry-grid';
+        wrapper.setAttribute('data-image-count', images.length);
+
+        // Insert wrapper before the first image
+        images[0].parentNode.insertBefore(wrapper, images[0]);
+
+        // Move all images into the wrapper
+        images.forEach(img => {
+          wrapper.appendChild(img);
+        });
+      }
+    }
+  }
+}
