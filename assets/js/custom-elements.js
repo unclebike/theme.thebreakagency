@@ -930,6 +930,7 @@ document.addEventListener('DOMContentLoaded', function () {
                               this.slider.querySelector('.slider-wrapper').setAttribute('tabindex', '-1');
                               this.animateSlideContent();
                               this.setLinkTabindex();
+                              this.setupIndexSlideLinks();
                             },
                         }
                     });
@@ -939,7 +940,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             this.flkty.previous(true);
                         });
                     }
-        
+
                     if (this.nextButton) {
                         this.nextButton.addEventListener('click', () => {
                             this.flkty.next(true);
@@ -983,9 +984,25 @@ document.addEventListener('DOMContentLoaded', function () {
                     currentLink.setAttribute('tabindex', '0');
                 }
 
+                setupIndexSlideLinks() {
+                    const indexSlideItems = this.slider.querySelectorAll('.index-slide-item');
+
+                    indexSlideItems.forEach(item => {
+                        item.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const targetSlide = parseInt(item.getAttribute('data-target-slide'));
+                            if (!isNaN(targetSlide)) {
+                                // Flickity uses 0-based indexing, but our slides start at index 0 (index slide)
+                                // so target slide 1 is at Flickity index 1
+                                this.flkty.select(targetSlide);
+                            }
+                        });
+                    });
+                }
+
                 animateSlideContent(initial = true) {
                     let slide = this.querySelector('.slide.is-selected');
-          
+
                     gsap.to(slide.querySelectorAll('.slide-ease-in-animation'), {
                       opacity: 1,
                       y: 0,
@@ -994,7 +1011,7 @@ document.addEventListener('DOMContentLoaded', function () {
                       stagger: 0.03,
                       ease: 'expo.out',
                     });
-          
+
 
                     gsap.fromTo(
                         slide.querySelector('.slide-image-animation'),
@@ -1009,9 +1026,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     );
 
                     if (initial) return;
-                    
+
                     let prevSlide = this.querySelector(`.slide[data-slide-number='${this.currentIndex}']`);
-          
+
                     gsap.to(prevSlide.querySelectorAll('.slide-ease-in-animation'), {
                       opacity: 0,
                       y: 30,

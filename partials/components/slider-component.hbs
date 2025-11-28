@@ -58,8 +58,45 @@
         </button>
 
         <div class="slider-wrapper">
+            <!-- Index Slide -->
+            <div
+                class="slide index-slide background-media"
+                role="group"
+                aria-roledescription="Slide"
+                aria-label="Index of {{pages.length}} slides"
+                data-slide-number="0"
+                data-slug="index"
+            >
+                <div class="wide-container">
+                    <div class="hero-content">
+                        <div class="hero-content-inner">
+                            <div class="hero-text-content">
+                                <div class="heading-1-wrapper slide-ease-in-animation">
+                                    <h1>Events</h1>
+                                </div>
+                                <div class="index-slide-list slide-ease-in-animation">
+                                    {{#foreach pages}}
+                                        <a href="#" class="index-slide-item bracket-button" data-target-slide="{{@number}}">
+                                            <div class="medium-text left-bracket">{{t "["}}</div>
+                                            <div class="bracket-button-text">
+                                                <div class="medium-text main">{{title}}</div>
+                                                <div class="medium-text absolute">{{title}}</div>
+                                            </div>
+                                            <div class="medium-text right-bracket">{{t "]"}}</div>
+                                        </a>
+                                    {{/foreach}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="background-image slide-image-animation">
+                    <div class="dark-overlay"></div>
+                </div>
+            </div>
+
             {{#foreach pages}}
-                <div 
+                <div
                     class="slide background-media"
                     role="group"
                     aria-roledescription="Slide"
