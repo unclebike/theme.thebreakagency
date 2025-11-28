@@ -80,14 +80,21 @@
                                 <div class="post-summary-wrapper slide-ease-in-animation">
                                     <div class="index-slide-list">
                                         {{#foreach pages}}
-                                            <a href="#" class="index-slide-item bracket-button" data-target-slide="{{@number}}">
-                                                <div class="medium-text left-bracket">{{t "["}}</div>
-                                                <div class="bracket-button-text">
-                                                    <div class="medium-text main">{{title}}</div>
-                                                    <div class="medium-text absolute">{{title}}</div>
-                                                </div>
-                                                <div class="medium-text right-bracket">{{t "]"}}</div>
-                                            </a>
+                                            <div class="index-slide-row">
+                                                <a href="#" class="index-slide-item bracket-button" data-target-slide="{{@number}}">
+                                                    <div class="medium-text left-bracket">{{t "["}}</div>
+                                                    <div class="bracket-button-text">
+                                                        <div class="medium-text main">{{title}}</div>
+                                                        <div class="medium-text absolute">{{title}}</div>
+                                                    </div>
+                                                    <div class="medium-text right-bracket">{{t "]"}}</div>
+                                                </a>
+                                                {{#if excerpt}}
+                                                    <div class="index-slide-excerpt">
+                                                        <p class="paragraph overlay">{{excerpt}}</p>
+                                                    </div>
+                                                {{/if}}
+                                            </div>
                                         {{/foreach}}
                                     </div>
                                 </div>
@@ -120,17 +127,17 @@
                                                 <span class="restricted-access-icon flex-center overlay-text-color">
                                                     {{> "icons/lock-icon"}}
                                                 </span>
-                                                <div class="medium-text right-bracket">{{t "["}}</div>
+                                                <div class="medium-text right-bracket">{{t "]"}}</div>
                                             </div>
                                         {{/unless}}
-                                        {{#foreach tags limit="2"}}                                            
+                                        {{#foreach tags limit="2"}}
                                             <a href="{{url}}" class="bracket-button">
                                                 <div class="medium-text left-bracket">{{t "["}}</div>
                                                 <div class="bracket-button-text">
                                                     <div class="medium-text main">{{name}}</div>
                                                     <div class="medium-text absolute">{{name}}</div>
                                                 </div>
-                                                <div class="medium-text right-bracket">{{t "["}}</div>
+                                                <div class="medium-text right-bracket">{{t "]"}}</div>
                                             </a>
                                         {{/foreach}}
                                     </div>
