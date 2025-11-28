@@ -490,13 +490,15 @@ button,
 
 .subtitle-icon {
     display: inline-block;
-    height: 2em;
-    width: 2em; /* or adjust if your icon is wide/narrow */
-    background-image: url("{{asset 'images/yeti-bridges.png'}}"); /* update this */
-    background-size: contain;
+    height: max(192px, calc(1.11vw * var(--scale)));
+    width: auto; /* or adjust if your icon is wide/narrow */
+    background-image: url('../images/yeti-bridges.png'); /* update this */
+    background-size: fill;
     background-repeat: no-repeat;
     background-position: center;
     flex-shrink: 0;
+    vertical-align: middle;
+    align-self: center; /* if using inline-flex */
 }
 
 .space-between-subtitle {
