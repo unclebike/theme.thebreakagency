@@ -480,11 +480,11 @@ button,
 .subtitle {
     display: block;
     color: var(--text-color);
-    text-transform: none;
+    text-transform: Uppercase;
     margin-top: 0;
     margin-bottom: max(6px, calc(0.42vw * var(--scale)));
     font-family: var(--font2);
-    font-size: max(28px, calc(1.94vw * var(--scale)));
+    font-size: max(64px, calc(2.94vw * var(--scale)));
     font-weight: 700;
     line-height: 120%;
 }
@@ -497,15 +497,15 @@ button,
     margin-top: 0;
     margin-bottom: 0;
     font-family: var(--font2);
-    font-size: max(14px, calc(0.97vw * var(--scale)));
+    font-size: max(18px, calc(1.97vw * var(--scale)));
     font-weight: 400;
     line-height: 140%;
 }
 
 .subtitle-icon {
     display: inline-block;
-    height: max(48px, calc(3.33vw * var(--scale)));
-    width: max(48px, calc(3.33vw * var(--scale)));
+    height: max(192px, calc(4.33vw * var(--scale)));
+    width: max(192px, calc(4.33vw * var(--scale)));
     background-image: url('../images/yeti-bridges.png');
     background-size: contain;
     background-repeat: no-repeat;
