@@ -41,7 +41,11 @@ html[data-primary-font="Thunder"]  .full-page-section h1 {
     max-width: max(445px, calc(30.9vw * var(--scale)));
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: calc(1vw * var(--scale));
+}
+
+.form-container .form-page-paragraph {
+    margin-top: 0;
+    margin-bottom: max(16px, calc(1.11vw * var(--scale)));
 }
 
 .page-subscribe-wrapper {

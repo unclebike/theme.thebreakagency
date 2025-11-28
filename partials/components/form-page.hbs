@@ -11,12 +11,6 @@
             {{title}}
         </h1>
 
-        <div class="form-page-paragraph{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
-            <p class="paragraph light">
-                {{custom_excerpt}}
-            </p>
-        </div>  
-
         {{#if @site.members_enabled}}
             {{#if account_page}}
                  <custom-form class="form-container{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
@@ -33,6 +27,12 @@
                             <div class="toggle-slider"></div>
                         </div>
                     {{/match}}
+
+                    <div class="form-page-paragraph{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                        <p class="paragraph light">
+                            {{custom_excerpt}}
+                        </p>
+                    </div>
 
                     <form data-members-form="{{type}}" data-members-autoredirect="false" class="page-form-element">
                         {{#match type "signin"}}
