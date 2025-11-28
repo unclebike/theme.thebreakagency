@@ -479,28 +479,43 @@ function setSmoothScroll() {
 
 function applyImageGridPattern() {
   const postContent = document.querySelector('.post-content-inner');
-  if (!postContent) return;
+  if (!postContent) {
+    console.log('No .post-content-inner found');
+    return;
+  }
 
   const children = Array.from(postContent.children);
+  console.log('Found', children.length, 'children in post-content-inner');
 
   for (let i = 0; i < children.length; i++) {
     const element = children[i];
 
-    // Check if current element is a kg-header
+    // Check if current element is a kg-header (both old and new versions)
     if (element.classList.contains('kg-header-card')) {
+      console.log('Found kg-header at index', i);
       const images = [];
       let nextIndex = i + 1;
 
-      // Collect consecutive image cards
-      while (nextIndex < children.length && children[nextIndex].classList.contains('kg-image-card')) {
-        images.push(children[nextIndex]);
-        nextIndex++;
+      // Collect consecutive image cards or figures with kg-image-card
+      while (nextIndex < children.length) {
+        const nextEl = children[nextIndex];
+        if (nextEl.classList.contains('kg-image-card') ||
+            (nextEl.tagName === 'FIGURE' && nextEl.classList.contains('kg-image-card'))) {
+          images.push(nextEl);
+          nextIndex++;
+        } else {
+          break;
+        }
       }
+
+      console.log('Found', images.length, 'images after kg-header');
 
       // Check if there are 3-9 images and the next element is a divider
       if (images.length >= 3 && images.length <= 9 &&
           nextIndex < children.length &&
           children[nextIndex].tagName === 'HR') {
+
+        console.log('Pattern matched! Creating masonry grid with', images.length, 'images');
 
         // Create a wrapper for the images
         const wrapper = document.createElement('div');
@@ -514,6 +529,16 @@ function applyImageGridPattern() {
         images.forEach(img => {
           wrapper.appendChild(img);
         });
+
+        console.log('Masonry grid created successfully');
+      } else {
+        if (images.length < 3) {
+          console.log('Not enough images (need 3-9, found', images.length + ')');
+        } else if (images.length > 9) {
+          console.log('Too many images (need 3-9, found', images.length + ')');
+        } else if (nextIndex >= children.length || children[nextIndex].tagName !== 'HR') {
+          console.log('No HR divider found after images');
+        }
       }
     }
   }
