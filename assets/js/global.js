@@ -527,6 +527,9 @@ function applyImageGridPattern() {
 
         console.log('Pattern matched! Creating masonry grid with', images.length, 'images');
 
+        // Add class to the kg-header to match grid width
+        element.classList.add('kg-header-with-grid');
+
         // Create a wrapper for the images
         const wrapper = document.createElement('div');
         wrapper.className = 'kg-image-masonry-grid';

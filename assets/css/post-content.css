@@ -2106,6 +2106,14 @@ td {
 
 /* MASONRY IMAGE GRID */
 
+/* Header that precedes the grid should match its width */
+.kg-header-card.kg-header-with-grid {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
 .kg-image-masonry-grid {
     display: grid;
     gap: max(20px, calc(1.39vw * var(--scale)));
