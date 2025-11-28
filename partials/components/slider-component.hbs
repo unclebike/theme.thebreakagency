@@ -82,7 +82,7 @@
                                         <div class="post-summary-wrapper slide-ease-in-animation">
                                             <div class="index-slide-list">
                                                 {{#foreach ../pages}}
-                                                    {{#has tag="hash-index"}}
+                                                    {{#has tag="#index"}}
                                                         {{! Skip this page - it's the index itself }}
                                                     {{else}}
                                                         <div class="index-slide-row">
@@ -136,7 +136,7 @@
                                         </div>
                                     {{/has}}
                                 </div>
-                                {{#has tag="hash-index"}}
+                                {{#has tag="#index"}}
                                     {{! No button on index slide }}
                                 {{else}}
                                     {{^match @custom.button_style_on_background_media "None"}}
