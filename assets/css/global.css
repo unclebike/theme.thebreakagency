@@ -472,7 +472,7 @@ button,
     grid-template-rows: auto auto;
     align-items: center;
     gap: max(20px, calc(1.39vw * var(--scale)));
-    width: fit-content;
+    width: calc(100vw/2.4);
 }
 
 .subtitle-with-margin {
