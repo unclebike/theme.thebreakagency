@@ -31,6 +31,7 @@ html[data-primary-font="Thunder"]  .full-page-section h1 {
     position: relative;
     z-index: 3;
     width: fit-content;
+    padding-top: 15vw;
 }
 
 .form-page-wrapper * {
