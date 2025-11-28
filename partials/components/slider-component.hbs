@@ -58,12 +58,12 @@
         </button>
 
         <div class="slider-wrapper">
-            {{#foreach pages}}
+            {{#foreach pages as |page allPages|}}
                 <div
                     class="slide {{#has tag="#index"}}index-slide{{/has}} background-media"
                     role="group"
                     aria-roledescription="Slide"
-                    aria-label="{{@number}} of {{pages.length}}"
+                    aria-label="{{@number}} of {{@root.pages.length}}"
                     data-slide-number="{{@number}}"
                     data-slug="{{slug}}"
                 >
@@ -81,7 +81,7 @@
                                         </div>
                                         <div class="post-summary-wrapper slide-ease-in-animation">
                                             <div class="index-slide-list">
-                                                {{#foreach pages}}
+                                                {{#foreach allPages}}
                                                     {{#has tag="#index"}}
                                                         {{! Skip this page - it's the index itself }}
                                                     {{else}}
