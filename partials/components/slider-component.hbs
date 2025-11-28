@@ -67,14 +67,14 @@
                 data-slide-number="0"
                 data-slug="index"
             >
-                <div class="wide-container">
+                <div class="wide-container{{#match @custom.content_position_on_background_media "Center"}} hero-center{{/match}}">
                     <div class="hero-content">
                         <div class="hero-content-inner">
                             <div class="hero-text-content">
                                 <div class="tags-wrapper slide-ease-in-animation">
                                     <!-- Empty tags wrapper for consistent spacing -->
                                 </div>
-                                <div class="heading-1-wrapper slide-ease-in-animation" data-content-length="Medium">
+                                <div class="heading-1-wrapper slide-ease-in-animation" data-content-length="{{@custom.content_length_on_background_media}}">
                                     <h1>Events</h1>
                                 </div>
                                 <div class="post-summary-wrapper slide-ease-in-animation">
