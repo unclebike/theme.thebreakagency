@@ -498,7 +498,7 @@ button,
     margin-top: 0;
     margin-bottom: 0;
     font-family: var(--font1);
-    font-size: max(48px, calc(1.94vw * var(--scale)));
+    font-size: max(36px, calc(1.94vw * var(--scale)));
     font-weight: 700;
     line-height: 120%;
 }
