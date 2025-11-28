@@ -467,6 +467,9 @@ button,
 
 .subtitle-wrapper {
     margin-bottom: max(144px, calc(10vw * var(--scale)));
+    display: flex;
+    align-items: center;
+    gap: max(20px, calc(1.39vw * var(--scale)));
 }
 
 .subtitle-with-margin {
@@ -475,17 +478,15 @@ button,
 }
 
 .subtitle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5em;
+    display: block;
     color: var(--text-color);
     text-transform: none;
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: max(6px, calc(0.42vw * var(--scale)));
     font-family: var(--font2);
-    font-size: max(16px, calc(1.11vw * var(--scale)));
+    font-size: max(28px, calc(1.94vw * var(--scale)));
     font-weight: 700;
-    line-height: calc(80% * var(--heading-font-line-height-scale));
+    line-height: 120%;
 }
 
 .subtitle-caption {
@@ -493,25 +494,23 @@ button,
     color: var(--text-color);
     opacity: 0.7;
     text-transform: none;
-    margin-top: max(8px, calc(0.56vw * var(--scale)));
+    margin-top: 0;
     margin-bottom: 0;
     font-family: var(--font2);
     font-size: max(14px, calc(0.97vw * var(--scale)));
     font-weight: 400;
-    line-height: 150%;
+    line-height: 140%;
 }
 
 .subtitle-icon {
     display: inline-block;
-    height: max(192px, calc(1.11vw * var(--scale)));
-    width: max(192px, calc(1.11vw * var(--scale))); /* or adjust if your icon is wide/narrow */
-    background-image: url('../images/yeti-bridges.png'); /* update this */
-    background-size: cover;
+    height: max(48px, calc(3.33vw * var(--scale)));
+    width: max(48px, calc(3.33vw * var(--scale)));
+    background-image: url('../images/yeti-bridges.png');
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     flex-shrink: 0;
-    vertical-align: middle;
-    align-self: center; /* if using inline-flex */
 }
 
 .space-between-subtitle {
