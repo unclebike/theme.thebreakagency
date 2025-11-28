@@ -486,7 +486,7 @@ button,
     font-weight: 700;
 	line-height: calc(80% * var(--heading-font-line-height-scale));
     font-weight: 700;
-    line-height: 130%;
+    line-height: calc(80% * var(--heading-font-line-height-scale));
 }
 
 .subtitle-icon {
