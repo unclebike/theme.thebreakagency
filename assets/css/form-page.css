@@ -2,10 +2,11 @@
     height: 100svh;
     position: relative;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     text-align: center;
     overflow: hidden;
+    padding-top: 15vh;
 }
 
 .full-page-section h1 {
@@ -27,7 +28,6 @@ html[data-primary-font="Thunder"]  .full-page-section h1 {
 }
 
 .form-page-wrapper {
-    padding-top: 5vh;
     position: relative;
     z-index: 3;
     width: fit-content;
