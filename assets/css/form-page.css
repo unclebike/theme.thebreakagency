@@ -208,6 +208,8 @@ input::placeholder {
     padding: max(4px, calc(0.28vw * var(--scale)));
     margin-bottom: max(16px, calc(1.11vw * var(--scale)));
     width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .full-page[data-accent-navigation="true"] .user-type-toggle {

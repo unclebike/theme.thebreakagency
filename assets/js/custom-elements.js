@@ -571,9 +571,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                 } else {
                                     this.appendChild(contactButton);
                                 }
-
-                                // Automatically open mailto
-                                window.location.href = 'mailto:hello@thebreaksales.ca';
                             } else if (e.target.value === 'dealer') {
                                 // Show the form again for dealers
                                 formElement.style.display = "flex";
