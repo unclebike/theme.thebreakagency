@@ -10,7 +10,7 @@
                     <img class="logo-image main" src="{{@site.logo}}" alt="{{@site.title}}">
 {{#if @custom.accent_logo}}
                       <!-- Debug: accent_logo = {{@custom.accent_logo}} -->
-                      <img class="logo-image accent" src="{{img_url @custom.accent_logo size="l"}}" alt="{{@site.title}}" onerror="console.log('Failed to load accent logo. Raw value:', '{{@custom.accent_logo}}', 'Processed URL:', '{{img_url @custom.accent_logo size="l"}}'); this.style.display='none';"/>
+                      <img class="logo-image accent" src="{{@custom.accent_logo}}" alt="{{@site.title}}" onerror="console.log('Failed to load accent logo. Raw value:', '{{@custom.accent_logo}}'); this.style.display='none';"/>
                     {{/if}}
                 </div>               
             {{else}}
