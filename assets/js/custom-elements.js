@@ -993,7 +993,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             e.preventDefault();
                             const targetSlide = parseInt(item.getAttribute('data-target-slide'));
                             if (!isNaN(targetSlide)) {
-                                this.flkty.select(targetSlide);
+                                this.flkty.select(targetSlide - 1);
                             }
                         });
                     });
