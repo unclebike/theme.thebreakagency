@@ -508,15 +508,17 @@ function detectImageBrightness(imgElement) {
     if (pixelCount > 0) {
       brightness = brightness / pixelCount;
       
-      // Apply appropriate blend mode based on brightness
+      // Apply appropriate blend mode based on brightness to the image only
       if (brightness < 128) {
         // Dark image - use screen blend mode with light background
-        imgElement.style.mixBlendMode = 'screen';
-        imgElement.style.backgroundColor = '#ffffff';
+        img.style.mixBlendMode = 'screen';
+        img.style.backgroundColor = '#ffffff';
+        img.style.padding = '2px';
       } else {
         // Light image - use multiply blend mode with dark background
-        imgElement.style.mixBlendMode = 'multiply';
-        imgElement.style.backgroundColor = '#000000';
+        img.style.mixBlendMode = 'multiply';
+        img.style.backgroundColor = '#000000';
+        img.style.padding = '2px';
       }
     }
   };
@@ -598,7 +600,7 @@ function applyImageGridPattern() {
           // Add a class to indicate it has a colored background
           img.classList.add('kg-image-with-bg');
 
-          // Detect image brightness and apply appropriate blend mode
+          // Detect image brightness and apply appropriate blend mode to the image only
           detectImageBrightness(img);
         });
 
