@@ -987,28 +987,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 setupIndexSlideLinks() {
                     const indexSlideItems = this.slider.querySelectorAll('.index-slide-item');
-                    const slides = this.slider.querySelectorAll('.slide');
-
-                    // Debug: log all slide slugs
-                    console.log('All slides and their slugs:');
-                    Array.from(slides).forEach((slide, index) => {
-                        console.log(`Index ${index}: slug="${slide.getAttribute('data-slug')}"`);
-                    });
-
+                    
                     indexSlideItems.forEach(item => {
                         item.addEventListener('click', (e) => {
                             e.preventDefault();
-                            const targetSlug = item.getAttribute('data-target-slug');
-                            console.log('Clicked item with target slug:', targetSlug);
-                            if (targetSlug) {
-                                // Find the slide with matching slug and get its DOM index
-                                const targetIndex = Array.from(slides).findIndex(
-                                    slide => slide.getAttribute('data-slug') === targetSlug
-                                );
-                                console.log('Found target index:', targetIndex);
-                                if (targetIndex !== -1) {
-                                    this.flkty.select(targetIndex);
-                                }
+                            const targetSlide = parseInt(item.getAttribute('data-target-slide'));
+                            if (!isNaN(targetSlide)) {
+                                this.flkty.select(targetSlide);
                             }
                         });
                     });
