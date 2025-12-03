@@ -542,9 +542,8 @@ function applyImageGridPattern() {
         images.forEach((img, index) => {
           wrapper.appendChild(img);
 
-          // Assign a background color cycling through available colors
-          const colorIndex = index % colors.length;
-          img.style.backgroundColor = colors[colorIndex];
+// Assign a background color using only the first color (dark blue)
+          img.style.backgroundColor = colors[0];
 
           // Add a class to indicate it has a colored background
           img.classList.add('kg-image-with-bg');
