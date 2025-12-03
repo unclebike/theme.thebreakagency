@@ -126,25 +126,9 @@
             {{/if}}
         -->
 
-        <!--
-            <div id="circles-section" class="slider-with-circles{{#unless pages}} no-slider{{/unless}}" data-circles-content="{{@custom.homepage_circles_content}}">
-                <div class="slider-with-circles-inner">
-        -->
         {{#if pages}}
             {{>"components/slider-component"}}
         {{/if}}
-        <!--             </div> -->
-        <!--
-                        {{^match @custom.homepage_circles_content "None"}}
-                <div class="circle-wrapper">
-                    <div class="circle-outer">
-                        <div class="circle-animation">
-                            {{>"components/circles-section" circles_data=@custom.homepage_circles_content }}
-                        </div>
-                    </div>
-                </div>
-            {{/match}}
-        -->
             </div>
     {{/get}}   
     
