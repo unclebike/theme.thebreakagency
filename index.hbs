@@ -265,9 +265,8 @@
 
     <section class="section-padding-top section-relative last-section{{#match @custom.homepage_post_card_style "Creative"}} hide-posts{{/match}}">
         <div class="wide-container">
-            <div class="subtitle-wrapper subtitle-with-margin{{#match @custom.homepage_circles_content "None"}} space-between-subtitle{{/match}}">
-                <!-- <h2 class="subtitle{{^match @custom.homepage_circles_content "None"}} centered-text{{/match}}">{{t "(Latest posts)"}}</h2> -->
-                {{#match @custom.homepage_circles_content "None"}}<h2 class="subtitle">{{t "("}}{{plural pagination.total empty=(t "No Posts") singular=(t "1 Post") plural=(t "% Posts")}}{{t ")"}}</h2>{{/match}}
+<div class="subtitle-wrapper subtitle-with-margin">
+                <h2 class="subtitle">{{t "("}}{{plural pagination.total empty=(t "No Posts") singular=(t "1 Post") plural=(t "% Posts")}}{{t ")"}}</h2>
             </div>
             <div class="latest-posts">
                 <div id="pagination-grid" class="grid">               
