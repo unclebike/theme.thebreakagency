@@ -987,15 +987,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 setupIndexSlideLinks() {
                     const indexSlideItems = this.slider.querySelectorAll('.index-slide-item');
+                    const slides = this.slider.querySelectorAll('.slide');
 
                     indexSlideItems.forEach(item => {
                         item.addEventListener('click', (e) => {
                             e.preventDefault();
-                            const targetSlide = parseInt(item.getAttribute('data-target-slide'));
-                            if (!isNaN(targetSlide)) {
-                                // Convert Ghost's 1-based indexing to Flickity's 0-based indexing
-                                // Ghost page 1 should go to Flickity index 0, Ghost page 2 to index 1, etc.
-                                this.flkty.select(targetSlide - 1);
+                            const targetSlug = item.getAttribute('data-target-slug');
+                            if (targetSlug) {
+                                // Find the slide with matching slug and get its DOM index
+                                const targetIndex = Array.from(slides).findIndex(
+                                    slide => slide.getAttribute('data-slug') === targetSlug
+                                );
+                                if (targetIndex !== -1) {
+                                    this.flkty.select(targetIndex);
+                                }
                             }
                         });
                     });
