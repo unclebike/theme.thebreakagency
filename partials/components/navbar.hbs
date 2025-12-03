@@ -9,8 +9,7 @@
                 <div class="logo-image-wrapper flex-center">
                     <img class="logo-image main" src="{{@site.logo}}" alt="{{@site.title}}">
 {{#if @custom.accent_logo}}
-                      <!-- Debug: accent_logo = {{@custom.accent_logo}} -->
-                      <img class="logo-image accent" src="{{@custom.accent_logo}}" alt="{{@site.title}}" onerror="console.log('Failed to load accent logo. Raw value:', '{{@custom.accent_logo}}'); this.style.display='none';"/>
+                      <img class="logo-image accent" src="{{@custom.accent_logo}}" alt="{{@site.title}}"/>
                     {{/if}}
                 </div>               
             {{else}}
