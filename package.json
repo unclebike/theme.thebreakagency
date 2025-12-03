@@ -2,10 +2,10 @@
     "name": "snook",
     "description": "Snook is a bold and creative Ghost theme designed for those who dare to stand out. With its striking design and seamless user experience, Snook helps your blog break away from the ordinary. It challenges the norm, giving you the freedom to express your content with confidence and originality.",
     "demo": "https://snook.kusa-projects.com/",
-    "version": "1.0.6",
+    "version": "1.0.5",
     "private": true,
     "engines": {
-        "ghost": ">=6.0.0"
+        "ghost": ">=5.0.0"
     },
     "author": {
         "name": "KUSA Projects",
