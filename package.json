@@ -5,7 +5,7 @@
     "version": "1.0.5",
     "private": true,
     "engines": {
-        "ghost": ">=5.0.0"
+        "ghost": ">=6.0.0"
     },
     "author": {
         "name": "KUSA Projects",
@@ -222,16 +222,6 @@
                 "default": false,
                 "description": "Show a featured post preview on mobile devices, or navigate directly to the featured post on the first click",
                 "group": "homepage"
-            },
-            "homepage_circles_content": {
-                "type": "select",
-                "options": [
-                    "Tags",
-                    "Brands",
-                    "None"       
-                ],
-                "group": "homepage",
-                "default": "None"
             },
             "homepage_post_card_style": {
                 "type": "select",
