@@ -993,9 +993,9 @@ document.addEventListener('DOMContentLoaded', function () {
                             e.preventDefault();
                             const targetSlide = parseInt(item.getAttribute('data-target-slide'));
                             if (!isNaN(targetSlide)) {
-                                // Flickity uses 0-based indexing, but our slides start at index 0 (index slide)
-                                // so target slide 1 is at Flickity index 1
-                                this.flkty.select(targetSlide);
+                                // Convert Ghost's 1-based indexing to Flickity's 0-based indexing
+                                // Ghost page 1 should go to Flickity index 0, Ghost page 2 to index 1, etc.
+                                this.flkty.select(targetSlide - 1);
                             }
                         });
                     });
