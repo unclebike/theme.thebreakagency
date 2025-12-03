@@ -477,6 +477,56 @@ function setSmoothScroll() {
   requestAnimationFrame(raf);
 }
 
+function detectImageBrightness(imgElement) {
+  const img = imgElement.querySelector('img');
+  if (!img) return;
+
+  img.onload = function() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Use smaller sample for performance
+    const sampleSize = 50;
+    canvas.width = sampleSize;
+    canvas.height = sampleSize;
+    
+    ctx.drawImage(img, 0, 0, sampleSize, sampleSize);
+    
+    const imageData = ctx.getImageData(0, 0, sampleSize, sampleSize);
+    const data = imageData.data;
+    let brightness = 0;
+    let pixelCount = 0;
+    
+    for (let i = 0; i < data.length; i += 4) {
+      // Skip transparent pixels
+      if (data[i + 3] > 0) {
+        brightness += (data[i] + data[i + 1] + data[i + 2]) / 3;
+        pixelCount++;
+      }
+    }
+    
+    if (pixelCount > 0) {
+      brightness = brightness / pixelCount;
+      
+      // Apply appropriate blend mode based on brightness
+      if (brightness < 128) {
+        // Dark image - use screen blend mode with light background
+        imgElement.style.mixBlendMode = 'screen';
+        imgElement.style.backgroundColor = '#ffffff';
+      } else {
+        // Light image - use multiply blend mode with dark background
+        imgElement.style.mixBlendMode = 'multiply';
+        imgElement.style.backgroundColor = '#000000';
+      }
+    }
+  };
+  
+  // Trigger detection if image is already loaded
+  if (img.complete) {
+    img.onload();
+  }
+}
+
 function applyImageGridPattern() {
   const postContent = document.querySelector('.post-content-inner');
   if (!postContent) {
@@ -547,6 +597,9 @@ function applyImageGridPattern() {
 
           // Add a class to indicate it has a colored background
           img.classList.add('kg-image-with-bg');
+
+          // Detect image brightness and apply appropriate blend mode
+          detectImageBrightness(img);
         });
 
         console.log('Masonry grid created successfully with colored backgrounds');
