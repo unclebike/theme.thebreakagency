@@ -510,14 +510,14 @@ function detectImageBrightness(imgElement) {
       
       // Apply appropriate blend mode based on brightness to the image only
       if (brightness < 128) {
-        // Dark image - use screen blend mode with light background
-        img.style.mixBlendMode = 'screen';
-        img.style.backgroundColor = '#ffffff';
-        img.style.padding = '2px';
-      } else {
-        // Light image - use multiply blend mode with dark background
+        // Dark image - use multiply blend mode with dark background
         img.style.mixBlendMode = 'multiply';
         img.style.backgroundColor = '#000000';
+        img.style.padding = '2px';
+      } else {
+        // Light image - use screen blend mode with light background
+        img.style.mixBlendMode = 'screen';
+        img.style.backgroundColor = '#ffffff';
         img.style.padding = '2px';
       }
     }
