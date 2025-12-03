@@ -987,13 +987,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 setupIndexSlideLinks() {
                     const indexSlideItems = this.slider.querySelectorAll('.index-slide-item');
+                    const slides = this.slider.querySelectorAll('.slide');
                     
                     indexSlideItems.forEach(item => {
                         item.addEventListener('click', (e) => {
                             e.preventDefault();
-                            const targetSlide = parseInt(item.getAttribute('data-target-slide'));
-                            if (!isNaN(targetSlide)) {
-                                this.flkty.select(targetSlide - 1);
+                            const targetSlug = item.getAttribute('data-target-slug');
+                            if (targetSlug) {
+                                // Find the slide with matching slug and get its index
+                                const slideIndex = Array.from(slides).findIndex(
+                                    slide => slide.getAttribute('data-slug') === targetSlug
+                                );
+                                if (slideIndex !== -1) {
+                                    this.flkty.select(slideIndex);
+                                }
                             }
                         });
                     });
