@@ -900,7 +900,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     this.slider = this;
                     this.flkty = null;
-                    this.currentIndex = 0;
+                    this.currentIndex = 1;
                     this.numberTrack = this.slider.querySelector('.current-slide-number-inner');
                     this.slideNumber = this.slider.querySelectorAll('.slide').length;
 
