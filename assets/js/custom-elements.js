@@ -1049,8 +1049,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     );
 
                     if (initial) return;
-
-                    let prevSlide = this.querySelector(`.slide[data-slide-number='${this.currentIndex}']`);
+                    
+                    let prevSlide = this.querySelector(`.slide[data-slide-number='${index + 1}']`);
 
                     gsap.to(prevSlide.querySelectorAll('.slide-ease-in-animation'), {
                       opacity: 0,
