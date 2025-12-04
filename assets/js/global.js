@@ -478,6 +478,8 @@ function setSmoothScroll() {
 }
 
 function detectImageBrightness(imgElement) {
+  // Commented out - automatic contrast detection for masonry grid images
+  /*
   const img = imgElement.querySelector('img');
   if (!img) return;
 
@@ -527,6 +529,8 @@ function detectImageBrightness(imgElement) {
   if (img.complete) {
     img.onload();
   }
+  }
+  */
 }
 
 function applyImageGridPattern() {
@@ -601,7 +605,7 @@ function applyImageGridPattern() {
           img.classList.add('kg-image-with-bg');
 
           // Detect image brightness and apply appropriate blend mode to the image only
-          detectImageBrightness(img);
+          // detectImageBrightness(img);
         });
 
         console.log('Masonry grid created successfully with colored backgrounds');
