@@ -966,6 +966,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.currentIndex = index + 1;
           
                     this.setLinkTabindex();
+                    this.formatSlideNumbers(); // Update slide counter when slide changes
 
                     if (!this.numberTrack) return;
 
@@ -1001,8 +1002,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 formatSlideNumbers() {
                     const numbers = this.slider.querySelectorAll('.current-slide-number-inner span');
+                    const currentSlide = this.slider.querySelector('.slide.is-selected');
+                    const isIndexSlide = currentSlide && currentSlide.classList.contains('index-slide');
+                    
                     numbers.forEach((span, index) => {
-                        span.textContent = String(index).padStart(2, '0');
+                        if (index === 0) {
+                            // Index slide - always show "00"
+                            span.textContent = '00';
+                        } else {
+                            // Event slides - show slide number (index + 1) formatted as two digits
+                            const slideNumber = index + 1;
+                            span.textContent = String(slideNumber).padStart(2, '0');
+                        }
                     });
 
                     // Format total slides
