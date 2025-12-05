@@ -466,7 +466,7 @@ td {
 /* Image and Callout Card Side-by-Side Grid */
 .kg-image-callout-grid {
     display: inline-grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 3fr;
     gap: max(20px, calc(1.39vw * var(--scale)));
     width: auto;
 }
