@@ -468,17 +468,29 @@ td {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: max(20px, calc(1.39vw * var(--scale)));
-    align-items: start;
+    align-items: stretch;
 }
 
 .kg-image-callout-grid .kg-image-card,
 .kg-image-callout-grid .kg-callout-card {
     margin: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.kg-image-callout-grid .kg-image-card {
+    justify-content: center;
+}
+
+.kg-image-callout-grid .kg-callout-card {
+    justify-content: center;
 }
 
 .kg-image-callout-grid .kg-image-card img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* This needs to be added so there are no warnings */
