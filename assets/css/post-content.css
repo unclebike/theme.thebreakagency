@@ -477,15 +477,15 @@ td {
 }
 
 .kg-image-callout-grid .kg-image-card {
-    height: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .kg-image-callout-grid .kg-image-card img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    max-height: 100%;
+    object-fit: contain;
 }
 
 /* This needs to be added so there are no warnings */
