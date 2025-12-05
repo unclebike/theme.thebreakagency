@@ -469,16 +469,30 @@ td {
     grid-template-columns: 1fr 3fr;
     gap: max(20px, calc(1.39vw * var(--scale)));
     width: auto;
+    align-items: start;
 }
 
 .kg-image-callout-grid .kg-image-card {
-    display: flex;
+    display: inline-flex;
     justify-content: flex-end;
+    align-self: start;
+    height: auto;
+    min-height: 128px;
+    max-height: 20vh;
+}
+
+.kg-image-callout-grid .kg-image-card img {
+    max-height: 20vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
 }
 
 .kg-image-callout-grid .kg-callout-card {
-    display: flex;
+    display: inline-flex;
     justify-content: flex-start;
+    align-self: start;
+    height: auto;
 }
 
 .kg-image-callout-grid .kg-image-card {
