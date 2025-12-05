@@ -630,12 +630,33 @@ function applyImageCalloutGridPattern() {
 
   const children = Array.from(postContent.children);
 
+  // Helper to check if element is empty (empty p tags, br, etc.)
+  const isEmpty = (el) => {
+    if (el.tagName === 'P' && el.textContent.trim() === '' && el.children.length === 0) return true;
+    if (el.tagName === 'BR') return true;
+    return false;
+  };
+
   for (let i = 0; i < children.length - 1; i++) {
     const currentEl = children[i];
-    const nextEl = children[i + 1];
-
+    
     const currentIsImage = currentEl.classList.contains('kg-image-card');
     const currentIsCallout = currentEl.classList.contains('kg-callout-card');
+    
+    if (!currentIsImage && !currentIsCallout) continue;
+
+    // Look for the next non-empty element
+    let nextIndex = i + 1;
+    const emptyElements = [];
+    
+    while (nextIndex < children.length && isEmpty(children[nextIndex])) {
+      emptyElements.push(children[nextIndex]);
+      nextIndex++;
+    }
+    
+    if (nextIndex >= children.length) continue;
+    
+    const nextEl = children[nextIndex];
     const nextIsImage = nextEl.classList.contains('kg-image-card');
     const nextIsCallout = nextEl.classList.contains('kg-callout-card');
 
@@ -651,9 +672,12 @@ function applyImageCalloutGridPattern() {
       // Move both elements into the wrapper
       wrapper.appendChild(currentEl);
       wrapper.appendChild(nextEl);
+      
+      // Remove empty elements between them
+      emptyElements.forEach(el => el.remove());
 
-      // Skip the next element since we've already processed it
-      i++;
+      // Skip to after the next element
+      i = nextIndex;
     }
   }
 }
