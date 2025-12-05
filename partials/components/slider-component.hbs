@@ -12,12 +12,16 @@
             <div class="slide-number">
                 <div class="current-slide-number-inner">
                     <span class="medium-text bigger-font">
-                        0
+                        00
                     </span>
                     {{#foreach pages}}
-                        <span class="medium-text bigger-font">
-                            {{@number}}
-                        </span>
+                        {{#has tag="#index"}}
+                            <!-- Skip index slide in counter -->
+                        {{else}}
+                            <span class="medium-text bigger-font">
+                                {{@number}}
+                            </span>
+                        {{/has}}
                     {{/foreach}}
                 </div>
             </div>
