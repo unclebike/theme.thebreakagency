@@ -621,3 +621,39 @@ function applyImageGridPattern() {
     }
   }
 }
+
+function applyImageCalloutGridPattern() {
+  const postContent = document.querySelector('.post-content-inner');
+  if (!postContent) {
+    return;
+  }
+
+  const children = Array.from(postContent.children);
+
+  for (let i = 0; i < children.length - 1; i++) {
+    const currentEl = children[i];
+    const nextEl = children[i + 1];
+
+    const currentIsImage = currentEl.classList.contains('kg-image-card');
+    const currentIsCallout = currentEl.classList.contains('kg-callout-card');
+    const nextIsImage = nextEl.classList.contains('kg-image-card');
+    const nextIsCallout = nextEl.classList.contains('kg-callout-card');
+
+    // Check if we have an image card followed by a callout card or vice versa
+    if ((currentIsImage && nextIsCallout) || (currentIsCallout && nextIsImage)) {
+      // Create a wrapper for the grid
+      const wrapper = document.createElement('div');
+      wrapper.className = 'kg-image-callout-grid';
+
+      // Insert wrapper before the first element
+      currentEl.parentNode.insertBefore(wrapper, currentEl);
+
+      // Move both elements into the wrapper
+      wrapper.appendChild(currentEl);
+      wrapper.appendChild(nextEl);
+
+      // Skip the next element since we've already processed it
+      i++;
+    }
+  }
+}
