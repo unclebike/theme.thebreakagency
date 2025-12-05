@@ -492,6 +492,27 @@ td {
     object-fit: contain !important;
 }
 
+.kg-image-callout-grid .kg-image-card,
+.kg-image-callout-grid .kg-callout-card {
+    margin: 0;
+}
+
+.kg-image-callout-grid .kg-image-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    max-height: 100%;
+}
+
+.kg-image-callout-grid .kg-image-card img.kg-image {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+}
+
 /* This needs to be added so there are no warnings */
 .kg-callout-card-emoji,
 .kg-callout-card-text,
