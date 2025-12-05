@@ -465,10 +465,11 @@ td {
 
 /* Image and Callout Card Side-by-Side Grid */
 .kg-image-callout-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: inline-grid;
+    grid-template-columns: auto auto;
     gap: max(20px, calc(1.39vw * var(--scale)));
     align-items: start;
+    width: auto;
 }
 
 .kg-image-callout-grid .kg-image-card,
@@ -479,13 +480,21 @@ td {
 .kg-image-callout-grid .kg-image-card {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
+    height: 100%;
+    max-height: 100%;
+}
+
+.kg-image-callout-grid .kg-callout-card {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     height: 100%;
     max-height: 100%;
 }
 
 .kg-image-callout-grid .kg-image-card img.kg-image {
-    width: 100% !important;
+    width: auto !important;
     height: 100% !important;
     max-width: 100% !important;
     max-height: 100% !important;
