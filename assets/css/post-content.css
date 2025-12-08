@@ -466,7 +466,7 @@ td {
 /* Image and Callout Card Side-by-Side Grid */
 .kg-image-callout-grid {
     display: inline-grid;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 1fr 2fr;
     gap: max(20px, calc(1.39vw * var(--scale)));
     width: auto;
     align-items: start;
@@ -489,10 +489,15 @@ td {
 }
 
 .kg-image-callout-grid .kg-callout-card {
-    display: inline-flex;
+    display: flex;
     justify-content: flex-start;
     align-self: start;
     height: auto;
+    margin-bottom: max(16px, calc(1.11vw * var(--scale)));
+}
+
+.kg-image-callout-grid .kg-callout-card:last-child {
+    margin-bottom: 0;
 }
 
 .kg-image-callout-grid .kg-image-card {
