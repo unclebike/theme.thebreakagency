@@ -681,7 +681,7 @@ html[data-primary-font="Thunder"] .arrow-link-button {
 
 .grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 2fr;
     column-gap: max(26px, 1.8vw);
     row-gap: max(48px, calc(3.3vw * var(--scale)));
 }
@@ -1124,7 +1124,7 @@ html[data-footer-type='Normal'] .last-section {
     }
 
     .grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 2fr;
         column-gap: 30px;
         row-gap: 42px;
     }
