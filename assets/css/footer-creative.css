@@ -1,6 +1,7 @@
 .footer-wrapper {
     padding-top: max(90px, 6.25vw);
     overflow-x: clip;
+    background-color: var(--text-color);
 }
 
 .footer-outer {
