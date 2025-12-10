@@ -3,7 +3,7 @@
     align-items: flex-start;
     height: 100%;
     margin-top: max(54px, calc(3.75vw * var(--scale)));
-    padding-bottom: max(147px, calc(10.21vw * var(--scale)));
+    padding-bottom: max(74px, calc(5.1vw * var(--scale)));
     display: flex;  
     position: relative;
 }
@@ -101,7 +101,7 @@ featured-posts {
 @media screen and (max-width: 1080px) {
     .featured-posts {
         margin-top: 43px;
-        padding-bottom: 80px;
+        padding-bottom: 40px;
     }
 
     .featured-posts-inner {
