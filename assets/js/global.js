@@ -261,32 +261,33 @@ function creativeLatestPostsTrigger(){
     let headingInner = heading.querySelector('.creative-post-card-title');
     let arrow = heading.querySelector('.arrow-link-button');
 
-    ScrollTrigger.matchMedia({
-      "(max-width: 1080px)": function () {
-        gsap.to(headingInner, {
-          scrollTrigger: {
-            trigger: heading,
-            start: "top center",
-            end: "bottom+=1 center",
-            toggleActions: "play reverse play reverse",
-            onEnter: () => {
-              onEnterAnimation();
-            },
-            onLeave: () => {
-              onLeaveAnimation();
-            },
-            onEnterBack: () => {
-              onEnterAnimation();
-            },
-            onLeaveBack: () => {
-              onLeaveAnimation();
-            }
+    let mm = gsap.matchMedia();
+    
+    mm.add("(max-width: 1080px)", () => {
+      gsap.to(headingInner, {
+        scrollTrigger: {
+          trigger: heading,
+          start: "top center",
+          end: "bottom+=1 center",
+          toggleActions: "play reverse play reverse",
+          onEnter: () => {
+            onEnterAnimation();
+          },
+          onLeave: () => {
+            onLeaveAnimation();
+          },
+          onEnterBack: () => {
+            onEnterAnimation();
+          },
+          onLeaveBack: () => {
+            onLeaveAnimation();
           }
-        });
-      },
-      "(min-width: 1081px)": function () {
-         removeStyles(); 
-      }
+        }
+      });
+    });
+    
+    mm.add("(min-width: 1081px)", () => {
+      removeStyles(); 
     });
 
     function removeStyles(){

@@ -822,32 +822,33 @@ document.addEventListener('DOMContentLoaded', function () {
                   let img = heading.querySelector('.all-posts-background-image');
                   let headingInner = heading.querySelector('.all-posts-item-link');
               
-                  ScrollTrigger.matchMedia({
-                    "(max-width: 1080px)": function () {
-                      gsap.to(headingInner, {
-                        scrollTrigger: {
-                          trigger: heading,
-                          start: "top center",
-                          end: "bottom+=1 center",
-                          toggleActions: "play reverse play reverse",
-                          onEnter: () => {
-                            onEnterAnimation();
-                          },
-                          onLeave: () => {
-                            onLeaveAnimation();
-                          },
-                          onEnterBack: () => {
-                            onEnterAnimation();
-                          },
-                          onLeaveBack: () => {
-                            onLeaveAnimation();
-                          }
+                  let mm = gsap.matchMedia();
+                  
+                  mm.add("(max-width: 1080px)", () => {
+                    gsap.to(headingInner, {
+                      scrollTrigger: {
+                        trigger: heading,
+                        start: "top center",
+                        end: "bottom+=1 center",
+                        toggleActions: "play reverse play reverse",
+                        onEnter: () => {
+                          onEnterAnimation();
+                        },
+                        onLeave: () => {
+                          onLeaveAnimation();
+                        },
+                        onEnterBack: () => {
+                          onEnterAnimation();
+                        },
+                        onLeaveBack: () => {
+                          onLeaveAnimation();
                         }
-                      });
-                    },
-                    "(min-width: 1081px)": function () {
-                       removeStyles(); 
-                    }
+                      }
+                    });
+                  });
+                  
+                  mm.add("(min-width: 1081px)", () => {
+                    removeStyles(); 
                   });
               
                   function removeStyles(){
