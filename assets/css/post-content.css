@@ -2565,13 +2565,13 @@ td {
     /* HEADER CARD OLD */
 
     .kg-header-card {
-        border-radius: 10px;
+        border-radius: 6px;
     }
 
     .kg-header-card.kg-size-large,
     .kg-header-card.kg-size-medium,
     .kg-header-card.kg-size-small {
-        border-radius: 10px !important;
+        border-radius: 6px !important;
     }
 
     .kg-header-card {
