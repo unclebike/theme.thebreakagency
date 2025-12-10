@@ -472,19 +472,14 @@ td {
     width: 100%;
 }
 
-/* Callouts centered */
-.kg-image-callout-grid .kg-callout-card {
+/* First callout - contains image on left */
+.kg-image-callout-grid .kg-callout-card:first-child {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: max(16px, calc(1.11vw * var(--scale)));
     width: auto;
     max-width: 100%;
-}
-
-/* First callout contains the image */
-.kg-image-callout-grid .kg-callout-card:first-child {
-    margin-bottom: 0;
 }
 
 /* Image inside first callout - sits on left */
@@ -501,10 +496,17 @@ td {
     object-fit: contain;
 }
 
-/* Button inside last callout */
+/* Subsequent callouts - match first callout width, stack content vertically */
+.kg-image-callout-grid .kg-callout-card:not(:first-child) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+/* Button inside callout - sits below text */
 .kg-image-callout-grid .kg-callout-card .kg-button-card {
     margin-top: max(16px, calc(1.11vw * var(--scale)));
-    width: 100%;
     justify-content: flex-start;
 }
 
