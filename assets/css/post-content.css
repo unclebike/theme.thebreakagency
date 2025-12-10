@@ -465,21 +465,24 @@ td {
 
 /* Image and Callout Card Grid */
 .kg-image-callout-grid {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: max(16px, calc(1.11vw * var(--scale)));
+}
+
+/* All callouts in the grid */
+.kg-image-callout-grid .kg-callout-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: max(16px, calc(1.11vw * var(--scale)));
-    width: 100%;
+    align-items: flex-start;
 }
 
 /* First callout - contains image on left */
 .kg-image-callout-grid .kg-callout-card:first-child {
-    display: flex;
     flex-direction: row;
     align-items: center;
     gap: max(16px, calc(1.11vw * var(--scale)));
-    width: auto;
-    max-width: 100%;
 }
 
 /* Image inside first callout - sits on left */
@@ -494,14 +497,6 @@ td {
     width: auto;
     height: auto;
     object-fit: contain;
-}
-
-/* Subsequent callouts - match first callout width, stack content vertically */
-.kg-image-callout-grid .kg-callout-card:not(:first-child) {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
 }
 
 /* Button inside callout - sits below text */
