@@ -496,8 +496,28 @@ td {
     margin-bottom: max(16px, calc(1.11vw * var(--scale)));
 }
 
-.kg-image-callout-grid .kg-callout-card:last-child {
+.kg-image-callout-grid .kg-callout-card:last-of-type {
     margin-bottom: 0;
+}
+
+/* Hero image overlap - image breaks into first callout */
+.kg-image-callout-grid .kg-image-card {
+    position: relative;
+    z-index: 2;
+    margin-right: -20px;
+}
+
+/* First callout receives the overlap */
+.kg-image-callout-grid .kg-callout-card:first-of-type {
+    position: relative;
+    z-index: 1;
+}
+
+/* Button inside last callout */
+.kg-image-callout-grid .kg-callout-card .kg-button-card {
+    margin-top: max(16px, calc(1.11vw * var(--scale)));
+    width: 100%;
+    justify-content: flex-start;
 }
 
 .kg-image-callout-grid .kg-image-card {

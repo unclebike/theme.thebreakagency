@@ -648,7 +648,7 @@ function applyImageCalloutGridPattern() {
 
     // Look for the next non-empty element
     let nextIndex = i + 1;
-    const emptyElements = [];
+    let emptyElements = [];
     
     while (nextIndex < children.length && isEmpty(children[nextIndex])) {
       emptyElements.push(children[nextIndex]);
@@ -677,8 +677,47 @@ function applyImageCalloutGridPattern() {
       // Remove empty elements between them
       emptyElements.forEach(el => el.remove());
 
-      // Skip to after the next element
-      i = nextIndex;
+      // Continue collecting additional callouts and button
+      let lastCallout = nextIsCallout ? nextEl : currentEl;
+      let scanIndex = nextIndex + 1;
+      
+      // Re-fetch children since DOM has changed
+      const updatedChildren = Array.from(postContent.children);
+      const wrapperIndex = updatedChildren.indexOf(wrapper);
+      scanIndex = wrapperIndex + 1;
+      
+      while (scanIndex < updatedChildren.length) {
+        const scanEl = updatedChildren[scanIndex];
+        
+        // Skip empty elements
+        if (isEmpty(scanEl)) {
+          scanEl.remove();
+          // Re-fetch after removal
+          const refreshedChildren = Array.from(postContent.children);
+          scanIndex = refreshedChildren.indexOf(wrapper) + 1;
+          continue;
+        }
+        
+        const isCallout = scanEl.classList.contains('kg-callout-card');
+        const isButton = scanEl.classList.contains('kg-button-card');
+        
+        if (isCallout) {
+          // Add callout to wrapper
+          wrapper.appendChild(scanEl);
+          lastCallout = scanEl;
+          scanIndex++;
+        } else if (isButton) {
+          // Move button inside the last callout
+          lastCallout.appendChild(scanEl);
+          break;
+        } else {
+          // Stop if we hit something else
+          break;
+        }
+      }
+
+      // Skip to after processed elements
+      i = Array.from(postContent.children).indexOf(wrapper);
     }
   }
 }
