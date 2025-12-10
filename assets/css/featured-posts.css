@@ -23,21 +23,21 @@
 
 .featured-posts-circle {
     position: fixed;
-    left: 35vw;
+    left: 50vw;
     z-index: 5;
     pointer-events: none;
     border-radius: 100%;
     width: max(calc(19px * (var(--heading-font-scale) + var(--circle-scale))), calc(1.32vw * (var(--heading-font-scale) + var(--circle-scale))));
     height: max(calc(19px * (var(--heading-font-scale) + var(--circle-scale))), calc(1.32vw * (var(--heading-font-scale) + var(--circle-scale))));
     background-color: var(--text-color);
-    transform: translateY(-50%) scale(0);
+    scale: 0;
     opacity: 0;
-    will-change: transform, opacity;
-    transition: transform 0.3s var(--bounce-past-transition), opacity 0.2s linear;
+    will-change: scale, opacity;
+    transition: scale 0.3s var(--bounce-past-transition), opacity 0.2s linear;
 }
 
 .featured-posts-list:hover .featured-posts-circle {
-    transform: translateY(-50%) scale(1);
+    scale: 1;
     opacity: 1;
 }
 
