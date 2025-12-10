@@ -1272,6 +1272,15 @@ html[data-footer-type='Normal'] .last-section {
         padding-top: 44px;
     }
 
+    .subtitle-wrapper {
+        gap: 12px;
+    }
+
+    .subtitle-icon {
+        max-width: 128px;
+        max-height: 128px;
+    }
+
     .last-section {
         padding-bottom: 70px;
     }
