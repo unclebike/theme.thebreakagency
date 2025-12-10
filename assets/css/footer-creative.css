@@ -88,6 +88,8 @@
     top: 48%;
     left: 50%;
     transform: translate(-50%, -50%);
+    background-color: var(--text-color);
+    color: var(--background-color);
 }
 
 .footer-slider {
@@ -95,7 +97,6 @@
     height: 100%;
     transform: rotate(5deg);
     position: relative;
-    background-color: var(--text-color);
 }
 
 .footer-slide,
@@ -138,6 +139,7 @@ html[data-primary-font="Thunder"] .footer-center-link .heading-1 {
     font-size: max(calc(160px * var(--heading-font-scale)), calc(11.11vw * var(--scale) * var(--heading-font-scale)));
     line-height: calc(80% * var(--heading-font-line-height-scale));
     text-decoration: none;
+    color: var(--background-color);
 }
 
 html[data-primary-font="Thunder"] .footer-center-link .arrow-link-button{
