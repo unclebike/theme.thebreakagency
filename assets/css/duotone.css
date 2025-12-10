@@ -1,0 +1,100 @@
+/* Duotone Effect for Hero Images
+ * Based on: https://github.com/rickymetz/duotonegenerator
+ * 
+ * Usage: Add class "duotone" to any .background-image or .background-media element
+ * Customize colors using CSS variables on the element or parent
+ */
+
+:root {
+    /* Default duotone colors - The Break brand colors */
+    --duotone-base: #ca6f4a;         /* Terracotta/rust - overlay button text color */
+    --duotone-foreground: #1e325d;   /* Navy - text color */
+    --duotone-bg-blend: multiply;
+    --duotone-fg-blend: lighten;
+    --duotone-opacity: 1;
+    --duotone-contrast: 1;
+    --duotone-blur: 0px;
+}
+
+/* Duotone container */
+.background-image.duotone,
+.background-media.duotone .background-image {
+    background-color: var(--duotone-base);
+}
+
+/* Duotone image treatment */
+.background-image.duotone img,
+.background-image.duotone figure,
+.background-media.duotone .background-image img,
+.background-media.duotone .background-image figure {
+    filter: grayscale(100%) contrast(var(--duotone-contrast)) blur(var(--duotone-blur));
+    mix-blend-mode: var(--duotone-bg-blend);
+    opacity: var(--duotone-opacity);
+}
+
+/* Foreground color overlay */
+.background-image.duotone::before,
+.background-media.duotone .background-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--duotone-foreground);
+    mix-blend-mode: var(--duotone-fg-blend);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Ensure dark-overlay appears above duotone effect if needed */
+.background-image.duotone .dark-overlay,
+.background-media.duotone .background-image .dark-overlay {
+    z-index: 2;
+}
+
+/* Preset color schemes */
+
+/* The Break - Brand colors (default) */
+.duotone-break {
+    --duotone-base: #ca6f4a;
+    --duotone-foreground: #1e325d;
+}
+
+/* Ocean - Blue tones */
+.duotone-ocean {
+    --duotone-base: #08b76c;
+    --duotone-foreground: #0a3463;
+}
+
+/* Sunset - Warm tones */
+.duotone-sunset {
+    --duotone-base: #ff6b35;
+    --duotone-foreground: #4a0e4e;
+}
+
+/* Noir - High contrast B&W */
+.duotone-noir {
+    --duotone-base: #1a1a1a;
+    --duotone-foreground: #ffffff;
+    --duotone-fg-blend: overlay;
+}
+
+/* Forest - Green tones */
+.duotone-forest {
+    --duotone-base: #2d5a27;
+    --duotone-foreground: #0d1f0c;
+}
+
+/* Vintage - Sepia tones */
+.duotone-vintage {
+    --duotone-base: #d4a574;
+    --duotone-foreground: #2c1810;
+}
+
+/* Electric - Vibrant */
+.duotone-electric {
+    --duotone-base: #00ffff;
+    --duotone-foreground: #ff00ff;
+    --duotone-fg-blend: color-dodge;
+}
