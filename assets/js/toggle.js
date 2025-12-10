@@ -18,6 +18,13 @@ function setToggle() {
       const clonedSvg = svgElement.cloneNode(true);
 
       container.appendChild(clonedSvg);
+
+      // Check for :open in heading text and default to open state
+      const headingText = card.querySelector('.kg-toggle-heading-text');
+      if (headingText && headingText.textContent.includes(':open')) {
+          headingText.textContent = headingText.textContent.replace(':open', '').trim();
+          card.setAttribute('data-kg-toggle-state', 'open');
+      }
   })
 
   const toggleFn = function(event) {
