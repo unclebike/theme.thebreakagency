@@ -23,7 +23,7 @@
 
 .featured-posts-circle {
     position: fixed;
-    left: 30vw;
+    left: 35vw;
     z-index: 5;
     pointer-events: none;
     border-radius: 100%;
