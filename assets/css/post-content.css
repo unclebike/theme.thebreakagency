@@ -1676,7 +1676,9 @@ td {
     padding: 0;
     min-height: initial;
     text-align: initial;
-    box-sizing: border-box
+    box-sizing: border-box;
+    border-radius: max(8px, calc(0.56vw * var(--scale)));
+    overflow: hidden;
 }
 
 .kg-header-card.kg-v2 * {
