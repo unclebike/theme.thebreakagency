@@ -95,6 +95,7 @@
     height: 100%;
     transform: rotate(5deg);
     position: relative;
+    background-color: var(--text-color);
 }
 
 .footer-slide,
