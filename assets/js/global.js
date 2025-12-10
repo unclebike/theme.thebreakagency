@@ -661,6 +661,8 @@ function applyImageCalloutGridPattern() {
     const nextIsImage = nextEl.classList.contains('kg-image-card');
     const nextIsCallout = nextEl.classList.contains('kg-callout-card');
 
+    const nextIsButton = nextEl.classList.contains('kg-button-card');
+
     // Check if we have an image card followed by a callout card or vice versa
     if ((currentIsImage && nextIsCallout) || (currentIsCallout && nextIsImage)) {
       // Create a wrapper for the grid
@@ -724,6 +726,17 @@ function applyImageCalloutGridPattern() {
 
       // Skip to after processed elements
       i = Array.from(postContent.children).indexOf(wrapper);
+    }
+    // Check if we have a callout followed by a button (no image)
+    else if (currentIsCallout && nextIsButton) {
+      // Remove empty elements between them
+      emptyElements.forEach(el => el.remove());
+      
+      // Move button inside the callout
+      currentEl.appendChild(nextEl);
+      
+      // Mark this callout as processed to avoid re-processing
+      currentEl.classList.add('kg-callout-with-button');
     }
   }
 }
