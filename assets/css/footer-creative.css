@@ -308,7 +308,8 @@ html[data-primary-font="Thunder"] .footer-center-link .arrow-link-button{
         color: var(--background-color) !important;
         font-size: calc(82px * var(--heading-font-scale));
         width: calc(100vw - (2 * 18px));
-        line-break: anywhere;
+        word-break: break-word;
+        overflow-wrap: break-word;
         padding-top: 28px;
     }
 }
