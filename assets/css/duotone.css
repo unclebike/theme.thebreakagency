@@ -6,9 +6,9 @@
  */
 
 :root {
-    /* Default duotone colors - The Break brand colors */
-    --duotone-base: #ca6f4a;         /* Terracotta/rust - overlay button text color */
-    --duotone-foreground: #1e325d;   /* Navy - text color */
+    /* Default duotone colors - The Break Blue */
+    --duotone-base: #c0dcf2;         /* Light blue */
+    --duotone-foreground: #1e325d;   /* Navy */
     --duotone-bg-blend: multiply;
     --duotone-fg-blend: lighten;
     --duotone-opacity: 1;
@@ -55,9 +55,9 @@
 
 /* Preset color schemes */
 
-/* The Break - Brand colors (default) */
-.duotone-break {
-    --duotone-base: #ca6f4a;
+/* The Break Blue - Brand colors (default) */
+.duotone-thebreak {
+    --duotone-base: #c0dcf2;
     --duotone-foreground: #1e325d;
 }
 
