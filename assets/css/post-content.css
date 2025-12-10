@@ -416,7 +416,7 @@ td {
 
 .kg-callout-card-blue {
     background: rgba(33, 172, 232, 0.12);
-    border: 1px solid rgba(33, 172, 232, 0.5);
+    border: 1px solid var(--ghost-accent-color);
 }
 
 .kg-callout-card-green {
