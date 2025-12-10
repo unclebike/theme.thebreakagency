@@ -506,6 +506,17 @@ td {
     justify-content: flex-start;
 }
 
+/* Callout with button (no image) - button below text, justified to end */
+.kg-callout-card.kg-callout-with-button {
+    flex-wrap: wrap;
+}
+
+.kg-callout-card.kg-callout-with-button .kg-button-card {
+    width: 100%;
+    margin-top: max(16px, calc(1.11vw * var(--scale)));
+    justify-content: flex-end;
+}
+
 
 
 /* This needs to be added so there are no warnings */
