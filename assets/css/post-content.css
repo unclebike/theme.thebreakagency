@@ -1504,7 +1504,7 @@ td {
     align-items: center;
     justify-content: center;
     text-align: center;
-    border-radius: max(14px, calc(0.97vw * var(--scale)));
+    border-radius: max(8px, calc(0.56vw * var(--scale)));
 }
 
 .kg-header-card.kg-size-small {
@@ -1527,7 +1527,7 @@ td {
     right: unset !important;
     margin-left: 0px !important;
     margin-right: 0px !important;
-    border-radius: calc(1vw * var(--scale)) !important;
+    border-radius: max(8px, calc(0.56vw * var(--scale))) !important;
 }
 
 .kg-header-card.kg-align-left {
