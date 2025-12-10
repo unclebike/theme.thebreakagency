@@ -339,11 +339,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             this.loadMoreBtn.style.display = html.querySelector("#load-more-btn") ? "block" : "none";
                         }
 
-                        let footer =  document.querySelector('custom-footer');
-                        let isCreativeFooter = footer.getAttribute('data-is-creative') == 'true' ? true : false;
-                        if(isCreativeFooter){
-                            footer.footerAnimation();
-                        }
                     })
                     .catch(error => {
                         console.error("Error loading more posts:", error);
@@ -1307,9 +1302,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 if(this.isCreativeFooter){
                     this.secondLevelFooter(this); 
                     this.footerSlider();
-                    this.footerAnimation();
-
-                    this.mainHeightChange();
                 }else{
                     this.secondLevelFooterNormal();
                 }
@@ -1322,78 +1314,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 })            
             }  
 
-            mainHeightChange() {
-                const mainElement = document.documentElement;
-            
-                if (!mainElement) return;
-            
-                const resizeObserver = new ResizeObserver(debounce(entries => {
-                    for (let entry of entries) {
-                        this.footerAnimation(); 
-                    }
-                }, 100));
-            
-                resizeObserver.observe(mainElement);
-            }
-
-            footerAnimation() {
-                killScrollTrigger('.footer-outer');
-
-                if (window.matchMedia('(max-width: 1080px)').matches) return;
-
-                gsap.to(".footer-overlay-piece-inner", {
-                    width: "100%",
-                    ease: "none",
-                    stagger: {
-                        amount: 1,
-                        from: "start"
-                    },
-                    scrollTrigger: {
-                        trigger: ".footer-outer",
-                        start: "top top",
-                        end: "bottom bottom",
-                        scrub: true
-                    }
-                });
-
-                let bgColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color').trim();
-                let textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-color').trim();
-            
-                ScrollTrigger.create({
-                    trigger: ".footer-outer",
-                    start: "center center",
-                    end: "center center",
-                    onEnter: () => {
-                        gsap.to(".footer-center-link .heading-1", {
-                            color: bgColor,
-                            duration: 0.2,
-                            ease: "linear"
-                        });
-
-                        gsap.to(".footer-center-link .arrow-link-button", {
-                            backgroundColor: bgColor,
-                            color: textColor,
-                            duration: 0.2,
-                            ease: "linear"
-                        });
-                    },
-                    onLeaveBack: () => {
-                        gsap.to(".footer-center-link .heading-1", {
-                            color: textColor,
-                            duration: 0.2,
-                            ease: "linear"
-                        });
-
-                        gsap.to(".footer-center-link .arrow-link-button", {
-                            backgroundColor: textColor,
-                            color: bgColor,
-                            duration: 0.2,
-                            ease: "linear"
-                        });
-                    }
-                });  
-            }
-            
             footerSlider(){
                 const slides = this.container.querySelectorAll('.footer-slide');
 
