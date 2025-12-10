@@ -425,6 +425,7 @@ button,
 .narrow-container {
     min-width: calc(800px + 2 * max(26px, 1.8vw));
     width: calc((56vw * var(--scale)) + 2 * max(26px, 1.8vw));
+    padding-top: 2vw;
     padding-left: max(26px, 1.8vw);
     padding-right: max(26px, 1.8vw);
     margin-left: auto;
