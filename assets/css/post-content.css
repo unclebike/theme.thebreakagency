@@ -465,68 +465,49 @@ td {
 
 /* Image and Callout Card Side-by-Side Grid */
 .kg-image-callout-grid {
-    display: inline-grid;
-    grid-template-columns: 1fr 2fr;
-    gap: max(20px, calc(1.39vw * var(--scale)));
+    display: flex;
+    flex-direction: column;
+    gap: max(16px, calc(1.11vw * var(--scale)));
     width: auto;
-    align-items: start;
+    align-items: flex-start;
 }
 
+/* First callout extends to contain the image */
+.kg-image-callout-grid .kg-callout-card:first-of-type {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: max(16px, calc(1.11vw * var(--scale)));
+    padding: max(16px, calc(1.11vw * var(--scale)));
+}
+
+/* Image sits inside first callout */
 .kg-image-callout-grid .kg-image-card {
-    display: inline-flex;
-    justify-content: flex-end;
-    align-self: start;
-    height: auto;
-    min-height: 128px;
-    max-height: 20vh;
+    order: -1;
+    flex-shrink: 0;
+    margin: 0;
 }
 
 .kg-image-callout-grid .kg-image-card img {
-    max-height: 20vh;
+    max-height: 128px;
     width: auto;
     height: auto;
     object-fit: contain;
 }
 
+/* Subsequent callouts stack normally */
 .kg-image-callout-grid .kg-callout-card {
     display: flex;
-    justify-content: flex-start;
-    align-self: start;
-    height: auto;
-    margin-bottom: max(16px, calc(1.11vw * var(--scale)));
-}
-
-.kg-image-callout-grid .kg-callout-card:last-of-type {
-    margin-bottom: 0;
-}
-
-/* Hero image overlap - image breaks into first callout */
-.kg-image-callout-grid .kg-image-card {
-    position: relative;
-    z-index: 2;
-    margin-right: -20px;
-}
-
-/* First callout receives the overlap */
-.kg-image-callout-grid .kg-callout-card:first-of-type {
-    position: relative;
-    z-index: 1;
+    flex-direction: column;
+    align-self: stretch;
+    width: 100%;
+    margin: 0;
 }
 
 /* Button inside last callout */
 .kg-image-callout-grid .kg-callout-card .kg-button-card {
     margin-top: max(16px, calc(1.11vw * var(--scale)));
     width: 100%;
-    justify-content: flex-start;
-}
-
-.kg-image-callout-grid .kg-image-card {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.kg-image-callout-grid .kg-callout-card {
-    display: flex;
     justify-content: flex-start;
 }
 

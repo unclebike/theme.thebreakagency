@@ -667,18 +667,24 @@ function applyImageCalloutGridPattern() {
       const wrapper = document.createElement('div');
       wrapper.className = 'kg-image-callout-grid';
 
+      // Determine which is image and which is first callout
+      const imageEl = currentIsImage ? currentEl : nextEl;
+      const firstCallout = currentIsCallout ? currentEl : nextEl;
+
       // Insert wrapper before the first element
       currentEl.parentNode.insertBefore(wrapper, currentEl);
 
-      // Move both elements into the wrapper
-      wrapper.appendChild(currentEl);
-      wrapper.appendChild(nextEl);
+      // Move first callout into wrapper
+      wrapper.appendChild(firstCallout);
+      
+      // Move image INSIDE the first callout (at the beginning)
+      firstCallout.insertBefore(imageEl, firstCallout.firstChild);
       
       // Remove empty elements between them
       emptyElements.forEach(el => el.remove());
 
       // Continue collecting additional callouts and button
-      let lastCallout = nextIsCallout ? nextEl : currentEl;
+      let lastCallout = firstCallout;
       let scanIndex = nextIndex + 1;
       
       // Re-fetch children since DOM has changed
