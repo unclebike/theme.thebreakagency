@@ -1766,6 +1766,41 @@ td {
     pointer-events: none
 }
 
+/* Duotone effect for header card images */
+.kg-header-card>picture {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--duotone-base, #f2d7c0);
+}
+
+.kg-header-card>picture>.kg-header-card-image {
+    filter: grayscale(100%) contrast(var(--duotone-contrast, 1));
+    mix-blend-mode: var(--duotone-bg-blend, multiply);
+    opacity: var(--duotone-opacity, 1);
+}
+
+.kg-header-card>picture::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--duotone-foreground, #ca6f4a);
+    mix-blend-mode: var(--duotone-fg-blend, lighten);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Apply The Break Orange (alt) colors to header cards */
+.kg-header-card {
+    --duotone-base: #f2d7c0;
+    --duotone-foreground: #ca6f4a;
+}
+
 .kg-header-card-content .kg-header-card-image {
     width: 100%;
     height: 0;
