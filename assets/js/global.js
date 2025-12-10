@@ -677,7 +677,7 @@ function applyImageCalloutGridPattern() {
       // Move first callout into wrapper
       wrapper.appendChild(firstCallout);
       
-      // Move image INSIDE the first callout (at the beginning)
+      // Move image inside the first callout (at the beginning, left side)
       firstCallout.prepend(imageEl);
       
       // Remove empty elements between them

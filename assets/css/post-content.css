@@ -463,51 +463,42 @@ td {
     margin-top: calc(1vw * var(--scale))
 }
 
-/* Image and Callout Card Side-by-Side Grid */
+/* Image and Callout Card Grid */
 .kg-image-callout-grid {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: max(16px, calc(1.11vw * var(--scale)));
-    width: auto;
-    align-items: flex-start;
+    width: 100%;
 }
 
-/* First callout contains the image */
-.kg-image-callout-grid .kg-callout-card:first-of-type {
+/* Callouts centered */
+.kg-image-callout-grid .kg-callout-card {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: max(16px, calc(1.11vw * var(--scale)));
-    padding: max(16px, calc(1.11vw * var(--scale)));
-    position: relative;
-    overflow: visible;
+    width: auto;
+    max-width: 100%;
 }
 
-/* Image sits inside first callout, overflows upward */
-.kg-image-callout-grid .kg-image-card {
-    order: -1;
+/* First callout contains the image */
+.kg-image-callout-grid .kg-callout-card:first-child {
+    margin-bottom: 0;
+}
+
+/* Image inside first callout - sits on left */
+.kg-image-callout-grid .kg-callout-card .kg-image-card {
     flex-shrink: 0;
     margin: 0;
-    margin-top: max(-24px, calc(-1.67vw * var(--scale)));
-    margin-bottom: max(-8px, calc(-0.56vw * var(--scale)));
-    align-self: stretch;
-    display: flex;
-    align-items: center;
+    order: -1;
 }
 
-.kg-image-callout-grid .kg-image-card img {
+.kg-image-callout-grid .kg-callout-card .kg-image-card img {
+    max-height: 128px;
     width: auto;
-    height: 100%;
+    height: auto;
     object-fit: contain;
-}
-
-/* Subsequent callouts stack normally */
-.kg-image-callout-grid .kg-callout-card {
-    display: flex;
-    flex-direction: column;
-    align-self: stretch;
-    width: 100%;
-    margin: 0;
 }
 
 /* Button inside last callout */
@@ -517,26 +508,7 @@ td {
     justify-content: flex-start;
 }
 
-.kg-image-callout-grid .kg-image-card,
-.kg-image-callout-grid .kg-callout-card {
-    margin: 0;
-}
 
-.kg-image-callout-grid .kg-image-card {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    max-height: 100%;
-}
-
-.kg-image-callout-grid .kg-image-card img.kg-image {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    object-fit: contain !important;
-}
 
 /* This needs to be added so there are no warnings */
 .kg-callout-card-emoji,
