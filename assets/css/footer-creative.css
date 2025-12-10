@@ -21,7 +21,7 @@
     justify-content: flex-start;
     align-items: stretch;
     min-height: 100vh;
-    padding-top: max(55px, 3.82vw);
+    /* padding-top: max(55px, 3.82vw); */
     display: flex;
     position: relative;
 }
