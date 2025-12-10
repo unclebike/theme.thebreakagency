@@ -971,7 +971,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     if (!this.numberTrack) return;
 
-                    this.numberTrack.style.transform = `translateY(-${(100 / this.slideNumber) * index}%)`;
+                    const numberCount = this.numberTrack.querySelectorAll('span').length;
+                    this.numberTrack.style.transform = `translateY(-${(100 / numberCount) * index}%)`;
                 }
 
                 setLinkTabindex() {
