@@ -472,26 +472,33 @@ td {
     align-items: flex-start;
 }
 
-/* First callout extends to contain the image */
+/* First callout contains the image */
 .kg-image-callout-grid .kg-callout-card:first-of-type {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: max(16px, calc(1.11vw * var(--scale)));
     padding: max(16px, calc(1.11vw * var(--scale)));
+    position: relative;
+    overflow: visible;
 }
 
-/* Image sits inside first callout */
+/* Image sits inside first callout, 10% taller and overflows up */
 .kg-image-callout-grid .kg-image-card {
     order: -1;
     flex-shrink: 0;
     margin: 0;
+    align-self: stretch;
+    position: relative;
+    top: -5%;
+    height: 110%;
+    display: flex;
+    align-items: center;
 }
 
 .kg-image-callout-grid .kg-image-card img {
-    max-height: 128px;
+    height: 100%;
     width: auto;
-    height: auto;
     object-fit: contain;
 }
 
