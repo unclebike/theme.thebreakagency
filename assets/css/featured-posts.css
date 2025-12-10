@@ -61,8 +61,8 @@
     opacity: 0;
     max-width: max(410px, calc(28.5vw));
     position: absolute;
-    top: max(53px, calc(3.69vw * var(--scale)));
-    left: 0;
+    top: max(53px, calc(5vw * var(--scale)));
+    left: 10vw;
     height: 100%;
 }
 
