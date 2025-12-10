@@ -310,6 +310,7 @@ html[data-primary-font="Thunder"] .footer-center-link .arrow-link-button{
         width: calc(100vw - (2 * 18px));
         word-break: break-word;
         overflow-wrap: break-word;
+        text-align: center;
         padding-top: 28px;
     }
 }
