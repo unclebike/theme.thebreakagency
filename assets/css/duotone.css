@@ -61,6 +61,12 @@
     --duotone-foreground: #1e325d;
 }
 
+/* The Break Orange - Brand alternate */
+.duotone-thebreak-alt {
+    --duotone-base: #f2d7c0;
+    --duotone-foreground: #ca6f4a;
+}
+
 /* Ocean - Blue tones */
 .duotone-ocean {
     --duotone-base: #08b76c;
