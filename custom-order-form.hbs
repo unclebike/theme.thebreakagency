@@ -27,15 +27,11 @@
                     <div class="post-content-inner">
                         <form 
                             class="order-form"
-                            action="https://formspree.io/f/YOUR_FORM_ID"
+                            action="#"
                             method="POST"
                         >
+                            <input type="hidden" name="_subject" value="New Product Order from {{@site.title}}">
                             {{content}}
-
-                            <div class="order-form-footer">
-                                <input type="hidden" name="_subject" value="New Product Order from {{@site.title}}">
-                                <button type="submit" class="order-form-submit">Submit Order</button>
-                            </div>
                         </form>
                     </div>
                 </div>
