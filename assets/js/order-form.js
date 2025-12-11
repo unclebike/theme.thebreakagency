@@ -165,17 +165,26 @@
 
             let isExpanded = false;
 
+            // Get size grid height for expanded description max-height
+            const sizeGridHeight = sizeGrid.offsetHeight;
+
             toggleBtn.addEventListener('click', () => {
                 if (!isExpanded) {
-                    // Expand
+                    // Expand - use size grid's space for description
+                    wrapper.style.maxHeight = sizeGridHeight + 'px';
+                    wrapper.style.overflowY = 'auto';
                     description.classList.add('description-expanded');
                     toggleBtn.textContent = '...less';
-                    sizeGrid.style.display = 'none';
+                    sizeGrid.style.visibility = 'hidden';
+                    sizeGrid.style.position = 'absolute';
                 } else {
                     // Collapse
+                    wrapper.style.maxHeight = '3em';
+                    wrapper.style.overflowY = 'hidden';
                     description.classList.remove('description-expanded');
                     toggleBtn.textContent = '...more';
-                    sizeGrid.style.display = '';
+                    sizeGrid.style.visibility = '';
+                    sizeGrid.style.position = '';
                 }
                 isExpanded = !isExpanded;
             });
