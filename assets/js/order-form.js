@@ -114,6 +114,9 @@
         // Add horizontal class if flagged
         if (isHorizontal) {
             card.classList.add('order-form-product-horizontal');
+            // Move size grid outside container for horizontal layout
+            // This makes it a direct child of the card for 2-column grid
+            card.appendChild(sizeGrid);
         }
     }
 
