@@ -55,6 +55,10 @@
     justify-content: center;
     width: max(36px, calc(2.5vw * var(--scale)));
     height: max(36px, calc(2.5vw * var(--scale)));
+    min-width: max(36px, calc(2.5vw * var(--scale)));
+    min-height: max(36px, calc(2.5vw * var(--scale)));
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
     border: 1px solid var(--text-color);
     background: transparent;
     border-radius: 50%;
@@ -64,6 +68,7 @@
     transition: all 0.2s ease;
     color: var(--text-color);
     line-height: 1;
+    padding: 0;
 }
 
 .qty-btn:hover {
@@ -78,15 +83,19 @@
 .qty-input {
     width: max(48px, calc(3.33vw * var(--scale)));
     height: max(36px, calc(2.5vw * var(--scale)));
+    min-width: max(48px, calc(3.33vw * var(--scale)));
+    flex-shrink: 0;
     text-align: center;
     border: 1px solid var(--text-color);
     border-radius: max(6px, calc(0.42vw * var(--scale)));
     font-family: var(--font2);
-    font-size: max(16px, calc(1.11vw * var(--scale)));
+    font-size: max(16px, calc(1.11vw * var(--scale))) !important;
     font-weight: 500;
-    background: var(--background-color);
-    color: var(--text-color);
+    background: var(--background-color) !important;
+    color: var(--text-color) !important;
     -moz-appearance: textfield;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .qty-input::-webkit-outer-spin-button,
@@ -151,13 +160,16 @@
     .qty-btn {
         width: 32px;
         height: 32px;
+        min-width: 32px;
+        min-height: 32px;
         font-size: 18px;
     }
 
     .qty-input {
         width: 44px;
         height: 32px;
-        font-size: 14px;
+        min-width: 44px;
+        font-size: 14px !important;
     }
 
 }
