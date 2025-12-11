@@ -148,16 +148,22 @@
 }
 
 .order-form .order-form-product-horizontal .kg-product-card-image {
-    max-width: 300px;
-    max-height: 100%;
+    width: auto;
+    height: 100%;
+    max-width: 250px;
     object-fit: cover;
-    align-self: start;
+    object-position: top;
+    grid-row: 1;
+    grid-column: 1;
+    align-self: stretch;
 }
 
 /* Right column: title, description, sizes */
 .order-form .order-form-right-column {
     display: flex;
     flex-direction: column;
+    grid-row: 1;
+    grid-column: 2;
 }
 
 .order-form .order-form-right-column .kg-product-card-title-container {
@@ -180,7 +186,16 @@
     }
     
     .order-form .order-form-product-horizontal .kg-product-card-image {
+        width: 100%;
+        height: auto;
         max-width: 100%;
+        grid-row: 1;
+        grid-column: 1;
+    }
+    
+    .order-form .order-form-right-column {
+        grid-row: 2;
+        grid-column: 1;
     }
 }
 
