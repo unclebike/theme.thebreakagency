@@ -276,7 +276,7 @@ img, figure {
     grid-row-gap: max(7px, calc(0.49vw * var(--scale)));
     justify-content: flex-start;
     align-items: center;
-    margin-bottom: max(16px, calc(1.11vw * var(--scale)));
+    margin-bottom: max(1px, calc(.11vw * var(--scale)));
     display: flex;
 }
 
