@@ -231,6 +231,11 @@
     overflow: hidden;
 }
 
+/* Override Ghost editor's pre-wrap which prevents line-clamp */
+.order-form .description-collapsed .description-text * {
+    white-space: normal !important;
+}
+
 .order-form .description-collapsed .description-toggle {
     display: inline;
     margin-top: 0.25em;
