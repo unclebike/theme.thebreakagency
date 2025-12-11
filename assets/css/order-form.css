@@ -166,9 +166,11 @@
     flex: 1;
 }
 
-/* Push size grid to bottom of card */
+/* Push size grid to bottom of card, 2 columns */
 .order-form .kg-product-card:not(.order-form-product-horizontal) .size-qty-grid {
     margin-top: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
 /* Non-product elements span full width */
