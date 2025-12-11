@@ -138,66 +138,41 @@
     }
 
     function setupExpandableDescription(description, sizeGrid) {
-        // Wrap original content
-        const originalContent = description.innerHTML;
-        description.innerHTML = `
-            <div class="description-collapsed">
-                <span class="description-text">${originalContent}</span>
-                <button type="button" class="description-toggle">...more</button>
-            </div>
-            <div class="description-expanded">
-                <span class="description-text">${originalContent}</span>
-                <button type="button" class="description-toggle">...less</button>
-            </div>
-        `;
+        // Add toggle button after description content
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'description-toggle';
+        toggleBtn.textContent = '...more';
+        description.appendChild(toggleBtn);
 
-        const collapsed = description.querySelector('.description-collapsed');
-        const expanded = description.querySelector('.description-expanded');
-        const moreBtn = collapsed.querySelector('.description-toggle');
-        const lessBtn = expanded.querySelector('.description-toggle');
+        // Mark as collapsed (clamped) by default
+        description.classList.add('description-clamped');
 
         // Check if text actually overflows (needs "...more")
-        const textEl = collapsed.querySelector('.description-text');
         requestAnimationFrame(() => {
-            // Add small buffer (2px) to account for rounding
-            if (textEl.scrollHeight <= textEl.offsetHeight + 2) {
-                moreBtn.style.display = 'none';
+            if (description.scrollHeight <= description.offsetHeight + 2) {
+                toggleBtn.style.display = 'none';
                 description.classList.add('no-overflow');
                 return;
             }
 
-            // Expand on click
-            moreBtn.addEventListener('click', () => {
-                const expandedHeight = expanded.scrollHeight;
-                
-                gsap.to(collapsed, {
-                    opacity: 0,
-                    duration: 0.2,
-                    onComplete: () => {
-                        collapsed.style.display = 'none';
-                        expanded.style.display = 'block';
-                        expanded.style.opacity = 0;
-                        
-                        gsap.to(expanded, { opacity: 1, duration: 0.2 });
-                        gsap.to(sizeGrid, { opacity: 0, duration: 0.2 });
-                    }
-                });
-            });
+            let isExpanded = false;
 
-            // Collapse on click
-            lessBtn.addEventListener('click', () => {
-                gsap.to(expanded, {
-                    opacity: 0,
-                    duration: 0.2,
-                    onComplete: () => {
-                        expanded.style.display = 'none';
-                        collapsed.style.display = 'flex';
-                        collapsed.style.opacity = 0;
-                        
-                        gsap.to(collapsed, { opacity: 1, duration: 0.2 });
-                        gsap.to(sizeGrid, { opacity: 1, duration: 0.2 });
-                    }
-                });
+            toggleBtn.addEventListener('click', () => {
+                if (!isExpanded) {
+                    // Expand
+                    description.classList.remove('description-clamped');
+                    description.classList.add('description-expanded');
+                    toggleBtn.textContent = '...less';
+                    gsap.to(sizeGrid, { opacity: 0, duration: 0.2 });
+                } else {
+                    // Collapse
+                    description.classList.add('description-clamped');
+                    description.classList.remove('description-expanded');
+                    toggleBtn.textContent = '...more';
+                    gsap.to(sizeGrid, { opacity: 1, duration: 0.2 });
+                }
+                isExpanded = !isExpanded;
             });
         });
     }
