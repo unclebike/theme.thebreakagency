@@ -127,6 +127,48 @@
     border-radius: max(8px, calc(0.56vw * var(--scale)));
     background: var(--background-color);
     margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.order-form .kg-product-card .kg-product-card-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+/* Regular (non-horizontal) card styling */
+.order-form .kg-product-card:not(.order-form-product-horizontal) .kg-product-card-image {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: top;
+    border-radius: max(4px, calc(0.28vw * var(--scale)));
+}
+
+.order-form .kg-product-card:not(.order-form-product-horizontal) .kg-product-card-title-container {
+    margin-top: max(16px, calc(1.11vw * var(--scale)));
+    margin-bottom: max(8px, calc(0.56vw * var(--scale)));
+}
+
+.order-form .kg-product-card:not(.order-form-product-horizontal) .kg-product-card-title {
+    font-family: var(--font1);
+    font-size: max(24px, calc(1.67vw * var(--scale)));
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.order-form .kg-product-card:not(.order-form-product-horizontal) .kg-product-card-description {
+    font-family: var(--font2);
+    font-size: max(14px, calc(0.97vw * var(--scale)));
+    line-height: 1.5;
+    opacity: 0.8;
+    flex: 1;
+}
+
+/* Push size grid to bottom of card */
+.order-form .kg-product-card:not(.order-form-product-horizontal) .size-qty-grid {
+    margin-top: auto;
 }
 
 /* Non-product elements span full width */
