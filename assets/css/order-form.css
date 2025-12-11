@@ -113,16 +113,31 @@
 
 
 
+/* Product Card Grid Layout */
+.order-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: max(24px, calc(1.67vw * var(--scale)));
+}
+
 /* Product Card Enhancements for Order Form */
 .order-form .kg-product-card {
     padding: max(24px, calc(1.67vw * var(--scale)));
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: max(8px, calc(0.56vw * var(--scale)));
     background: var(--background-color);
+    margin-bottom: 0;
 }
 
-.order-form .kg-product-card + .kg-product-card {
-    margin-top: max(24px, calc(1.67vw * var(--scale)));
+/* Non-product elements span full width */
+.order-form > *:not(.kg-product-card) {
+    grid-column: 1 / -1;
+}
+
+@media screen and (max-width: 768px) {
+    .order-form {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Submit Button - matches product card button positioning */
