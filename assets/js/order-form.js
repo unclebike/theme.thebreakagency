@@ -7,9 +7,13 @@
  * 1. Create a page using the "Order Form" template
  * 2. Add product cards in Ghost editor
  * 3. Set button text to comma-separated sizes: "XS,S,M,L,XL"
- * 4. Set button URL to product ID: "#SKU-12345" or "SKU-12345"
- * 5. Add a kg-button card at the end with the Formspree URL as href
- * 6. The script transforms cards and wires up the form submission
+ * 4. Set button URL to product ID: "#SKU-12345"
+ * 5. Add #H to force horizontal layout: "#SKU-12345#H"
+ * 6. Add a kg-button card at the end with the Formspree URL as href
+ * 
+ * Layout:
+ * - Odd number of cards: last card auto-becomes horizontal
+ * - Use #H flag to force any card horizontal
  */
 
 (function() {
@@ -17,119 +21,114 @@
 
     function initOrderForm() {
         const form = document.querySelector('.order-form');
-        if (!form) {
-            console.log('Order Form: No form found');
-            return;
-        }
+        if (!form) return;
 
-        // Find submit button (kg-button) and extract Formspree URL
+        setupSubmitButton(form);
+        
+        const productCards = Array.from(form.querySelectorAll('.kg-product-card'));
+        if (!productCards.length) return;
+
+        // Determine which cards should be horizontal
+        const horizontalFlags = detectHorizontalCards(productCards);
+
+        productCards.forEach((card, index) => {
+            transformProductCard(card, horizontalFlags[index]);
+        });
+    }
+
+    function setupSubmitButton(form) {
         const submitButton = form.querySelector('.kg-button-card .kg-btn');
-        if (submitButton) {
-            const formspreeUrl = submitButton.getAttribute('href');
-            if (formspreeUrl && formspreeUrl.includes('formspree.io')) {
-                form.setAttribute('action', formspreeUrl);
-                
-                // Convert the button to a submit button
-                submitButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    form.submit();
-                });
-                
-                // Style it as submit
-                submitButton.closest('.kg-button-card').classList.add('order-form-submit-card');
+        if (!submitButton) return;
+
+        const formspreeUrl = submitButton.getAttribute('href');
+        if (!formspreeUrl || !formspreeUrl.includes('formspree.io')) return;
+
+        form.setAttribute('action', formspreeUrl);
+        submitButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            form.submit();
+        });
+        submitButton.closest('.kg-button-card').classList.add('order-form-submit-card');
+    }
+
+    function detectHorizontalCards(cards) {
+        const flags = cards.map(card => {
+            const buttonEl = card.querySelector('.kg-product-card-button');
+            const href = buttonEl?.getAttribute('href') || '';
+            return href.includes('#H');
+        });
+
+        // Auto-horizontal for odd card out (if not already forced)
+        const forcedCount = flags.filter(f => f).length;
+        const remainingCards = cards.length - forcedCount;
+        
+        if (remainingCards % 2 === 1) {
+            // Find last non-forced card and make it horizontal
+            for (let i = cards.length - 1; i >= 0; i--) {
+                if (!flags[i]) {
+                    flags[i] = true;
+                    break;
+                }
             }
         }
 
-        // Transform product cards
-        const productCards = form.querySelectorAll('.kg-product-card');
-        
-        if (!productCards.length) {
-            console.log('Order Form: No product cards found');
-            return;
-        }
-
-        productCards.forEach((card) => {
-            transformProductCard(card);
-        });
-
-        console.log(`Order Form: Transformed ${productCards.length} product card(s)`);
+        return flags;
     }
 
-    function transformProductCard(card) {
-        // Extract product name from title
+    function transformProductCard(card, isHorizontal) {
         const titleEl = card.querySelector('.kg-product-card-title');
-        const productName = titleEl ? titleEl.textContent.trim() : 'Unknown Product';
+        const productName = titleEl?.textContent.trim() || 'Unknown Product';
         
-        // Extract product ID from button URL
         const buttonEl = card.querySelector('.kg-product-card-button');
-        if (!buttonEl) {
-            console.log(`Order Form: No button found for "${productName}", skipping`);
-            return;
-        }
+        if (!buttonEl) return;
 
-        let buttonUrl = buttonEl.getAttribute('href') || '';
-        
-        // Check for horizontal flag #H
-        const isHorizontal = buttonUrl.includes('#H');
-        buttonUrl = buttonUrl.replace('#H', '');
-        
-        // Extract ID - remove # if present, use the value as product ID
+        // Parse button URL for product ID (strip #H flag)
+        const buttonUrl = (buttonEl.getAttribute('href') || '').replace('#H', '');
         const productId = buttonUrl.replace(/^#/, '').trim();
-        
-        if (!productId) {
-            console.log(`Order Form: No product ID in button URL for "${productName}", skipping`);
-            return;
-        }
+        if (!productId) return;
 
-        // Extract sizes from button text
-        const sizesText = buttonEl.textContent.trim();
-        const sizes = sizesText ? sizesText.split(',').map(s => s.trim()).filter(s => s) : [];
+        // Parse sizes from button text
+        const sizes = (buttonEl.textContent.trim())
+            .split(',')
+            .map(s => s.trim())
+            .filter(Boolean);
+        if (!sizes.length) return;
 
-        if (!sizes.length) {
-            console.log(`Order Form: No sizes found for "${productName}", skipping`);
-            return;
-        }
-
-        // Create the size/qty grid
+        // Build size grid and replace button
         const sizeGrid = createSizeGrid(productId, sizes);
-
-        // Find the button container and replace it with the grid
         const buttonContainer = card.querySelector('.kg-product-card-button-container');
-        if (buttonContainer) {
-            buttonContainer.replaceWith(sizeGrid);
-        } else {
-            buttonEl.replaceWith(sizeGrid);
-        }
+        (buttonContainer || buttonEl).replaceWith(sizeGrid);
 
-        // Add hidden field for product name (using product ID as key)
+        // Add hidden product name field
         const hiddenName = document.createElement('input');
         hiddenName.type = 'hidden';
         hiddenName.name = `${productId}_name`;
         hiddenName.value = productName;
         card.appendChild(hiddenName);
 
-        // Mark card as transformed
+        // Mark as transformed
         card.classList.add('order-form-product');
-        
-        // Add horizontal class if flagged
+
+        // Apply horizontal layout
         if (isHorizontal) {
-            card.classList.add('order-form-product-horizontal');
-            
-            // Create right column wrapper for title, description, and sizes
-            const rightColumn = document.createElement('div');
-            rightColumn.className = 'order-form-right-column';
-            
-            // Move title and description into right column
-            const titleContainer = card.querySelector('.kg-product-card-title-container');
-            const description = card.querySelector('.kg-product-card-description');
-            
-            if (titleContainer) rightColumn.appendChild(titleContainer);
-            if (description) rightColumn.appendChild(description);
-            rightColumn.appendChild(sizeGrid);
-            
-            // Append right column to card
-            card.appendChild(rightColumn);
+            applyHorizontalLayout(card, sizeGrid);
         }
+    }
+
+    function applyHorizontalLayout(card, sizeGrid) {
+        card.classList.add('order-form-product-horizontal');
+
+        const rightColumn = document.createElement('div');
+        rightColumn.className = 'order-form-right-column';
+
+        const titleContainer = card.querySelector('.kg-product-card-title-container');
+        const description = card.querySelector('.kg-product-card-description');
+
+        if (titleContainer) rightColumn.appendChild(titleContainer);
+        if (description) rightColumn.appendChild(description);
+        rightColumn.appendChild(sizeGrid);
+
+        card.appendChild(rightColumn);
     }
 
     function createSizeGrid(productId, sizes) {
