@@ -158,7 +158,8 @@
         // Check if text actually overflows (needs "...more")
         const textEl = collapsed.querySelector('.description-text');
         requestAnimationFrame(() => {
-            if (textEl.scrollHeight <= textEl.offsetHeight) {
+            // Add small buffer (2px) to account for rounding
+            if (textEl.scrollHeight <= textEl.offsetHeight + 2) {
                 moreBtn.style.display = 'none';
                 description.classList.add('no-overflow');
                 return;
