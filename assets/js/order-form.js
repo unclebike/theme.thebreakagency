@@ -170,12 +170,12 @@
                     // Expand
                     description.classList.add('description-expanded');
                     toggleBtn.textContent = '...less';
-                    gsap.to(sizeGrid, { opacity: 0, duration: 0.2 });
+                    sizeGrid.style.display = 'none';
                 } else {
                     // Collapse
                     description.classList.remove('description-expanded');
                     toggleBtn.textContent = '...more';
-                    gsap.to(sizeGrid, { opacity: 1, duration: 0.2 });
+                    sizeGrid.style.display = '';
                 }
                 isExpanded = !isExpanded;
             });

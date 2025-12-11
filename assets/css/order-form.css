@@ -228,6 +228,8 @@
 .order-form .kg-product-card-description {
     position: relative;
     line-height: 1.5;
+    z-index: 10;
+    background: var(--background-color);
 }
 
 /* Description wrapper - handles the clamping */
@@ -236,19 +238,9 @@
     max-height: 3em; /* 2 lines × 1.5 line-height */
 }
 
-/* Expanded state - overlay the size chart */
-.order-form .kg-product-card-description.description-expanded {
-    position: absolute;
-    left: 0;
-    right: 0;
-    background: var(--background-color);
-    z-index: 10;
-    padding-bottom: 1em;
-}
-
+/* Expanded state - just remove clamp, overlay handled by z-index + background */
 .order-form .kg-product-card-description.description-expanded .description-wrapper {
     max-height: none;
-    overflow-y: auto;
 }
 
 /* Toggle button floated to end of text */
