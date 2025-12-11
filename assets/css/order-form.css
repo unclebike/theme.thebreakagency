@@ -100,39 +100,7 @@
     border-color: var(--ghost-accent-color);
 }
 
-/* Order Form Footer */
-.order-form-footer {
-    margin-top: max(48px, calc(3.33vw * var(--scale)));
-    padding-top: max(32px, calc(2.22vw * var(--scale)));
-    border-top: 1px solid var(--text-color);
-    display: flex;
-    justify-content: flex-end;
-}
 
-.order-form-submit {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: max(16px, calc(1.11vw * var(--scale))) max(48px, calc(3.33vw * var(--scale)));
-    background: var(--text-color);
-    color: var(--background-color);
-    border: none;
-    border-radius: max(8px, calc(0.56vw * var(--scale)));
-    font-family: var(--font1);
-    font-size: max(20px, calc(1.39vw * var(--scale)));
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s var(--ease-transition);
-}
-
-.order-form-submit:hover {
-    opacity: 0.85;
-    transform: translateY(-2px);
-}
-
-.order-form-submit:active {
-    transform: translateY(0);
-}
 
 /* Product Card Enhancements for Order Form */
 .order-form .kg-product-card {
@@ -144,6 +112,29 @@
 
 .order-form .kg-product-card + .kg-product-card {
     margin-top: max(24px, calc(1.67vw * var(--scale)));
+}
+
+/* Submit Button - matches product card button positioning */
+.order-form .order-form-submit-card {
+    margin-top: max(32px, calc(2.22vw * var(--scale)));
+}
+
+.order-form .order-form-submit-card .kg-btn {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    padding: max(14px, calc(0.97vw * var(--scale))) max(24px, calc(1.67vw * var(--scale)));
+    font-size: max(16px, calc(1.11vw * var(--scale)));
+    font-weight: 600;
+    border-radius: max(6px, calc(0.42vw * var(--scale)));
+    background: var(--text-color);
+    color: var(--background-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.order-form .order-form-submit-card .kg-btn:hover {
+    opacity: 0.85;
 }
 
 /* Responsive adjustments */
@@ -169,14 +160,4 @@
         font-size: 14px;
     }
 
-    .order-form-submit {
-        width: 100%;
-        padding: 16px 32px;
-        font-size: 18px;
-    }
-
-    .order-form-footer {
-        margin-top: 32px;
-        padding-top: 24px;
-    }
 }
