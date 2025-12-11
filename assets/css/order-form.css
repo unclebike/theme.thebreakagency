@@ -227,18 +227,19 @@
 /* Expandable description container */
 .order-form .kg-product-card-description {
     position: relative;
+    line-height: 1.5;
 }
 
 /* Description wrapper - handles the clamping */
 .order-form .kg-product-card-description .description-wrapper {
     overflow: hidden;
-    line-height: 1.5;
     max-height: 3em; /* 2 lines × 1.5 line-height */
 }
 
-/* Expanded state */
+/* Expanded state - scroll if needed, don't grow card */
 .order-form .kg-product-card-description.description-expanded .description-wrapper {
-    max-height: none;
+    max-height: 9em; /* ~6 lines max, then scroll */
+    overflow-y: auto;
 }
 
 /* Toggle button floated to end of text */
