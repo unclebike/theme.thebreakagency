@@ -22,6 +22,7 @@ html[data-primary-font="Thunder"] .secondary-paragraph-wrapper {
 
 .grid-with-border {
     padding-top: max(36px, calc(2.5vw * var(--scale)));
+    padding-bottom: max(36px, calc(2.5vw * var(--scale)));
     border-top: 1px solid var(--text-color);
 }
 
