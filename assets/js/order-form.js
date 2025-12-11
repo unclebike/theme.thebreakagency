@@ -129,6 +129,75 @@
         rightColumn.appendChild(sizeGrid);
 
         card.appendChild(rightColumn);
+
+        // Setup expandable description
+        if (description) {
+            setupExpandableDescription(description, sizeGrid);
+        }
+    }
+
+    function setupExpandableDescription(description, sizeGrid) {
+        // Wrap original content
+        const originalContent = description.innerHTML;
+        description.innerHTML = `
+            <div class="description-collapsed">
+                <span class="description-text">${originalContent}</span>
+                <button type="button" class="description-toggle">...more</button>
+            </div>
+            <div class="description-expanded">
+                <span class="description-text">${originalContent}</span>
+                <button type="button" class="description-toggle">...less</button>
+            </div>
+        `;
+
+        const collapsed = description.querySelector('.description-collapsed');
+        const expanded = description.querySelector('.description-expanded');
+        const moreBtn = collapsed.querySelector('.description-toggle');
+        const lessBtn = expanded.querySelector('.description-toggle');
+
+        // Check if text actually overflows (needs "...more")
+        const textEl = collapsed.querySelector('.description-text');
+        requestAnimationFrame(() => {
+            if (textEl.scrollHeight <= textEl.offsetHeight) {
+                moreBtn.style.display = 'none';
+                description.classList.add('no-overflow');
+                return;
+            }
+
+            // Expand on click
+            moreBtn.addEventListener('click', () => {
+                const expandedHeight = expanded.scrollHeight;
+                
+                gsap.to(collapsed, {
+                    opacity: 0,
+                    duration: 0.2,
+                    onComplete: () => {
+                        collapsed.style.display = 'none';
+                        expanded.style.display = 'block';
+                        expanded.style.opacity = 0;
+                        
+                        gsap.to(expanded, { opacity: 1, duration: 0.2 });
+                        gsap.to(sizeGrid, { opacity: 0, duration: 0.2 });
+                    }
+                });
+            });
+
+            // Collapse on click
+            lessBtn.addEventListener('click', () => {
+                gsap.to(expanded, {
+                    opacity: 0,
+                    duration: 0.2,
+                    onComplete: () => {
+                        expanded.style.display = 'none';
+                        collapsed.style.display = 'flex';
+                        collapsed.style.opacity = 0;
+                        
+                        gsap.to(collapsed, { opacity: 1, duration: 0.2 });
+                        gsap.to(sizeGrid, { opacity: 1, duration: 0.2 });
+                    }
+                });
+            });
+        });
     }
 
     function createSizeGrid(productId, sizes) {
