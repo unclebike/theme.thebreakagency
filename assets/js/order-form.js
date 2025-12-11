@@ -67,7 +67,12 @@
             return;
         }
 
-        const buttonUrl = buttonEl.getAttribute('href') || '';
+        let buttonUrl = buttonEl.getAttribute('href') || '';
+        
+        // Check for horizontal flag #H
+        const isHorizontal = buttonUrl.includes('#H');
+        buttonUrl = buttonUrl.replace('#H', '');
+        
         // Extract ID - remove # if present, use the value as product ID
         const productId = buttonUrl.replace(/^#/, '').trim();
         
@@ -105,6 +110,11 @@
 
         // Mark card as transformed
         card.classList.add('order-form-product');
+        
+        // Add horizontal class if flagged
+        if (isHorizontal) {
+            card.classList.add('order-form-product-horizontal');
+        }
     }
 
     function createSizeGrid(productId, sizes) {

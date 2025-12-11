@@ -134,6 +134,48 @@
     grid-column: 1 / -1;
 }
 
+/* Horizontal product card layout */
+.order-form .order-form-product-horizontal {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: max(16px, calc(1.11vw * var(--scale)));
+    align-items: start;
+}
+
+.order-form .order-form-product-horizontal .kg-product-card-container {
+    display: contents;
+}
+
+.order-form .order-form-product-horizontal .kg-product-card-image {
+    grid-row: 1 / 3;
+    width: max(120px, calc(8.33vw * var(--scale)));
+    height: auto;
+}
+
+.order-form .order-form-product-horizontal .kg-product-card-title-container {
+    grid-column: 2;
+    align-self: end;
+}
+
+.order-form .order-form-product-horizontal .size-qty-grid {
+    grid-column: 2;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+    align-self: start;
+}
+
+.order-form .order-form-product-horizontal .kg-product-card-description {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .order-form .order-form-product-horizontal .kg-product-card-image {
+        width: 80px;
+    }
+}
+
 @media screen and (max-width: 768px) {
     .order-form {
         grid-template-columns: 1fr;
