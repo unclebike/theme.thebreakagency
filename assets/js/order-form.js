@@ -138,19 +138,24 @@
     }
 
     function setupExpandableDescription(description, sizeGrid) {
-        // Add toggle button after description content
+        // Wrap existing content
+        const wrapper = document.createElement('div');
+        wrapper.className = 'description-wrapper';
+        while (description.firstChild) {
+            wrapper.appendChild(description.firstChild);
+        }
+        description.appendChild(wrapper);
+
+        // Add toggle button
         const toggleBtn = document.createElement('button');
         toggleBtn.type = 'button';
         toggleBtn.className = 'description-toggle';
         toggleBtn.textContent = '...more';
         description.appendChild(toggleBtn);
 
-        // Mark as collapsed (clamped) by default
-        description.classList.add('description-clamped');
-
         // Check if text actually overflows (needs "...more")
         requestAnimationFrame(() => {
-            if (description.scrollHeight <= description.offsetHeight + 2) {
+            if (wrapper.scrollHeight <= wrapper.offsetHeight + 2) {
                 toggleBtn.style.display = 'none';
                 description.classList.add('no-overflow');
                 return;
@@ -161,13 +166,11 @@
             toggleBtn.addEventListener('click', () => {
                 if (!isExpanded) {
                     // Expand
-                    description.classList.remove('description-clamped');
                     description.classList.add('description-expanded');
                     toggleBtn.textContent = '...less';
                     gsap.to(sizeGrid, { opacity: 0, duration: 0.2 });
                 } else {
                     // Collapse
-                    description.classList.add('description-clamped');
                     description.classList.remove('description-expanded');
                     toggleBtn.textContent = '...more';
                     gsap.to(sizeGrid, { opacity: 1, duration: 0.2 });
