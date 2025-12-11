@@ -59,6 +59,13 @@
                 "width": 3840
             }
         },
+        "custom_templates": [
+            {
+                "name": "Order Form",
+                "for": ["page"],
+                "slug": "order-form"
+            }
+        ],
         "card_assets": {
             "exclude": [
                 "toggle",
