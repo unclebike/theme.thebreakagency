@@ -138,20 +138,22 @@
     }
 
     function setupExpandableDescription(description, sizeGrid) {
+        // Create toggle button first (needs to be before content for float)
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'description-toggle';
+        toggleBtn.textContent = '...more';
+
         // Wrap existing content
         const wrapper = document.createElement('div');
         wrapper.className = 'description-wrapper';
         while (description.firstChild) {
             wrapper.appendChild(description.firstChild);
         }
-        description.appendChild(wrapper);
-
-        // Add toggle button
-        const toggleBtn = document.createElement('button');
-        toggleBtn.type = 'button';
-        toggleBtn.className = 'description-toggle';
-        toggleBtn.textContent = '...more';
+        
+        // Add button then wrapper (button floats right into text)
         description.appendChild(toggleBtn);
+        description.appendChild(wrapper);
 
         // Check if text actually overflows (needs "...more")
         requestAnimationFrame(() => {

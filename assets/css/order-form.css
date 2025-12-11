@@ -224,30 +224,43 @@
     white-space: normal !important;
 }
 
-/* Expandable description wrapper */
+/* Expandable description container */
+.order-form .kg-product-card-description {
+    position: relative;
+}
+
+/* Description wrapper - handles the clamping */
 .order-form .kg-product-card-description .description-wrapper {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
     overflow: hidden;
+    line-height: 1.5;
+    max-height: 3em; /* 2 lines × 1.5 line-height */
 }
 
-/* Expanded state - remove the clamp */
+/* Expanded state */
 .order-form .kg-product-card-description.description-expanded .description-wrapper {
-    display: block;
-    -webkit-line-clamp: unset;
-    overflow: visible;
+    max-height: none;
 }
 
+/* Toggle button floated to end of text */
 .order-form .description-toggle {
     background: none;
     border: none;
     padding: 0;
+    padding-left: 0.25em;
     font-family: var(--font2);
     font-size: inherit;
     color: var(--ghost-accent-color);
     cursor: pointer;
     white-space: nowrap;
+    float: right;
+    clear: both;
+}
+
+/* Create space for the button at end of line 2 */
+.order-form .kg-product-card-description:not(.description-expanded) .description-toggle {
+    position: relative;
+    margin-top: 1.5em; /* Push to line 2 */
+    shape-outside: inset(calc(100% - 1.5em) 0 0 0);
 }
 
 .order-form .description-toggle:hover {
@@ -256,6 +269,13 @@
 
 .order-form .kg-product-card-description.no-overflow .description-toggle {
     display: none;
+}
+
+/* Expanded state - button below text */
+.order-form .kg-product-card-description.description-expanded .description-toggle {
+    float: none;
+    display: block;
+    margin-top: 0.25em;
 }
 
 .order-form .order-form-right-column .size-qty-grid {
