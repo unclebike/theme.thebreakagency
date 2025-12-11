@@ -163,7 +163,15 @@
     font-size: max(14px, calc(0.97vw * var(--scale)));
     line-height: 1.5;
     opacity: 0.8;
-    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Override Ghost pre-wrap for vertical cards */
+.order-form .kg-product-card:not(.order-form-product-horizontal) .kg-product-card-description * {
+    white-space: normal !important;
 }
 
 /* Push size grid to bottom of card, 2 columns */
