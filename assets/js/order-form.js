@@ -113,6 +113,12 @@
         if (isHorizontal) {
             applyHorizontalLayout(card, sizeGrid);
         }
+
+        // Setup expandable description for all cards
+        const description = card.querySelector('.kg-product-card-description');
+        if (description) {
+            setupExpandableDescription(description, sizeGrid);
+        }
     }
 
     function applyHorizontalLayout(card, sizeGrid) {
@@ -129,11 +135,6 @@
         rightColumn.appendChild(sizeGrid);
 
         card.appendChild(rightColumn);
-
-        // Setup expandable description
-        if (description) {
-            setupExpandableDescription(description, sizeGrid);
-        }
     }
 
     function setupExpandableDescription(description, sizeGrid) {
