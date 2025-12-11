@@ -114,9 +114,21 @@
         // Add horizontal class if flagged
         if (isHorizontal) {
             card.classList.add('order-form-product-horizontal');
-            // Move size grid outside container for horizontal layout
-            // This makes it a direct child of the card for 2-column grid
-            card.appendChild(sizeGrid);
+            
+            // Create right column wrapper for title, description, and sizes
+            const rightColumn = document.createElement('div');
+            rightColumn.className = 'order-form-right-column';
+            
+            // Move title and description into right column
+            const titleContainer = card.querySelector('.kg-product-card-title-container');
+            const description = card.querySelector('.kg-product-card-description');
+            
+            if (titleContainer) rightColumn.appendChild(titleContainer);
+            if (description) rightColumn.appendChild(description);
+            rightColumn.appendChild(sizeGrid);
+            
+            // Append right column to card
+            card.appendChild(rightColumn);
         }
     }
 
