@@ -236,9 +236,18 @@
     max-height: 3em; /* 2 lines × 1.5 line-height */
 }
 
-/* Expanded state - scroll if needed, don't grow card */
+/* Expanded state - overlay the size chart */
+.order-form .kg-product-card-description.description-expanded {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: var(--background-color);
+    z-index: 10;
+    padding-bottom: 1em;
+}
+
 .order-form .kg-product-card-description.description-expanded .description-wrapper {
-    max-height: 9em; /* ~6 lines max, then scroll */
+    max-height: none;
     overflow-y: auto;
 }
 
