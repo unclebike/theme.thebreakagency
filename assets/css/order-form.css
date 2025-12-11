@@ -80,7 +80,8 @@
     transform: scale(0.95);
 }
 
-.qty-input {
+.order-form .qty-input,
+.order-form .qty-input::placeholder {
     width: max(48px, calc(3.33vw * var(--scale)));
     height: max(36px, calc(2.5vw * var(--scale)));
     min-width: max(48px, calc(3.33vw * var(--scale)));
@@ -96,6 +97,7 @@
     -moz-appearance: textfield;
     -webkit-appearance: none;
     appearance: none;
+    padding: 0 !important;
 }
 
 .qty-input::-webkit-outer-spin-button,
