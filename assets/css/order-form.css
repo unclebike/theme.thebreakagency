@@ -1,0 +1,182 @@
+/* Order Form Styles */
+
+/* Hide the original product card button */
+.order-form .kg-product-card-button-container,
+.order-form .kg-product-card-button {
+    display: none !important;
+}
+
+/* Mark transformed product cards */
+.order-form .order-form-product {
+    position: relative;
+}
+
+/* Size/Quantity Grid */
+.size-qty-grid {
+    display: flex;
+    flex-direction: column;
+    gap: max(8px, calc(0.56vw * var(--scale)));
+    margin-top: max(16px, calc(1.11vw * var(--scale)));
+    padding-top: max(16px, calc(1.11vw * var(--scale)));
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.size-qty-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: max(8px, calc(0.56vw * var(--scale))) max(12px, calc(0.83vw * var(--scale)));
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: max(6px, calc(0.42vw * var(--scale)));
+    transition: background-color 0.2s ease;
+}
+
+.size-qty-row.has-quantity {
+    background: rgba(var(--ghost-accent-color-rgb, 0, 0, 0), 0.1);
+}
+
+.size-label {
+    font-family: var(--font1);
+    font-size: max(18px, calc(1.25vw * var(--scale)));
+    font-weight: 600;
+    min-width: max(48px, calc(3.33vw * var(--scale)));
+}
+
+/* Quantity Controls */
+.qty-controls {
+    display: flex;
+    align-items: center;
+    gap: max(4px, calc(0.28vw * var(--scale)));
+}
+
+.qty-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: max(36px, calc(2.5vw * var(--scale)));
+    height: max(36px, calc(2.5vw * var(--scale)));
+    border: 1px solid var(--text-color);
+    background: transparent;
+    border-radius: 50%;
+    font-size: max(20px, calc(1.39vw * var(--scale)));
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--text-color);
+    line-height: 1;
+}
+
+.qty-btn:hover {
+    background: var(--text-color);
+    color: var(--background-color);
+}
+
+.qty-btn:active {
+    transform: scale(0.95);
+}
+
+.qty-input {
+    width: max(48px, calc(3.33vw * var(--scale)));
+    height: max(36px, calc(2.5vw * var(--scale)));
+    text-align: center;
+    border: 1px solid var(--text-color);
+    border-radius: max(6px, calc(0.42vw * var(--scale)));
+    font-family: var(--font2);
+    font-size: max(16px, calc(1.11vw * var(--scale)));
+    font-weight: 500;
+    background: var(--background-color);
+    color: var(--text-color);
+    -moz-appearance: textfield;
+}
+
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.qty-input:focus {
+    outline: none;
+    border-color: var(--ghost-accent-color);
+}
+
+/* Order Form Footer */
+.order-form-footer {
+    margin-top: max(48px, calc(3.33vw * var(--scale)));
+    padding-top: max(32px, calc(2.22vw * var(--scale)));
+    border-top: 1px solid var(--text-color);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.order-form-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: max(16px, calc(1.11vw * var(--scale))) max(48px, calc(3.33vw * var(--scale)));
+    background: var(--text-color);
+    color: var(--background-color);
+    border: none;
+    border-radius: max(8px, calc(0.56vw * var(--scale)));
+    font-family: var(--font1);
+    font-size: max(20px, calc(1.39vw * var(--scale)));
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-transition);
+}
+
+.order-form-submit:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+}
+
+.order-form-submit:active {
+    transform: translateY(0);
+}
+
+/* Product Card Enhancements for Order Form */
+.order-form .kg-product-card {
+    padding: max(24px, calc(1.67vw * var(--scale)));
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: max(8px, calc(0.56vw * var(--scale)));
+    background: var(--background-color);
+}
+
+.order-form .kg-product-card + .kg-product-card {
+    margin-top: max(24px, calc(1.67vw * var(--scale)));
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .size-qty-row {
+        padding: 10px 14px;
+    }
+
+    .size-label {
+        font-size: 16px;
+        min-width: 40px;
+    }
+
+    .qty-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+    }
+
+    .qty-input {
+        width: 44px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .order-form-submit {
+        width: 100%;
+        padding: 16px 32px;
+        font-size: 18px;
+    }
+
+    .order-form-footer {
+        margin-top: 32px;
+        padding-top: 24px;
+    }
+}
