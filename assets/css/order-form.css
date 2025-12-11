@@ -171,6 +171,8 @@
     margin-top: auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    align-content: end;
+    flex: 1;
 }
 
 /* Non-product elements span full width */
