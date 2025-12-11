@@ -256,6 +256,11 @@
     display: block;
 }
 
+/* Override Ghost pre-wrap for expanded text */
+.order-form .description-expanded .description-text * {
+    white-space: normal !important;
+}
+
 .order-form .description-toggle {
     background: none;
     border: none;
