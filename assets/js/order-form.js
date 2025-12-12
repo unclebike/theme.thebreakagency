@@ -172,67 +172,96 @@
         descGridWrapper.appendChild(description);
         descGridWrapper.appendChild(sizeGrid);
 
-        // Create toggle button (needs to be before content for float)
+        // Get the original text content
+        const originalText = description.textContent.trim();
+        
+        // Create wrapper for truncated content
+        const wrapper = document.createElement('div');
+        wrapper.className = 'description-wrapper';
+        description.innerHTML = '';
+        description.appendChild(wrapper);
+
+        // Create toggle button
         const toggleBtn = document.createElement('button');
         toggleBtn.type = 'button';
         toggleBtn.className = 'description-toggle';
         toggleBtn.textContent = '...more';
 
-        // Wrap existing content
-        const wrapper = document.createElement('div');
-        wrapper.className = 'description-wrapper';
-        while (description.firstChild) {
-            wrapper.appendChild(description.firstChild);
-        }
-        
-        // Add button then wrapper (button floats right into text)
-        description.appendChild(toggleBtn);
-        description.appendChild(wrapper);
+        let isExpanded = false;
+        let truncatedText = originalText;
 
-        // Calculate available space and set dynamic line clamp
-        function updateLineClamp() {
-            // Temporarily remove clamp to measure full heights
-            wrapper.style.maxHeight = 'none';
-            wrapper.style.webkitLineClamp = 'unset';
-            
+        function truncateToFit() {
             const wrapperHeight = descGridWrapper.offsetHeight;
             const sizeGridHeight = sizeGrid.offsetHeight;
             const availableHeight = wrapperHeight - sizeGridHeight;
-            
-            // Get line height from computed styles
-            const style = window.getComputedStyle(wrapper);
-            const lineHeight = parseFloat(style.lineHeight) || parseFloat(style.fontSize) * 1.5;
-            
-            // Calculate max lines that fit (minimum 1)
-            const maxLines = Math.max(1, Math.floor(availableHeight / lineHeight));
-            
-            // Set CSS custom property for line clamp
-            description.style.setProperty('--max-lines', maxLines);
-            wrapper.style.maxHeight = '';
-            wrapper.style.webkitLineClamp = '';
-            
-            // Check if text actually overflows
-            if (wrapper.scrollHeight <= wrapper.offsetHeight + 2) {
-                toggleBtn.style.display = 'none';
+
+            // Show full text first to check if truncation needed
+            wrapper.textContent = originalText;
+            toggleBtn.remove();
+
+            if (wrapper.scrollHeight <= availableHeight + 2) {
+                // Text fits, no truncation needed
                 description.classList.add('no-overflow');
+                return;
+            }
+
+            description.classList.remove('no-overflow');
+
+            // Binary search to find the right truncation point
+            let low = 0;
+            let high = originalText.length;
+            const moreText = '...more';
+
+            // Add toggle button to measure with it
+            wrapper.appendChild(toggleBtn);
+
+            while (low < high) {
+                const mid = Math.floor((low + high + 1) / 2);
+                wrapper.firstChild?.remove();
+                wrapper.insertBefore(document.createTextNode(originalText.slice(0, mid) + ' '), toggleBtn);
+                
+                if (wrapper.scrollHeight <= availableHeight) {
+                    low = mid;
+                } else {
+                    high = mid - 1;
+                }
+            }
+
+            // Set final truncated text
+            truncatedText = originalText.slice(0, low);
+            wrapper.firstChild?.remove();
+            wrapper.insertBefore(document.createTextNode(truncatedText + ' '), toggleBtn);
+        }
+
+        function render() {
+            if (isExpanded) {
+                wrapper.textContent = originalText + ' ';
+                toggleBtn.textContent = '...less';
+                wrapper.appendChild(toggleBtn);
             } else {
-                toggleBtn.style.display = '';
-                description.classList.remove('no-overflow');
+                wrapper.textContent = truncatedText + ' ';
+                toggleBtn.textContent = '...more';
+                wrapper.appendChild(toggleBtn);
             }
         }
 
+        toggleBtn.addEventListener('click', () => {
+            isExpanded = !isExpanded;
+            description.classList.toggle('description-expanded', isExpanded);
+            render();
+        });
+
         // Run after layout is complete
         requestAnimationFrame(() => {
-            updateLineClamp();
-            
-            toggleBtn.addEventListener('click', () => {
-                const isExpanded = description.classList.toggle('description-expanded');
-                toggleBtn.textContent = isExpanded ? '...less' : '...more';
-            });
+            truncateToFit();
         });
 
         // Recalculate on resize
-        window.addEventListener('resize', debounce(updateLineClamp, 100));
+        window.addEventListener('resize', debounce(() => {
+            if (!isExpanded) {
+                truncateToFit();
+            }
+        }, 100));
     }
 
     function debounce(fn, delay) {
