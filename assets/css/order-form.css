@@ -383,16 +383,19 @@
 
 /* Description container - sits on top, has background to cover size grid when expanded */
 .order-form .kg-product-card-description {
+    --max-lines: 2; /* Default, overridden by JS */
     align-self: start;
     line-height: 1.5;
     background: var(--background-color);
     z-index: 1;
 }
 
-/* Description wrapper - handles the clamping */
+/* Description wrapper - dynamic line clamp based on available space */
 .order-form .kg-product-card-description .description-wrapper {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--max-lines);
     overflow: hidden;
-    max-height: 3em; /* 2 lines × 1.5 line-height */
 }
 
 /* Expanded state - fill the grid cell, scroll if needed */

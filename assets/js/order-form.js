@@ -189,19 +189,58 @@
         description.appendChild(toggleBtn);
         description.appendChild(wrapper);
 
-        // Check if text actually overflows (needs "...more")
-        requestAnimationFrame(() => {
+        // Calculate available space and set dynamic line clamp
+        function updateLineClamp() {
+            // Temporarily remove clamp to measure full heights
+            wrapper.style.maxHeight = 'none';
+            wrapper.style.webkitLineClamp = 'unset';
+            
+            const wrapperHeight = descGridWrapper.offsetHeight;
+            const sizeGridHeight = sizeGrid.offsetHeight;
+            const availableHeight = wrapperHeight - sizeGridHeight;
+            
+            // Get line height from computed styles
+            const style = window.getComputedStyle(wrapper);
+            const lineHeight = parseFloat(style.lineHeight) || parseFloat(style.fontSize) * 1.5;
+            
+            // Calculate max lines that fit (minimum 1)
+            const maxLines = Math.max(1, Math.floor(availableHeight / lineHeight));
+            
+            // Set CSS custom property for line clamp
+            description.style.setProperty('--max-lines', maxLines);
+            wrapper.style.maxHeight = '';
+            wrapper.style.webkitLineClamp = '';
+            
+            // Check if text actually overflows
             if (wrapper.scrollHeight <= wrapper.offsetHeight + 2) {
                 toggleBtn.style.display = 'none';
                 description.classList.add('no-overflow');
-                return;
+            } else {
+                toggleBtn.style.display = '';
+                description.classList.remove('no-overflow');
             }
+        }
 
+        // Run after layout is complete
+        requestAnimationFrame(() => {
+            updateLineClamp();
+            
             toggleBtn.addEventListener('click', () => {
                 const isExpanded = description.classList.toggle('description-expanded');
                 toggleBtn.textContent = isExpanded ? '...less' : '...more';
             });
         });
+
+        // Recalculate on resize
+        window.addEventListener('resize', debounce(updateLineClamp, 100));
+    }
+
+    function debounce(fn, delay) {
+        let timeout;
+        return function(...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => fn.apply(this, args), delay);
+        };
     }
 
     function createSizeGrid(productId, sizes) {
