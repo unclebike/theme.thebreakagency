@@ -1385,7 +1385,6 @@ td {
     padding: max(20px, calc(1.39vw * var(--scale)));
     width: 100%;
     border-radius: 5px;
-    box-shadow: inset 0 0 0 1px var(--text-color);
 }
 
 .kg-product-card-image {
