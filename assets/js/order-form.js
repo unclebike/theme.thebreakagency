@@ -192,27 +192,35 @@
         let needsTruncation = false;
 
         function truncateToFit() {
-            // Get line height to calculate 2 lines
+            // Get line height
             const style = window.getComputedStyle(description);
             const lineHeight = parseFloat(style.lineHeight) || parseFloat(style.fontSize) * 1.5;
-            const maxHeight = lineHeight * 2; // 2 lines max
+            
+            // Calculate available height based on card space above size grid
+            const gridHeight = descGridWrapper.offsetHeight;
+            const sizeGridHeight = sizeGrid.offsetHeight;
+            const availableHeight = gridHeight - sizeGridHeight;
+            
+            // Calculate max lines that fit (minimum 2)
+            const maxLines = Math.max(2, Math.floor(availableHeight / lineHeight));
+            const maxHeight = lineHeight * maxLines;
 
-            // First, check if full text fits in 2 lines without button
+            // First, check if full text fits without button
             wrapper.textContent = originalText;
             
             if (wrapper.scrollHeight <= maxHeight + 2) {
-                // Text fits in 2 lines, no truncation needed
+                // Text fits, no truncation needed
                 needsTruncation = false;
                 truncatedText = originalText;
                 description.classList.add('no-overflow');
                 return;
             }
 
-            // Text doesn't fit in 2 lines, need to truncate
+            // Text doesn't fit, need to truncate
             needsTruncation = true;
             description.classList.remove('no-overflow');
 
-            // Binary search to find text that fits in 2 lines with "...more" button
+            // Binary search to find text that fits with "...more" button
             let low = 0;
             let high = originalText.length;
 
