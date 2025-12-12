@@ -40,12 +40,35 @@
         const submitButton = form.querySelector('.kg-button-card .kg-btn');
         if (!submitButton) return;
 
-        const formspreeUrl = submitButton.getAttribute('href');
-        if (!formspreeUrl || !formspreeUrl.includes('formspree.io')) return;
-
-        form.setAttribute('action', formspreeUrl);
+        // Wire up the button to submit the form
         submitButton.addEventListener('click', (e) => {
             e.preventDefault();
+            
+            // Basic validation before submit
+            const name = form.querySelector('[name="name"]');
+            const email = form.querySelector('[name="email"]');
+            
+            if (name && !name.value.trim()) {
+                name.focus();
+                return;
+            }
+            if (email && !email.value.trim()) {
+                email.focus();
+                return;
+            }
+            
+            // Check if at least one product is selected
+            const qtyInputs = form.querySelectorAll('.qty-input');
+            let hasItems = false;
+            qtyInputs.forEach(input => {
+                if (parseInt(input.value) > 0) hasItems = true;
+            });
+            
+            if (!hasItems) {
+                alert('Please select at least one item.');
+                return;
+            }
+            
             form.submit();
         });
         submitButton.closest('.kg-button-card').classList.add('order-form-submit-card');

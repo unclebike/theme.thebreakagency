@@ -27,10 +27,47 @@
                     <div class="post-content-inner">
                         <form 
                             class="order-form"
-                            action="#"
+                            action="https://thebreaksales.ca/api/order"
                             method="POST"
                         >
-                            <input type="hidden" name="_subject" value="New Product Order from {{@site.title}}">
+                            <div class="order-form-customer-info">
+                                <h3 class="order-form-section-title">Your Information</h3>
+                                <div class="order-form-fields">
+                                    <div class="order-form-field order-form-field-half">
+                                        <label for="order-name">Name <span class="required">*</span></label>
+                                        <input type="text" id="order-name" name="name" required placeholder="Your full name">
+                                    </div>
+                                    <div class="order-form-field order-form-field-half">
+                                        <label for="order-email">Email <span class="required">*</span></label>
+                                        <input type="email" id="order-email" name="email" required placeholder="your@email.com">
+                                    </div>
+                                    <div class="order-form-field order-form-field-half">
+                                        <label for="order-phone">Phone</label>
+                                        <input type="tel" id="order-phone" name="phone" placeholder="(555) 123-4567">
+                                    </div>
+                                    <div class="order-form-field order-form-field-half">
+                                        <label for="order-address">Address</label>
+                                        <input type="text" id="order-address" name="address" placeholder="Street address">
+                                    </div>
+                                    <div class="order-form-field order-form-field-third">
+                                        <label for="order-city">City</label>
+                                        <input type="text" id="order-city" name="city" placeholder="City">
+                                    </div>
+                                    <div class="order-form-field order-form-field-third">
+                                        <label for="order-province">Province</label>
+                                        <input type="text" id="order-province" name="province" placeholder="Province">
+                                    </div>
+                                    <div class="order-form-field order-form-field-third">
+                                        <label for="order-postal">Postal Code</label>
+                                        <input type="text" id="order-postal" name="postal_code" placeholder="A1A 1A1">
+                                    </div>
+                                    <div class="order-form-field order-form-field-full">
+                                        <label for="order-notes">Order Notes</label>
+                                        <textarea id="order-notes" name="notes" rows="3" placeholder="Any special requests or notes..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <h3 class="order-form-section-title order-form-products-title">Select Products</h3>
                             {{content}}
                         </form>
                     </div>

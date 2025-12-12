@@ -1,5 +1,140 @@
 /* Order Form Styles */
 
+/* =====================
+   Customer Info Section
+   ===================== */
+.order-form-customer-info {
+    grid-column: 1 / -1;
+    margin-bottom: max(24px, calc(1.67vw * var(--scale)));
+    padding: max(24px, calc(1.67vw * var(--scale)));
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: max(8px, calc(0.56vw * var(--scale)));
+    background: var(--background-color);
+}
+
+.order-form-section-title {
+    font-family: var(--font1);
+    font-size: max(24px, calc(1.67vw * var(--scale)));
+    font-weight: 600;
+    margin: 0 0 max(20px, calc(1.39vw * var(--scale))) 0;
+    line-height: 1.2;
+}
+
+.order-form-products-title {
+    grid-column: 1 / -1;
+    margin-bottom: max(8px, calc(0.56vw * var(--scale)));
+}
+
+.order-form-fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: max(16px, calc(1.11vw * var(--scale)));
+}
+
+.order-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: max(6px, calc(0.42vw * var(--scale)));
+}
+
+.order-form-field-half {
+    grid-column: span 1;
+}
+
+.order-form-field-third {
+    grid-column: span 1;
+}
+
+.order-form-field-full {
+    grid-column: 1 / -1;
+}
+
+.order-form-field label {
+    font-family: var(--font2);
+    font-size: max(14px, calc(0.97vw * var(--scale)));
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.order-form-field label .required {
+    color: #dc2626;
+}
+
+.order-form-field input,
+.order-form-field textarea {
+    padding: max(12px, calc(0.83vw * var(--scale))) max(14px, calc(0.97vw * var(--scale)));
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: max(6px, calc(0.42vw * var(--scale)));
+    font-family: var(--font2);
+    font-size: max(16px, calc(1.11vw * var(--scale)));
+    background: var(--background-color);
+    color: var(--text-color);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.order-form-field input::placeholder,
+.order-form-field textarea::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.order-form-field input:focus,
+.order-form-field textarea:focus {
+    outline: none;
+    border-color: var(--ghost-accent-color);
+    box-shadow: 0 0 0 3px rgba(var(--ghost-accent-color-rgb, 0, 0, 0), 0.1);
+}
+
+.order-form-field textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* 3-column layout for city/province/postal */
+@media screen and (min-width: 769px) {
+    .order-form-fields {
+        grid-template-columns: repeat(6, 1fr);
+    }
+    
+    .order-form-field-half {
+        grid-column: span 3;
+    }
+    
+    .order-form-field-third {
+        grid-column: span 2;
+    }
+    
+    .order-form-field-full {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Mobile: single column */
+@media screen and (max-width: 768px) {
+    .order-form-fields {
+        grid-template-columns: 1fr;
+    }
+    
+    .order-form-field-half,
+    .order-form-field-third,
+    .order-form-field-full {
+        grid-column: 1;
+    }
+    
+    .order-form-customer-info {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .order-form-section-title {
+        font-size: 20px;
+        margin-bottom: 16px;
+    }
+}
+
+/* =====================
+   Product Cards Section
+   ===================== */
+
 /* Hide the original product card button */
 .order-form .kg-product-card-button-container,
 .order-form .kg-product-card-button {
