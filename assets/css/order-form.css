@@ -307,6 +307,10 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-content: end;
+}
+
+/* Description-grid wrapper takes remaining space */
+.order-form .kg-product-card:not(.order-form-product-horizontal) .description-grid-wrapper {
     flex: 1;
 }
 
@@ -351,9 +355,8 @@
     margin-bottom: max(8px, calc(0.56vw * var(--scale)));
 }
 
-.order-form .order-form-right-column .kg-product-card-description {
-    margin-bottom: max(16px, calc(1.11vw * var(--scale)));
-    position: relative;
+.order-form .order-form-right-column .description-grid-wrapper {
+    flex: 1;
 }
 
 /* Override Ghost editor's pre-wrap which prevents line-clamp */
@@ -361,11 +364,18 @@
     white-space: normal !important;
 }
 
+/* Description and size grid wrapper - needed for absolute positioning */
+.order-form .description-grid-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
 /* Expandable description container */
 .order-form .kg-product-card-description {
     position: relative;
     line-height: 1.5;
-    z-index: 10;
     background: var(--background-color);
 }
 
@@ -375,9 +385,22 @@
     max-height: 3em; /* 2 lines × 1.5 line-height */
 }
 
-/* Expanded state - just remove clamp, overlay handled by z-index + background */
+/* Expanded state - absolute position to overlay size grid */
+.order-form .kg-product-card-description.description-expanded {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+}
+
 .order-form .kg-product-card-description.description-expanded .description-wrapper {
     max-height: none;
+    flex: 1;
+    overflow-y: auto;
 }
 
 /* Toggle button floated to end of text */
@@ -414,7 +437,8 @@
 .order-form .kg-product-card-description.description-expanded .description-toggle {
     float: none;
     display: block;
-    margin-top: 0.25em;
+    margin-top: 0.5em;
+    flex-shrink: 0;
 }
 
 .order-form .order-form-right-column .size-qty-grid {

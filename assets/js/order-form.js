@@ -153,7 +153,11 @@
         const titleContainer = card.querySelector('.kg-product-card-title-container');
         const description = card.querySelector('.kg-product-card-description');
 
+        // Move title to right column
         if (titleContainer) rightColumn.appendChild(titleContainer);
+        
+        // Description and sizeGrid will be wrapped together by setupExpandableDescription
+        // Just move them to right column for now
         if (description) rightColumn.appendChild(description);
         rightColumn.appendChild(sizeGrid);
 
@@ -161,7 +165,14 @@
     }
 
     function setupExpandableDescription(description, sizeGrid) {
-        // Create toggle button first (needs to be before content for float)
+        // Create a wrapper around description + sizeGrid for positioning context
+        const descGridWrapper = document.createElement('div');
+        descGridWrapper.className = 'description-grid-wrapper';
+        description.parentNode.insertBefore(descGridWrapper, description);
+        descGridWrapper.appendChild(description);
+        descGridWrapper.appendChild(sizeGrid);
+
+        // Create toggle button (needs to be before content for float)
         const toggleBtn = document.createElement('button');
         toggleBtn.type = 'button';
         toggleBtn.className = 'description-toggle';
@@ -186,30 +197,9 @@
                 return;
             }
 
-            let isExpanded = false;
-
-            // Get size grid height for expanded description max-height
-            const sizeGridHeight = sizeGrid.offsetHeight;
-
             toggleBtn.addEventListener('click', () => {
-                if (!isExpanded) {
-                    // Expand - use size grid's space for description
-                    wrapper.style.maxHeight = sizeGridHeight + 'px';
-                    wrapper.style.overflowY = 'auto';
-                    description.classList.add('description-expanded');
-                    toggleBtn.textContent = '...less';
-                    sizeGrid.style.visibility = 'hidden';
-                    sizeGrid.style.position = 'absolute';
-                } else {
-                    // Collapse
-                    wrapper.style.maxHeight = '3em';
-                    wrapper.style.overflowY = 'hidden';
-                    description.classList.remove('description-expanded');
-                    toggleBtn.textContent = '...more';
-                    sizeGrid.style.visibility = '';
-                    sizeGrid.style.position = '';
-                }
-                isExpanded = !isExpanded;
+                const isExpanded = description.classList.toggle('description-expanded');
+                toggleBtn.textContent = isExpanded ? '...less' : '...more';
             });
         });
     }
