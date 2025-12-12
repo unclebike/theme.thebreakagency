@@ -189,36 +189,40 @@
 
         let isExpanded = false;
         let truncatedText = originalText;
+        let needsTruncation = false;
 
         function truncateToFit() {
-            const wrapperHeight = descGridWrapper.offsetHeight;
+            // Get available height (grid cell height minus size grid)
+            const gridHeight = descGridWrapper.offsetHeight;
             const sizeGridHeight = sizeGrid.offsetHeight;
-            const availableHeight = wrapperHeight - sizeGridHeight;
+            const availableHeight = gridHeight - sizeGridHeight;
 
-            // Show full text first to check if truncation needed
+            // First, check if full text fits without button
             wrapper.textContent = originalText;
-            toggleBtn.remove();
-
-            if (wrapper.scrollHeight <= availableHeight + 2) {
-                // Text fits, no truncation needed
+            
+            if (wrapper.scrollHeight <= availableHeight) {
+                // Text fits completely, no truncation needed
+                needsTruncation = false;
+                truncatedText = originalText;
                 description.classList.add('no-overflow');
                 return;
             }
 
+            // Text doesn't fit, need to truncate
+            needsTruncation = true;
             description.classList.remove('no-overflow');
 
             // Binary search to find the right truncation point
+            // Account for the "...more" button width
             let low = 0;
             let high = originalText.length;
-            const moreText = '...more';
-
-            // Add toggle button to measure with it
-            wrapper.appendChild(toggleBtn);
 
             while (low < high) {
                 const mid = Math.floor((low + high + 1) / 2);
-                wrapper.firstChild?.remove();
-                wrapper.insertBefore(document.createTextNode(originalText.slice(0, mid) + ' '), toggleBtn);
+                const testText = originalText.slice(0, mid);
+                wrapper.innerHTML = '';
+                wrapper.appendChild(document.createTextNode(testText + ' '));
+                wrapper.appendChild(toggleBtn.cloneNode(true));
                 
                 if (wrapper.scrollHeight <= availableHeight) {
                     low = mid;
@@ -227,22 +231,24 @@
                 }
             }
 
-            // Set final truncated text
-            truncatedText = originalText.slice(0, low);
-            wrapper.firstChild?.remove();
-            wrapper.insertBefore(document.createTextNode(truncatedText + ' '), toggleBtn);
+            // Set final truncated text (trim trailing space/punctuation for cleaner look)
+            truncatedText = originalText.slice(0, low).replace(/[\s,.\-:;]+$/, '');
+            render();
         }
 
         function render() {
+            wrapper.innerHTML = '';
             if (isExpanded) {
-                wrapper.textContent = originalText + ' ';
+                wrapper.appendChild(document.createTextNode(originalText + ' '));
                 toggleBtn.textContent = '...less';
-                wrapper.appendChild(toggleBtn);
-            } else {
-                wrapper.textContent = truncatedText + ' ';
+            } else if (needsTruncation) {
+                wrapper.appendChild(document.createTextNode(truncatedText + ' '));
                 toggleBtn.textContent = '...more';
-                wrapper.appendChild(toggleBtn);
+            } else {
+                wrapper.appendChild(document.createTextNode(originalText));
+                return; // No button needed
             }
+            wrapper.appendChild(toggleBtn);
         }
 
         toggleBtn.addEventListener('click', () => {
