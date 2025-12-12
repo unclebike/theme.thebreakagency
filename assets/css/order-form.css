@@ -367,16 +367,22 @@
 /* Description and size grid wrapper - needed for absolute positioning */
 .order-form .description-grid-wrapper {
     position: relative;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    flex: 1;
+    /* Padding for the 2-line collapsed description that overlays from top */
+    padding-top: 3.5em; /* ~2 lines + some breathing room */
 }
 
-/* Expandable description container */
+/* Expandable description container - always absolute so it doesn't affect layout */
 .order-form .kg-product-card-description {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
     line-height: 1.5;
     background: var(--background-color);
+    z-index: 10;
 }
 
 /* Description wrapper - handles the clamping */
@@ -385,14 +391,9 @@
     max-height: 3em; /* 2 lines × 1.5 line-height */
 }
 
-/* Expanded state - absolute position to overlay size grid */
+/* Expanded state - extend to bottom, enable scroll */
 .order-form .kg-product-card-description.description-expanded {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
     bottom: 0;
-    z-index: 10;
     display: flex;
     flex-direction: column;
 }
