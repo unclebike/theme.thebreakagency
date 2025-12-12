@@ -402,6 +402,11 @@
     flex-direction: column;
 }
 
+/* Hide size grid when description is expanded */
+.order-form .kg-product-card-description.description-expanded ~ .size-qty-grid {
+    opacity: 0;
+}
+
 .order-form .kg-product-card-description.description-expanded .description-wrapper {
     max-height: none;
     flex: 1;
