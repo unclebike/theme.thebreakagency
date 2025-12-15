@@ -239,15 +239,18 @@
     border-color: var(--ghost-accent-color);
 }
 
-/* Product Card Grid Layout */
+/* Product Card Grid Layout - Masonry via JS */
 .order-form {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: clamp(16px, calc(1.11vw * var(--scale)), 32px);
+    position: relative;
+}
+
+.order-form .order-form-products {
+    position: relative;
 }
 
 /* Product Card Enhancements for Order Form */
 .order-form .kg-product-card {
+    position: absolute;
     padding: clamp(16px, calc(1.11vw * var(--scale)), 32px);
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
@@ -255,11 +258,12 @@
     margin-bottom: 0;
     display: flex;
     flex-direction: column;
-    max-width: clamp(300px, calc(26vw * var(--scale)), 450px);
+    width: clamp(300px, calc(26vw * var(--scale)), 450px);
+    box-sizing: border-box;
 }
 
 .order-form .kg-product-card.order-form-product-horizontal {
-    max-width: clamp(600px, calc(52vw * var(--scale)), 750px);
+    width: clamp(500px, calc(45vw * var(--scale)), 650px);
 }
 
 .order-form .kg-product-card .kg-product-card-container {
@@ -309,19 +313,15 @@
     flex: 1;
 }
 
-/* Non-product elements span full width */
-.order-form > *:not(.kg-product-card) {
-    grid-column: 1 / -1;
-}
-
-/* Small square card layout - for one-size items */
-.order-form .order-form-product-small.kg-product-card {
-    align-self: start;
+/* Non-product elements full width, relative positioning */
+.order-form > *:not(.kg-product-card):not(.order-form-products) {
+    position: relative;
+    width: 100%;
+    margin-bottom: clamp(16px, calc(1.11vw * var(--scale)), 32px);
 }
 
 /* Horizontal product card layout */
 .order-form .order-form-product-horizontal.kg-product-card {
-    grid-column: 1 / -1;
     display: grid;
     grid-template-columns: auto 1fr;
     gap: clamp(24px, calc(1.67vw * var(--scale)), 48px);
@@ -483,9 +483,17 @@
         margin-bottom: 16px;
     }
 
-    /* Product grid */
+    /* Product cards - single column, no masonry */
+    .order-form .kg-product-card {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        width: 100% !important;
+        margin-bottom: 16px;
+    }
+
     .order-form {
-        grid-template-columns: 1fr;
+        min-height: auto !important;
     }
 
     /* Horizontal cards stack vertically */
