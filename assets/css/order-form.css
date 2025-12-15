@@ -340,10 +340,7 @@
 .order-form .order-form-product-small .size-qty-grid {
     margin-top: clamp(6px, calc(0.42vw * var(--scale)), 12px);
     padding-top: clamp(6px, calc(0.42vw * var(--scale)), 12px);
-    justify-content: center;
-}
-
-.order-form .order-form-product-small .size-qty-row {
+    display: flex;
     justify-content: center;
 }
 
