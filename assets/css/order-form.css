@@ -255,6 +255,11 @@
     margin-bottom: 0;
     display: flex;
     flex-direction: column;
+    max-width: clamp(300px, calc(26vw * var(--scale)), 450px);
+}
+
+.order-form .kg-product-card.order-form-product-horizontal {
+    max-width: clamp(600px, calc(52vw * var(--scale)), 750px);
 }
 
 .order-form .kg-product-card .kg-product-card-container {
