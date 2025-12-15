@@ -352,25 +352,41 @@
     display: grid;
     grid-template-columns: auto 1fr;
     gap: clamp(24px, calc(1.67vw * var(--scale)), 48px);
+    align-items: start;
 }
 
-/* Image stays in container on left */
+/* Container uses contents to let children participate in grid */
 .order-form .order-form-product-horizontal .kg-product-card-container {
     display: contents;
 }
 
-.order-form .order-form-product-horizontal .kg-product-card-image {
+/* Left column: image, title, description */
+.order-form .order-form-left-column {
+    display: flex;
+    flex-direction: column;
+    grid-row: 1;
+    grid-column: 1;
+}
+
+.order-form .order-form-left-column .kg-product-card-image {
     width: clamp(200px, calc(17.36vw * var(--scale)), 400px);
     min-width: clamp(200px, calc(17.36vw * var(--scale)), 400px);
     aspect-ratio: 1 / 1;
     object-fit: cover;
     object-position: center;
     border-radius: clamp(4px, calc(0.28vw * var(--scale)), 8px);
-    grid-row: 1;
-    grid-column: 1;
 }
 
-/* Right column: title, description, sizes */
+.order-form .order-form-left-column .kg-product-card-title-container {
+    margin-top: clamp(12px, calc(0.83vw * var(--scale)), 24px);
+    margin-bottom: clamp(4px, calc(0.28vw * var(--scale)), 8px);
+}
+
+.order-form .order-form-left-column .kg-product-card-description {
+    font-size: clamp(12px, calc(0.83vw * var(--scale)), 24px);
+}
+
+/* Right column: just the size grid */
 .order-form .order-form-right-column {
     display: flex;
     flex-direction: column;
@@ -378,18 +394,10 @@
     grid-column: 2;
 }
 
-.order-form .order-form-right-column .kg-product-card-title-container {
-    margin-bottom: clamp(8px, calc(0.56vw * var(--scale)), 16px);
-}
-
-.order-form .order-form-right-column .description-grid-wrapper {
-    flex: 1;
-}
-
 .order-form .order-form-right-column .size-qty-grid {
-    margin-top: auto;
-    padding-top: clamp(24px, calc(2.4vw * var(--scale)), 48px);
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
 }
 
 /* Override Ghost editor's pre-wrap which prevents line-clamp */
@@ -525,16 +533,20 @@
         grid-template-columns: 1fr;
     }
     
-    .order-form .order-form-product-horizontal .kg-product-card-image {
-        width: 100%;
-        min-width: unset;
+    .order-form .order-form-left-column {
         grid-row: 1;
         grid-column: 1;
+    }
+    
+    .order-form .order-form-left-column .kg-product-card-image {
+        width: 100%;
+        min-width: unset;
     }
     
     .order-form .order-form-right-column {
         grid-row: 2;
         grid-column: 1;
+        margin-top: 16px;
     }
 
     /* Size grid controls */

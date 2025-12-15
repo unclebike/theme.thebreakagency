@@ -143,20 +143,24 @@
     function applyHorizontalLayout(card, sizeGrid) {
         card.classList.add('order-form-product-horizontal');
 
-        const rightColumn = document.createElement('div');
-        rightColumn.className = 'order-form-right-column';
+        // Left column: image, title, description
+        const leftColumn = document.createElement('div');
+        leftColumn.className = 'order-form-left-column';
 
+        const image = card.querySelector('.kg-product-card-image');
         const titleContainer = card.querySelector('.kg-product-card-title-container');
         const description = card.querySelector('.kg-product-card-description');
 
-        // Move title to right column
-        if (titleContainer) rightColumn.appendChild(titleContainer);
-        
-        // Description and sizeGrid will be wrapped together by setupExpandableDescription
-        // Just move them to right column for now
-        if (description) rightColumn.appendChild(description);
+        if (image) leftColumn.appendChild(image);
+        if (titleContainer) leftColumn.appendChild(titleContainer);
+        if (description) leftColumn.appendChild(description);
+
+        // Right column: just the size grid
+        const rightColumn = document.createElement('div');
+        rightColumn.className = 'order-form-right-column';
         rightColumn.appendChild(sizeGrid);
 
+        card.appendChild(leftColumn);
         card.appendChild(rightColumn);
     }
 
