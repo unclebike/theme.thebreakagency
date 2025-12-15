@@ -346,29 +346,6 @@
     justify-content: center;
 }
 
-.order-form .order-form-product-small .size-label {
-    font-size: clamp(14px, calc(0.97vw * var(--scale)), 24px);
-}
-
-.order-form .order-form-product-small .size-label-caption {
-    font-size: clamp(8px, calc(0.56vw * var(--scale)), 14px);
-}
-
-.order-form .order-form-product-small .qty-btn {
-    width: clamp(28px, calc(1.94vw * var(--scale)), 48px);
-    height: clamp(28px, calc(1.94vw * var(--scale)), 48px);
-    min-width: clamp(28px, calc(1.94vw * var(--scale)), 48px);
-    min-height: clamp(28px, calc(1.94vw * var(--scale)), 48px);
-    font-size: clamp(16px, calc(1.11vw * var(--scale)), 28px);
-}
-
-.order-form .order-form-product-small .qty-input {
-    width: clamp(36px, calc(2.5vw * var(--scale)), 64px);
-    height: clamp(28px, calc(1.94vw * var(--scale)), 48px);
-    min-width: clamp(36px, calc(2.5vw * var(--scale)), 64px);
-    font-size: clamp(14px, calc(0.97vw * var(--scale)), 24px) !important;
-}
-
 /* Horizontal product card layout - spans 2 columns */
 .order-form .order-form-product-horizontal.kg-product-card {
     grid-column: span 2;
