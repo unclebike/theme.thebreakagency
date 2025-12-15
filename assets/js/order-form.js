@@ -133,9 +133,9 @@
             applyHorizontalLayout(card, sizeGrid);
         }
 
-        // Setup expandable description for non-small cards
+        // Setup expandable description for non-small, non-horizontal cards
         const description = card.querySelector('.kg-product-card-description');
-        if (description && !flags.smallSquare) {
+        if (description && !flags.smallSquare && !flags.horizontal) {
             setupExpandableDescription(description, sizeGrid);
         }
     }
