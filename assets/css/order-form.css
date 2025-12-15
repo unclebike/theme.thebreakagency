@@ -5,36 +5,36 @@
    ===================== */
 .order-form-customer-info {
     grid-column: 1 / -1;
-    margin-bottom: max(24px, calc(1.67vw * var(--scale)));
-    padding: max(24px, calc(1.67vw * var(--scale)));
+    margin-bottom: clamp(24px, calc(1.67vw * var(--scale)), 48px);
+    padding: clamp(24px, calc(1.67vw * var(--scale)), 48px);
     border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: max(8px, calc(0.56vw * var(--scale)));
+    border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
     background: var(--background-color);
 }
 
 .order-form-section-title {
     font-family: var(--font1);
-    font-size: max(24px, calc(1.67vw * var(--scale)));
+    font-size: clamp(24px, calc(1.67vw * var(--scale)), 48px);
     font-weight: 600;
-    margin: 0 0 max(20px, calc(1.39vw * var(--scale))) 0;
+    margin: 0 0 clamp(20px, calc(1.39vw * var(--scale)), 40px) 0;
     line-height: 1.2;
 }
 
 .order-form-products-title {
     grid-column: 1 / -1;
-    margin-bottom: max(8px, calc(0.56vw * var(--scale)));
+    margin-bottom: clamp(8px, calc(0.56vw * var(--scale)), 16px);
 }
 
 .order-form-fields {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: max(16px, calc(1.11vw * var(--scale)));
+    gap: clamp(16px, calc(1.11vw * var(--scale)), 32px);
 }
 
 .order-form-field {
     display: flex;
     flex-direction: column;
-    gap: max(6px, calc(0.42vw * var(--scale)));
+    gap: clamp(6px, calc(0.42vw * var(--scale)), 12px);
 }
 
 .order-form-field-half {
@@ -51,7 +51,7 @@
 
 .order-form-field label {
     font-family: var(--font2);
-    font-size: max(14px, calc(0.97vw * var(--scale)));
+    font-size: clamp(14px, calc(0.97vw * var(--scale)), 28px);
     font-weight: 500;
     color: var(--text-color);
 }
@@ -62,11 +62,11 @@
 
 .order-form-field input,
 .order-form-field textarea {
-    padding: max(12px, calc(0.83vw * var(--scale))) max(14px, calc(0.97vw * var(--scale)));
+    padding: clamp(12px, calc(0.83vw * var(--scale)), 24px) clamp(14px, calc(0.97vw * var(--scale)), 28px);
     border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: max(6px, calc(0.42vw * var(--scale)));
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
     font-family: var(--font2);
-    font-size: max(16px, calc(1.11vw * var(--scale)));
+    font-size: clamp(16px, calc(1.11vw * var(--scale)), 32px);
     background: var(--background-color);
     color: var(--text-color);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -108,29 +108,6 @@
     }
 }
 
-/* Mobile: single column */
-@media screen and (max-width: 768px) {
-    .order-form-fields {
-        grid-template-columns: 1fr;
-    }
-    
-    .order-form-field-half,
-    .order-form-field-third,
-    .order-form-field-full {
-        grid-column: 1;
-    }
-    
-    .order-form-customer-info {
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-    
-    .order-form-section-title {
-        font-size: 20px;
-        margin-bottom: 16px;
-    }
-}
-
 /* =====================
    Product Cards Section
    ===================== */
@@ -146,13 +123,13 @@
     position: relative;
 }
 
-/* Size/Quantity Grid */
+/* Size/Quantity Grid - base styles for grid layout */
 .size-qty-grid {
-    display: flex;
-    flex-direction: column;
-    gap: max(8px, calc(0.56vw * var(--scale)));
-    margin-top: max(16px, calc(1.11vw * var(--scale)));
-    padding-top: max(16px, calc(1.11vw * var(--scale)));
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(8px, calc(0.56vw * var(--scale)), 16px);
+    margin-top: clamp(16px, calc(1.11vw * var(--scale)), 32px);
+    padding-top: clamp(16px, calc(1.11vw * var(--scale)), 32px);
     border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -160,9 +137,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: max(8px, calc(0.56vw * var(--scale))) max(12px, calc(0.83vw * var(--scale)));
+    padding: clamp(8px, calc(0.56vw * var(--scale)), 16px) clamp(12px, calc(0.83vw * var(--scale)), 24px);
     background: rgba(0, 0, 0, 0.03);
-    border-radius: max(6px, calc(0.42vw * var(--scale)));
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
     transition: background-color 0.2s ease;
 }
 
@@ -172,16 +149,16 @@
 
 .size-label {
     font-family: var(--font1);
-    font-size: max(18px, calc(1.25vw * var(--scale)));
+    font-size: clamp(18px, calc(1.25vw * var(--scale)), 36px);
     font-weight: 600;
-    min-width: max(48px, calc(3.33vw * var(--scale)));
+    min-width: clamp(48px, calc(3.33vw * var(--scale)), 96px);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 
 .size-label-caption {
-    font-size: max(10px, calc(0.69vw * var(--scale)));
+    font-size: clamp(10px, calc(0.69vw * var(--scale)), 20px);
     font-weight: 500;
     text-transform: uppercase;
     opacity: 0.6;
@@ -197,23 +174,23 @@
 .qty-controls {
     display: flex;
     align-items: center;
-    gap: max(4px, calc(0.28vw * var(--scale)));
+    gap: clamp(4px, calc(0.28vw * var(--scale)), 8px);
 }
 
 .qty-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: max(36px, calc(2.5vw * var(--scale)));
-    height: max(36px, calc(2.5vw * var(--scale)));
-    min-width: max(36px, calc(2.5vw * var(--scale)));
-    min-height: max(36px, calc(2.5vw * var(--scale)));
+    width: clamp(36px, calc(2.5vw * var(--scale)), 72px);
+    height: clamp(36px, calc(2.5vw * var(--scale)), 72px);
+    min-width: clamp(36px, calc(2.5vw * var(--scale)), 72px);
+    min-height: clamp(36px, calc(2.5vw * var(--scale)), 72px);
     aspect-ratio: 1 / 1;
     flex-shrink: 0;
     border: 1px solid var(--text-color);
     background: transparent;
     border-radius: 50%;
-    font-size: max(20px, calc(1.39vw * var(--scale)));
+    font-size: clamp(20px, calc(1.39vw * var(--scale)), 40px);
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -233,15 +210,15 @@
 
 .order-form .qty-input,
 .order-form .qty-input::placeholder {
-    width: max(48px, calc(3.33vw * var(--scale)));
-    height: max(36px, calc(2.5vw * var(--scale)));
-    min-width: max(48px, calc(3.33vw * var(--scale)));
+    width: clamp(48px, calc(3.33vw * var(--scale)), 96px);
+    height: clamp(36px, calc(2.5vw * var(--scale)), 72px);
+    min-width: clamp(48px, calc(3.33vw * var(--scale)), 96px);
     flex-shrink: 0;
     text-align: center;
     border: 1px solid var(--text-color);
-    border-radius: max(6px, calc(0.42vw * var(--scale)));
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
     font-family: var(--font2);
-    font-size: max(16px, calc(1.11vw * var(--scale))) !important;
+    font-size: clamp(16px, calc(1.11vw * var(--scale)), 32px) !important;
     font-weight: 500;
     background: var(--background-color) !important;
     color: var(--text-color) !important;
@@ -262,20 +239,18 @@
     border-color: var(--ghost-accent-color);
 }
 
-
-
 /* Product Card Grid Layout */
 .order-form {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: max(16px, calc(1.11vw * var(--scale)));
+    gap: clamp(16px, calc(1.11vw * var(--scale)), 32px);
 }
 
 /* Product Card Enhancements for Order Form */
 .order-form .kg-product-card {
-    padding: max(16px, calc(1.11vw * var(--scale)));
+    padding: clamp(16px, calc(1.11vw * var(--scale)), 32px);
     border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: max(8px, calc(0.56vw * var(--scale)));
+    border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
     background: var(--background-color);
     margin-bottom: 0;
     display: flex;
@@ -288,39 +263,40 @@
     flex: 1;
 }
 
+/* Shared card title styles */
+.order-form .kg-product-card-title {
+    font-family: var(--font1);
+    font-size: clamp(24px, calc(1.67vw * var(--scale)), 48px);
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+/* Shared card description styles */
+.order-form .kg-product-card-description {
+    font-family: var(--font2);
+    font-size: clamp(14px, calc(0.97vw * var(--scale)), 28px);
+    line-height: 1.5;
+    opacity: 0.8;
+    background: var(--background-color);
+    z-index: 1;
+}
+
 /* Regular (non-horizontal) card styling */
 .order-form .kg-product-card:not(.order-form-product-horizontal) .kg-product-card-image {
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     object-position: center;
-    border-radius: max(4px, calc(0.28vw * var(--scale)));
+    border-radius: clamp(4px, calc(0.28vw * var(--scale)), 8px);
 }
 
 .order-form .kg-product-card:not(.order-form-product-horizontal) .kg-product-card-title-container {
-    margin-top: max(16px, calc(1.11vw * var(--scale)));
-    margin-bottom: max(8px, calc(0.56vw * var(--scale)));
-}
-
-.order-form .kg-product-card:not(.order-form-product-horizontal) .kg-product-card-title {
-    font-family: var(--font1);
-    font-size: max(24px, calc(1.67vw * var(--scale)));
-    font-weight: 600;
-    line-height: 1.2;
+    margin-top: clamp(16px, calc(1.11vw * var(--scale)), 32px);
+    margin-bottom: clamp(8px, calc(0.56vw * var(--scale)), 16px);
 }
 
 .order-form .kg-product-card:not(.order-form-product-horizontal) .kg-product-card-description {
-    font-family: var(--font2);
-    font-size: max(14px, calc(0.97vw * var(--scale)));
-    line-height: 1.5;
-    opacity: 0.8;
     position: relative;
-}
-
-/* Push size grid to bottom of card, 2 columns */
-.order-form .kg-product-card:not(.order-form-product-horizontal) .size-qty-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
 }
 
 /* Description-grid wrapper takes remaining space */
@@ -338,14 +314,12 @@
     align-self: start;
 }
 
-
-
 /* Horizontal product card layout */
 .order-form .order-form-product-horizontal.kg-product-card {
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: max(24px, calc(1.67vw * var(--scale)));
+    gap: clamp(24px, calc(1.67vw * var(--scale)), 48px);
 }
 
 /* Image stays in container on left */
@@ -354,11 +328,12 @@
 }
 
 .order-form .order-form-product-horizontal .kg-product-card-image {
-    width: 250px;
-    min-width: 250px;
+    width: clamp(200px, calc(17.36vw * var(--scale)), 400px);
+    min-width: clamp(200px, calc(17.36vw * var(--scale)), 400px);
     aspect-ratio: 1 / 1;
     object-fit: cover;
     object-position: center;
+    border-radius: clamp(4px, calc(0.28vw * var(--scale)), 8px);
     grid-row: 1;
     grid-column: 1;
 }
@@ -372,11 +347,17 @@
 }
 
 .order-form .order-form-right-column .kg-product-card-title-container {
-    margin-bottom: max(8px, calc(0.56vw * var(--scale)));
+    margin-bottom: clamp(8px, calc(0.56vw * var(--scale)), 16px);
 }
 
 .order-form .order-form-right-column .description-grid-wrapper {
     flex: 1;
+}
+
+.order-form .order-form-right-column .size-qty-grid {
+    margin-top: auto;
+    padding-top: clamp(24px, calc(2.4vw * var(--scale)), 48px);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* Override Ghost editor's pre-wrap which prevents line-clamp */
@@ -403,12 +384,9 @@
     align-self: end;
 }
 
-/* Description container - sits on top, has background to cover size grid when expanded */
-.order-form .kg-product-card-description {
+/* Description container - sits on top */
+.order-form .description-grid-wrapper .kg-product-card-description {
     align-self: start;
-    line-height: 1.5;
-    background: var(--background-color);
-    z-index: 1;
 }
 
 /* Description wrapper */
@@ -454,52 +432,19 @@
     display: none;
 }
 
-.order-form .order-form-right-column .size-qty-grid {
-    margin-top: auto;
-    padding-top: max(24px, calc(2.4vw * var(--scale)));
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-}
-
-@media screen and (max-width: 768px) {
-    .order-form .order-form-product-horizontal.kg-product-card {
-        grid-template-columns: 1fr;
-    }
-    
-    .order-form .order-form-product-horizontal .kg-product-card-image {
-        width: 100%;
-        min-width: unset;
-        aspect-ratio: 1 / 1;
-        grid-row: 1;
-        grid-column: 1;
-    }
-    
-    .order-form .order-form-right-column {
-        grid-row: 2;
-        grid-column: 1;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .order-form {
-        grid-template-columns: 1fr;
-    }
-}
-
 /* Submit Button - matches product card button positioning */
 .order-form .order-form-submit-card {
-    margin-top: max(32px, calc(2.22vw * var(--scale)));
+    margin-top: clamp(32px, calc(2.22vw * var(--scale)), 64px);
 }
 
 .order-form .order-form-submit-card .kg-btn {
     width: 100%;
     justify-content: center;
     display: flex;
-    padding: max(14px, calc(0.97vw * var(--scale))) max(24px, calc(1.67vw * var(--scale)));
-    font-size: max(16px, calc(1.11vw * var(--scale)));
+    padding: clamp(14px, calc(0.97vw * var(--scale)), 28px) clamp(24px, calc(1.67vw * var(--scale)), 48px);
+    font-size: clamp(16px, calc(1.11vw * var(--scale)), 32px);
     font-weight: 600;
-    border-radius: max(6px, calc(0.42vw * var(--scale)));
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
     background: var(--text-color);
     color: var(--background-color);
     text-decoration: none;
@@ -510,8 +455,52 @@
     opacity: 0.85;
 }
 
-/* Responsive adjustments */
+/* Mobile adjustments */
 @media screen and (max-width: 768px) {
+    /* Customer info */
+    .order-form-fields {
+        grid-template-columns: 1fr;
+    }
+    
+    .order-form-field-half,
+    .order-form-field-third,
+    .order-form-field-full {
+        grid-column: 1;
+    }
+    
+    .order-form-customer-info {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .order-form-section-title {
+        font-size: 20px;
+        margin-bottom: 16px;
+    }
+
+    /* Product grid */
+    .order-form {
+        grid-template-columns: 1fr;
+    }
+
+    /* Horizontal cards stack vertically */
+    .order-form .order-form-product-horizontal.kg-product-card {
+        grid-template-columns: 1fr;
+    }
+    
+    .order-form .order-form-product-horizontal .kg-product-card-image {
+        width: 100%;
+        min-width: unset;
+        grid-row: 1;
+        grid-column: 1;
+    }
+    
+    .order-form .order-form-right-column {
+        grid-row: 2;
+        grid-column: 1;
+    }
+
+    /* Size grid controls */
     .size-qty-row {
         padding: 10px 14px;
     }
@@ -529,11 +518,11 @@
         font-size: 18px;
     }
 
-    .qty-input {
+    .order-form .qty-input,
+    .order-form .qty-input::placeholder {
         width: 44px;
         height: 32px;
         min-width: 44px;
         font-size: 14px !important;
     }
-
 }
