@@ -317,7 +317,9 @@
 }
 
 .order-form .order-form-product-small .kg-product-card-image {
-    width: 100%;
+    max-width: clamp(150px, calc(13.89vw * var(--scale)), 200px);
+    max-height: clamp(150px, calc(13.89vw * var(--scale)), 200px);
+    width: auto;
     height: auto;
     aspect-ratio: auto;
     object-fit: contain;
