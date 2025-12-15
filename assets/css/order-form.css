@@ -456,7 +456,7 @@
 
 .order-form .order-form-right-column .size-qty-grid {
     margin-top: auto;
-    padding-top: max(16px, calc(1.11vw * var(--scale)));
+    padding-top: max(24px, calc(2.4vw * var(--scale)));
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     display: grid;
     grid-template-columns: 1fr 1fr;
