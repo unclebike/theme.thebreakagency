@@ -282,6 +282,11 @@
     z-index: 1;
 }
 
+/* Product images are clickable for lightbox */
+.order-form .kg-product-card-image {
+    cursor: pointer;
+}
+
 /* Regular (non-horizontal) card styling */
 .order-form .kg-product-card:not(.order-form-product-horizontal) .kg-product-card-image {
     width: 100%;

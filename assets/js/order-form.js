@@ -36,6 +36,13 @@
         productCards.forEach((card, index) => {
             transformProductCard(card, cardFlags[index]);
         });
+
+        // Initialize Lightense for product images if available
+        if (typeof Lightense !== 'undefined') {
+            Lightense('.order-form .kg-product-card-image', {
+                background: 'var(--background-color)'
+            });
+        }
     }
 
     function setupSubmitButton(form) {
