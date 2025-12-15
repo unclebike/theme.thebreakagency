@@ -239,31 +239,22 @@
     border-color: var(--ghost-accent-color);
 }
 
-/* Product Card Grid Layout - Masonry via JS */
+/* Product Card Grid Layout - CSS Columns Masonry */
 .order-form {
-    position: relative;
-}
-
-.order-form .order-form-products {
-    position: relative;
+    column-width: clamp(300px, calc(26vw * var(--scale)), 450px);
+    column-gap: clamp(16px, calc(1.11vw * var(--scale)), 32px);
 }
 
 /* Product Card Enhancements for Order Form */
 .order-form .kg-product-card {
-    position: absolute;
+    break-inside: avoid;
     padding: clamp(16px, calc(1.11vw * var(--scale)), 32px);
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
     background: var(--background-color);
-    margin-bottom: 0;
+    margin-bottom: clamp(16px, calc(1.11vw * var(--scale)), 32px);
     display: flex;
     flex-direction: column;
-    width: clamp(300px, calc(26vw * var(--scale)), 450px);
-    box-sizing: border-box;
-}
-
-.order-form .kg-product-card.order-form-product-horizontal {
-    width: clamp(500px, calc(45vw * var(--scale)), 650px);
 }
 
 .order-form .kg-product-card .kg-product-card-container {
@@ -313,10 +304,9 @@
     flex: 1;
 }
 
-/* Non-product elements full width, relative positioning */
-.order-form > *:not(.kg-product-card):not(.order-form-products) {
-    position: relative;
-    width: 100%;
+/* Non-product elements span all columns */
+.order-form > *:not(.kg-product-card) {
+    column-span: all;
     margin-bottom: clamp(16px, calc(1.11vw * var(--scale)), 32px);
 }
 
@@ -483,21 +473,19 @@
         margin-bottom: 16px;
     }
 
-    /* Product cards - single column, no masonry */
+    /* Single column on mobile */
+    .order-form {
+        column-width: auto;
+        columns: 1;
+    }
+
     .order-form .kg-product-card {
-        position: relative !important;
-        left: auto !important;
-        top: auto !important;
-        width: 100% !important;
         margin-bottom: 16px;
     }
 
-    .order-form {
-        min-height: auto !important;
-    }
-
-    /* Horizontal cards stack vertically */
+    /* Horizontal cards span full width on mobile */
     .order-form .order-form-product-horizontal.kg-product-card {
+        column-span: all;
         grid-template-columns: 1fr;
     }
     
