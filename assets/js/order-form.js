@@ -312,36 +312,42 @@
         const row = document.createElement('div');
         row.className = 'size-qty-row';
 
-        // Check for size prefixes (YOUTH, UNISEX, MENS, WOMENS)
-        const prefixes = ['YOUTH', 'UNISEX', 'MENS', 'WOMENS'];
+        // Parse size prefix shortcodes: Y=Youth, U=Unisex, M=Mens, W=Womens, none=Adult
+        // e.g., "YS" -> Youth S, "MS" -> Mens S, "S" -> Adult S
+        const prefixMap = {
+            'Y': 'YOUTH',
+            'U': 'UNISEX',
+            'M': 'MENS',
+            'W': 'WOMENS'
+        };
+        
+        const upperSize = size.toUpperCase();
+        const firstChar = upperSize.charAt(0);
         let caption = null;
         let displaySize = size;
         
-        for (const prefix of prefixes) {
-            if (size.toUpperCase().startsWith(prefix)) {
-                caption = prefix;
-                displaySize = size.slice(prefix.length).trim();
-                break;
-            }
+        if (prefixMap[firstChar]) {
+            caption = prefixMap[firstChar];
+            displaySize = size.slice(1).trim() || size; // Keep original if nothing after prefix
+        } else {
+            // No prefix = Adult
+            caption = 'ADULT';
+            displaySize = size;
         }
 
-        // Size label (with optional caption)
+        // Size label with caption
         const label = document.createElement('span');
         label.className = 'size-label';
         
-        if (caption) {
-            const captionEl = document.createElement('span');
-            captionEl.className = 'size-label-caption';
-            captionEl.textContent = caption;
-            label.appendChild(captionEl);
-            
-            const textEl = document.createElement('span');
-            textEl.className = 'size-label-text';
-            textEl.textContent = displaySize;
-            label.appendChild(textEl);
-        } else {
-            label.textContent = size;
-        }
+        const captionEl = document.createElement('span');
+        captionEl.className = 'size-label-caption';
+        captionEl.textContent = caption;
+        label.appendChild(captionEl);
+        
+        const textEl = document.createElement('span');
+        textEl.className = 'size-label-text';
+        textEl.textContent = displaySize;
+        label.appendChild(textEl);
 
         // Quantity controls
         const controls = document.createElement('div');
