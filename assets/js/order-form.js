@@ -312,10 +312,36 @@
         const row = document.createElement('div');
         row.className = 'size-qty-row';
 
-        // Size label
+        // Check for size prefixes (YOUTH, UNISEX, MENS, WOMENS)
+        const prefixes = ['YOUTH', 'UNISEX', 'MENS', 'WOMENS'];
+        let caption = null;
+        let displaySize = size;
+        
+        for (const prefix of prefixes) {
+            if (size.toUpperCase().startsWith(prefix)) {
+                caption = prefix;
+                displaySize = size.slice(prefix.length).trim();
+                break;
+            }
+        }
+
+        // Size label (with optional caption)
         const label = document.createElement('span');
         label.className = 'size-label';
-        label.textContent = size;
+        
+        if (caption) {
+            const captionEl = document.createElement('span');
+            captionEl.className = 'size-label-caption';
+            captionEl.textContent = caption;
+            label.appendChild(captionEl);
+            
+            const textEl = document.createElement('span');
+            textEl.className = 'size-label-text';
+            textEl.textContent = displaySize;
+            label.appendChild(textEl);
+        } else {
+            label.textContent = size;
+        }
 
         // Quantity controls
         const controls = document.createElement('div');

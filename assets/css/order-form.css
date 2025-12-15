@@ -175,6 +175,22 @@
     font-size: max(18px, calc(1.25vw * var(--scale)));
     font-weight: 600;
     min-width: max(48px, calc(3.33vw * var(--scale)));
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.size-label-caption {
+    font-size: max(10px, calc(0.69vw * var(--scale)));
+    font-weight: 500;
+    text-transform: uppercase;
+    opacity: 0.6;
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+.size-label-text {
+    line-height: 1;
 }
 
 /* Quantity Controls */
@@ -349,6 +365,10 @@
 
 .order-form .order-form-product-small .size-label {
     font-size: max(12px, calc(0.83vw * var(--scale)));
+}
+
+.order-form .order-form-product-small .size-label-caption {
+    font-size: max(8px, calc(0.56vw * var(--scale)));
 }
 
 .order-form .order-form-product-small .qty-input {
