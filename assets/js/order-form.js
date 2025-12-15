@@ -313,7 +313,8 @@
         row.className = 'size-qty-row';
 
         // Parse size prefix shortcodes: Y=Youth, U=Unisex, M=Mens, W=Womens, none=Adult
-        // e.g., "YS" -> Youth S, "MS" -> Mens S, "S" -> Adult S
+        // Prefix must be followed by a valid size (S, M, L, XL, XXL, etc.)
+        // e.g., "YS" -> Youth S, "MM" -> Mens M, "M" -> Adult M
         const prefixMap = {
             'Y': 'YOUTH',
             'U': 'UNISEX',
@@ -323,14 +324,16 @@
         
         const upperSize = size.toUpperCase();
         const firstChar = upperSize.charAt(0);
+        const rest = size.slice(1).trim();
         let caption = null;
         let displaySize = size;
         
-        if (prefixMap[firstChar]) {
+        // Only treat as prefix if there's something after it (the actual size)
+        if (prefixMap[firstChar] && rest.length > 0) {
             caption = prefixMap[firstChar];
-            displaySize = size.slice(1).trim() || size; // Keep original if nothing after prefix
+            displaySize = rest;
         } else {
-            // No prefix = Adult
+            // No valid prefix = Adult
             caption = 'ADULT';
             displaySize = size;
         }
