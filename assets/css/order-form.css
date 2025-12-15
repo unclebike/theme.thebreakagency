@@ -239,20 +239,20 @@
     border-color: var(--ghost-accent-color);
 }
 
-/* Product Card Grid Layout - CSS Columns Masonry */
+/* Product Card Grid Layout - CSS Grid with dense packing */
 .order-form {
-    column-width: clamp(300px, calc(26vw * var(--scale)), 450px);
-    column-gap: clamp(16px, calc(1.11vw * var(--scale)), 32px);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(clamp(280px, calc(26vw * var(--scale)), 400px), 1fr));
+    grid-auto-flow: dense;
+    gap: clamp(16px, calc(1.11vw * var(--scale)), 32px);
 }
 
 /* Product Card Enhancements for Order Form */
 .order-form .kg-product-card {
-    break-inside: avoid;
     padding: clamp(16px, calc(1.11vw * var(--scale)), 32px);
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
     background: var(--background-color);
-    margin-bottom: clamp(16px, calc(1.11vw * var(--scale)), 32px);
     display: flex;
     flex-direction: column;
 }
@@ -304,14 +304,15 @@
     flex: 1;
 }
 
-/* Non-product elements span all columns */
+/* Non-product elements span full width */
 .order-form > *:not(.kg-product-card) {
-    column-span: all;
+    grid-column: 1 / -1;
     margin-bottom: clamp(16px, calc(1.11vw * var(--scale)), 32px);
 }
 
-/* Horizontal product card layout */
+/* Horizontal product card layout - spans 2 columns */
 .order-form .order-form-product-horizontal.kg-product-card {
+    grid-column: span 2;
     display: grid;
     grid-template-columns: auto 1fr;
     gap: clamp(24px, calc(1.67vw * var(--scale)), 48px);
@@ -475,17 +476,16 @@
 
     /* Single column on mobile */
     .order-form {
-        column-width: auto;
-        columns: 1;
+        grid-template-columns: 1fr;
     }
 
     .order-form .kg-product-card {
         margin-bottom: 16px;
     }
 
-    /* Horizontal cards span full width on mobile */
+    /* Horizontal cards - single column, stack vertically */
     .order-form .order-form-product-horizontal.kg-product-card {
-        column-span: all;
+        grid-column: span 1;
         grid-template-columns: 1fr;
     }
     
