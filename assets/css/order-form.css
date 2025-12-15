@@ -310,6 +310,60 @@
     margin-bottom: clamp(16px, calc(1.11vw * var(--scale)), 32px);
 }
 
+/* Small/compact card for one-size items (#SQ flag) */
+.order-form .order-form-product-small.kg-product-card {
+    padding: clamp(10px, calc(0.69vw * var(--scale)), 20px);
+}
+
+.order-form .order-form-product-small .kg-product-card-image {
+    width: clamp(120px, calc(10vw * var(--scale)), 180px);
+    height: clamp(120px, calc(10vw * var(--scale)), 180px);
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    margin: 0 auto;
+}
+
+.order-form .order-form-product-small .kg-product-card-title-container {
+    margin-top: clamp(10px, calc(0.69vw * var(--scale)), 20px);
+    margin-bottom: clamp(6px, calc(0.42vw * var(--scale)), 12px);
+}
+
+.order-form .order-form-product-small .kg-product-card-title {
+    font-size: clamp(18px, calc(1.25vw * var(--scale)), 32px);
+}
+
+.order-form .order-form-product-small .kg-product-card-description {
+    font-size: clamp(12px, calc(0.83vw * var(--scale)), 20px);
+}
+
+.order-form .order-form-product-small .size-qty-grid {
+    margin-top: clamp(10px, calc(0.69vw * var(--scale)), 20px);
+    padding-top: clamp(10px, calc(0.69vw * var(--scale)), 20px);
+}
+
+.order-form .order-form-product-small .size-label {
+    font-size: clamp(14px, calc(0.97vw * var(--scale)), 24px);
+}
+
+.order-form .order-form-product-small .size-label-caption {
+    font-size: clamp(8px, calc(0.56vw * var(--scale)), 14px);
+}
+
+.order-form .order-form-product-small .qty-btn {
+    width: clamp(28px, calc(1.94vw * var(--scale)), 48px);
+    height: clamp(28px, calc(1.94vw * var(--scale)), 48px);
+    min-width: clamp(28px, calc(1.94vw * var(--scale)), 48px);
+    min-height: clamp(28px, calc(1.94vw * var(--scale)), 48px);
+    font-size: clamp(16px, calc(1.11vw * var(--scale)), 28px);
+}
+
+.order-form .order-form-product-small .qty-input {
+    width: clamp(36px, calc(2.5vw * var(--scale)), 64px);
+    height: clamp(28px, calc(1.94vw * var(--scale)), 48px);
+    min-width: clamp(36px, calc(2.5vw * var(--scale)), 64px);
+    font-size: clamp(14px, calc(0.97vw * var(--scale)), 24px) !important;
+}
+
 /* Horizontal product card layout - spans 2 columns */
 .order-form .order-form-product-horizontal.kg-product-card {
     grid-column: span 2;
