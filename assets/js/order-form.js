@@ -9,11 +9,13 @@
  * 3. Set button text to comma-separated sizes: "XS,S,M,L,XL"
  * 4. Set button URL to product ID: "#SKU-12345"
  * 5. Add #H to force horizontal layout: "#SKU-12345#H"
- * 6. Add a kg-button card at the end with the Formspree URL as href
+ * 6. Add #SQ for small square card (one-size items): "#SKU-12345#SQ"
+ * 7. Add a kg-button card at the end with the Formspree URL as href
  * 
  * Layout:
  * - Odd number of cards: last card auto-becomes horizontal
  * - Use #H flag to force any card horizontal
+ * - Use #SQ flag for compact one-size items (smaller square)
  */
 
 (function() {
@@ -28,11 +30,11 @@
         const productCards = Array.from(form.querySelectorAll('.kg-product-card'));
         if (!productCards.length) return;
 
-        // Determine which cards should be horizontal
-        const horizontalFlags = detectHorizontalCards(productCards);
+        // Determine which cards should be horizontal or small square
+        const cardFlags = detectCardFlags(productCards);
 
         productCards.forEach((card, index) => {
-            transformProductCard(card, horizontalFlags[index]);
+            transformProductCard(card, cardFlags[index]);
         });
     }
 
@@ -74,22 +76,25 @@
         submitButton.closest('.kg-button-card').classList.add('order-form-submit-card');
     }
 
-    function detectHorizontalCards(cards) {
+    function detectCardFlags(cards) {
         const flags = cards.map(card => {
             const buttonEl = card.querySelector('.kg-product-card-button');
             const href = buttonEl?.getAttribute('href') || '';
-            return href.includes('#H');
+            return {
+                horizontal: href.includes('#H'),
+                smallSquare: href.includes('#SQ')
+            };
         });
 
-        // Auto-horizontal for odd card out (if not already forced)
-        const forcedCount = flags.filter(f => f).length;
-        const remainingCards = cards.length - forcedCount;
+        // Auto-horizontal for odd card out (if not already forced horizontal or small square)
+        const specialCount = flags.filter(f => f.horizontal || f.smallSquare).length;
+        const remainingCards = cards.length - specialCount;
         
         if (remainingCards % 2 === 1) {
-            // Find last non-forced card and make it horizontal
+            // Find last non-special card and make it horizontal
             for (let i = cards.length - 1; i >= 0; i--) {
-                if (!flags[i]) {
-                    flags[i] = true;
+                if (!flags[i].horizontal && !flags[i].smallSquare) {
+                    flags[i].horizontal = true;
                     break;
                 }
             }
@@ -98,15 +103,15 @@
         return flags;
     }
 
-    function transformProductCard(card, isHorizontal) {
+    function transformProductCard(card, flags) {
         const titleEl = card.querySelector('.kg-product-card-title');
         const productName = titleEl?.textContent.trim() || 'Unknown Product';
         
         const buttonEl = card.querySelector('.kg-product-card-button');
         if (!buttonEl) return;
 
-        // Parse button URL for product ID (strip #H flag)
-        const buttonUrl = (buttonEl.getAttribute('href') || '').replace('#H', '');
+        // Parse button URL for product ID (strip flags)
+        const buttonUrl = (buttonEl.getAttribute('href') || '').replace(/#H|#SQ/g, '');
         const productId = buttonUrl.replace(/^#/, '').trim();
         if (!productId) return;
 
@@ -132,14 +137,16 @@
         // Mark as transformed
         card.classList.add('order-form-product');
 
-        // Apply horizontal layout
-        if (isHorizontal) {
+        // Apply layout variants
+        if (flags.smallSquare) {
+            card.classList.add('order-form-product-small');
+        } else if (flags.horizontal) {
             applyHorizontalLayout(card, sizeGrid);
         }
 
-        // Setup expandable description for all cards
+        // Setup expandable description for non-small cards
         const description = card.querySelector('.kg-product-card-description');
-        if (description) {
+        if (description && !flags.smallSquare) {
             setupExpandableDescription(description, sizeGrid);
         }
     }
