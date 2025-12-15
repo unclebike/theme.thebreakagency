@@ -335,53 +335,10 @@
 
 /* Small square card layout - for one-size items */
 .order-form .order-form-product-small.kg-product-card {
-    max-width: 200px;
+    align-self: start;
 }
 
-.order-form .order-form-product-small .kg-product-card-image {
-    aspect-ratio: 1 / 1;
-    width: 100%;
-    object-fit: cover;
-    object-position: center;
-    border-radius: max(4px, calc(0.28vw * var(--scale)));
-}
 
-.order-form .order-form-product-small .kg-product-card-title {
-    font-size: max(18px, calc(1.25vw * var(--scale)));
-}
-
-.order-form .order-form-product-small .kg-product-card-description {
-    font-size: max(12px, calc(0.83vw * var(--scale)));
-}
-
-.order-form .order-form-product-small .size-qty-grid {
-    margin-top: max(12px, calc(0.83vw * var(--scale)));
-    padding-top: max(12px, calc(0.83vw * var(--scale)));
-}
-
-.order-form .order-form-product-small .size-qty-row {
-    padding: max(6px, calc(0.42vw * var(--scale))) max(10px, calc(0.69vw * var(--scale)));
-}
-
-.order-form .order-form-product-small .size-label {
-    font-size: max(12px, calc(0.83vw * var(--scale)));
-}
-
-.order-form .order-form-product-small .size-label-caption {
-    font-size: max(8px, calc(0.56vw * var(--scale)));
-}
-
-.order-form .order-form-product-small .qty-input {
-    width: max(36px, calc(2.5vw * var(--scale)));
-    height: max(28px, calc(1.94vw * var(--scale)));
-    font-size: max(12px, calc(0.83vw * var(--scale)));
-}
-
-.order-form .order-form-product-small .qty-btn {
-    width: max(24px, calc(1.67vw * var(--scale)));
-    height: max(24px, calc(1.67vw * var(--scale)));
-    font-size: max(14px, calc(0.97vw * var(--scale)));
-}
 
 /* Horizontal product card layout */
 .order-form .order-form-product-horizontal.kg-product-card {
