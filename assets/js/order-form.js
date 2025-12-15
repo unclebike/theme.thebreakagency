@@ -80,25 +80,14 @@
         const flags = cards.map(card => {
             const buttonEl = card.querySelector('.kg-product-card-button');
             const href = buttonEl?.getAttribute('href') || '';
+            const buttonText = buttonEl?.textContent.trim() || '';
+            const sizeCount = buttonText.split(',').filter(s => s.trim()).length;
+            
             return {
-                horizontal: href.includes('#H'),
+                horizontal: href.includes('#H') || sizeCount > 3,  // Auto-horizontal if more than 3 sizes
                 smallSquare: href.includes('#SQ')
             };
         });
-
-        // Auto-horizontal for odd card out (if not already forced horizontal or small square)
-        const specialCount = flags.filter(f => f.horizontal || f.smallSquare).length;
-        const remainingCards = cards.length - specialCount;
-        
-        if (remainingCards % 2 === 1) {
-            // Find last non-special card and make it horizontal
-            for (let i = cards.length - 1; i >= 0; i--) {
-                if (!flags[i].horizontal && !flags[i].smallSquare) {
-                    flags[i].horizontal = true;
-                    break;
-                }
-            }
-        }
 
         return flags;
     }
