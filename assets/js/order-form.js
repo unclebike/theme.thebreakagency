@@ -199,7 +199,10 @@
             // Calculate available height based on card space above size grid
             const gridHeight = descGridWrapper.offsetHeight;
             const sizeGridHeight = sizeGrid.offsetHeight;
-            const availableHeight = gridHeight - sizeGridHeight;
+            // Get the padding-top of size grid to ensure description doesn't overlap into it
+            const sizeGridStyle = window.getComputedStyle(sizeGrid);
+            const sizeGridPaddingTop = parseFloat(sizeGridStyle.paddingTop) || 0;
+            const availableHeight = gridHeight - sizeGridHeight - sizeGridPaddingTop;
             
             // Calculate max lines that fit (minimum 2)
             const maxLines = Math.max(2, Math.floor(availableHeight / lineHeight));
