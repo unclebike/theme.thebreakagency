@@ -275,9 +275,9 @@
 /* Regular (non-horizontal) card styling */
 .order-form .kg-product-card:not(.order-form-product-horizontal) .kg-product-card-image {
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
-    object-position: top;
+    object-position: center;
     border-radius: max(4px, calc(0.28vw * var(--scale)));
 }
 
@@ -331,14 +331,13 @@
 }
 
 .order-form .order-form-product-horizontal .kg-product-card-image {
-    width: auto;
-    height: 100%;
-    max-width: 250px;
+    width: 250px;
+    min-width: 250px;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
-    object-position: top;
+    object-position: center;
     grid-row: 1;
     grid-column: 1;
-    align-self: stretch;
 }
 
 /* Right column: title, description, sizes */
@@ -445,8 +444,8 @@
     
     .order-form .order-form-product-horizontal .kg-product-card-image {
         width: 100%;
-        height: auto;
-        max-width: 100%;
+        min-width: unset;
+        aspect-ratio: 1 / 1;
         grid-row: 1;
         grid-column: 1;
     }
