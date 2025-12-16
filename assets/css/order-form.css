@@ -875,8 +875,13 @@
 /* Preview container - show content above paywall */
 .order-form-preview {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: clamp(16px, calc(1.11vw * var(--scale)), 32px);
+}
+
+/* Ensure all grid items can shrink */
+.order-form-preview > * {
+    min-width: 0;
 }
 
 /* Style product cards in preview the same as in the form */
@@ -935,6 +940,8 @@
     border: 2px solid #f97316;
     border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
     padding: clamp(24px, calc(1.67vw * var(--scale)), 48px);
+    min-width: 0;
+    overflow: hidden;
 }
 
 @media screen and (max-width: 1024px) {
@@ -986,6 +993,8 @@
     padding: clamp(16px, calc(1.11vw * var(--scale)), 32px);
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .skeleton-card--horizontal {
