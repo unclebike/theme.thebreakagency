@@ -407,7 +407,7 @@
                     body: JSON.stringify({
                         name: name,
                         email: email,
-                        requestSrc: 'order-form',
+                        requestSrc: window.location.href,
                     }),
                 });
                 
