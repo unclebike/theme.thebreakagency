@@ -529,14 +529,22 @@
     margin-top: clamp(32px, calc(2.22vw * var(--scale)), 64px);
 }
 
-/* Button container - stack buttons vertically with gap, centered */
+/* Button container - side by side on desktop, stacked on mobile */
 .order-form .order-form-submit-card .kg-btn-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: clamp(12px, calc(0.83vw * var(--scale)), 24px);
-    align-items: center;
-    max-width: 400px;
+    justify-content: center;
+    align-items: stretch;
+    max-width: 600px;
     margin: 0 auto;
+}
+
+@media screen and (max-width: 768px) {
+    .order-form .order-form-submit-card .kg-btn-container {
+        flex-direction: column;
+        max-width: 400px;
+    }
 }
 
 /* Send Order button (from Ghost editor) */
