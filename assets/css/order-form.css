@@ -878,8 +878,9 @@
     display: none;
 }
 
-/* Remove the fading effect from preview content - we want it visible */
+/* Make fading-content transparent to grid - children flow directly in parent grid */
 .order-form--preview .fading-content {
+    display: contents;
     -webkit-mask-image: none;
     mask-image: none;
 }
