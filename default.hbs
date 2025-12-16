@@ -75,20 +75,20 @@
         {{!-- Deferred scripts - load after page content --}}
         <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-        {{#if @custom.use_smooth_scrolling}}
-            <script defer src="https://unpkg.com/lenis@1.1.5/dist/lenis.min.js"></script>
-        {{/if}}
         <script defer src="{{asset "js/global-animations.js"}}"></script>
 
         {{#if @custom.use_smooth_scrolling}}
             <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    // Wait for Lenis to be available
-                    if (typeof Lenis !== 'undefined') {
-                        setSmoothScroll();
-                    } else {
-                        window.addEventListener('load', () => setSmoothScroll());
-                    }
+                // Load Lenis after page is fully loaded (lowest priority)
+                window.addEventListener('load', function() {
+                    var script = document.createElement('script');
+                    script.src = 'https://unpkg.com/lenis@1.1.5/dist/lenis.min.js';
+                    script.onload = function() {
+                        if (typeof setSmoothScroll === 'function') {
+                            setSmoothScroll();
+                        }
+                    };
+                    document.body.appendChild(script);
                 });
             </script>
         {{/if}}
