@@ -907,6 +907,11 @@
 }
 
 /* Preview mode - locked/skeleton appearance for product cards */
+/* Contain the blur effect within the card boundaries */
+.order-form--preview .kg-product-card {
+    overflow: hidden;
+}
+
 .order-form--preview .kg-product-card-image:not(.skeleton) {
     filter: blur(8px);
     -webkit-filter: blur(8px);
