@@ -174,22 +174,26 @@
    Price/MOQ Chips
    ===================== */
 
-/* Chips row - spans full width of size grid */
+/* Chips row - ALWAYS spans full width of size grid, sits above size rows */
 .price-moq-chips {
-    grid-column: 1 / -1;
+    grid-column: 1 / -1 !important;
     display: flex;
     gap: clamp(8px, calc(0.56vw * var(--scale)), 16px);
     margin-bottom: clamp(4px, calc(0.28vw * var(--scale)), 8px);
 }
 
-/* Individual chip - styled like size labels */
+/* Individual chip - styled to match size-qty-row dimensions */
 .info-chip {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: center;
+    /* Match size-qty-row padding */
     padding: clamp(8px, calc(0.56vw * var(--scale)), 16px) clamp(12px, calc(0.83vw * var(--scale)), 24px);
     background: rgba(0, 0, 0, 0.03);
     border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
+    /* Flex grow to fill available space equally */
+    flex: 1;
 }
 
 .info-chip-caption {
@@ -223,8 +227,7 @@
 .moq-chip--small {
     flex-direction: row;
     align-items: center;
-    background: transparent;
-    padding: clamp(4px, calc(0.28vw * var(--scale)), 8px) clamp(8px, calc(0.56vw * var(--scale)), 16px);
+    gap: clamp(4px, calc(0.28vw * var(--scale)), 8px);
 }
 
 .moq-chip--small .moq-strikethrough {
@@ -236,13 +239,14 @@
     opacity: 0.8;
 }
 
-/* Small card price/moq chips - more compact, side by side */
+/* Small card price/moq chips - keep full width, compact sizing */
 .order-form-product-small .price-moq-chips {
+    grid-column: 1 / -1 !important;
     margin-bottom: clamp(2px, calc(0.14vw * var(--scale)), 4px);
 }
 
 .order-form-product-small .info-chip {
-    padding: clamp(4px, calc(0.28vw * var(--scale)), 8px) clamp(8px, calc(0.56vw * var(--scale)), 16px);
+    padding: clamp(6px, calc(0.42vw * var(--scale)), 12px) clamp(10px, calc(0.69vw * var(--scale)), 20px);
 }
 
 .order-form-product-small .info-chip-caption {
@@ -477,8 +481,17 @@
 .order-form .order-form-product-small .size-qty-grid {
     margin-top: clamp(6px, calc(0.42vw * var(--scale)), 12px);
     padding-top: clamp(6px, calc(0.42vw * var(--scale)), 12px);
-    display: flex;
-    justify-content: center;
+    /* Use grid layout so chips can span full width */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+}
+
+/* Center the single size row in small cards */
+.order-form .order-form-product-small .size-qty-row {
+    grid-column: 1 / -1;
+    width: auto;
+    justify-self: center;
 }
 
 /* Horizontal product card layout - spans 2 columns */
