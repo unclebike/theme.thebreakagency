@@ -184,13 +184,19 @@
         const submitCard = form.querySelector('.order-form-submit-card');
         if (!submitCard) return;
 
+        const defaultText = 'Send Draft';
+        const successText = 'Success!';
+        const savingText = 'Saving...';
+
         // Create save draft button
         const saveBtn = document.createElement('button');
         saveBtn.type = 'button';
         saveBtn.className = 'kg-btn order-form-save-btn';
-        saveBtn.innerHTML = '<span class="save-btn-text">Save Draft</span>';
+        saveBtn.innerHTML = `<span class="save-btn-text">${defaultText}</span>`;
         
-        // Create status indicator
+        const btnTextEl = saveBtn.querySelector('.save-btn-text');
+        
+        // Create status indicator (for errors and loaded state only)
         const statusEl = document.createElement('span');
         statusEl.className = 'order-form-draft-status';
         
@@ -204,31 +210,50 @@
         // Mark form as having draft capability
         form.classList.add('has-draft-capability');
 
+        // Function to reset button to default state
+        function resetButtonState() {
+            saveBtn.classList.remove('success');
+            btnTextEl.textContent = defaultText;
+        }
+
+        // Listen for quantity changes to reset success state
+        form.addEventListener('input', (e) => {
+            if (e.target.classList.contains('qty-input')) {
+                resetButtonState();
+            }
+        });
+
+        // Also reset on +/- button clicks (they don't always trigger input event)
+        form.addEventListener('click', (e) => {
+            if (e.target.classList.contains('qty-btn')) {
+                resetButtonState();
+            }
+        });
+
         // Save draft click handler
         saveBtn.addEventListener('click', async () => {
             saveBtn.disabled = true;
+            saveBtn.classList.remove('success');
             saveBtn.classList.add('saving');
-            statusEl.textContent = 'Saving...';
-            statusEl.className = 'order-form-draft-status saving';
+            btnTextEl.textContent = savingText;
+            statusEl.textContent = '';
+            statusEl.className = 'order-form-draft-status';
 
             try {
                 await saveDraft(form, memberUuid, pageSlug);
-                statusEl.textContent = 'Draft saved!';
-                statusEl.className = 'order-form-draft-status success';
+                saveBtn.classList.remove('saving');
+                saveBtn.classList.add('success');
+                btnTextEl.textContent = successText;
                 form.classList.add('draft-saved');
-                
-                // Clear success message after 3 seconds
-                setTimeout(() => {
-                    statusEl.textContent = '';
-                    statusEl.className = 'order-form-draft-status';
-                }, 3000);
+                // Success state persists until quantity changes
             } catch (error) {
                 console.error('Failed to save draft:', error);
+                saveBtn.classList.remove('saving');
+                btnTextEl.textContent = defaultText;
                 statusEl.textContent = 'Failed to save';
                 statusEl.className = 'order-form-draft-status error';
             } finally {
                 saveBtn.disabled = false;
-                saveBtn.classList.remove('saving');
             }
         });
     }
