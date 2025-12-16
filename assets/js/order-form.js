@@ -30,6 +30,14 @@
 
     function initOrderForm() {
         const form = document.querySelector('.order-form');
+        const noAccessContainer = document.querySelector('.order-form-no-access');
+        
+        // Handle no-access state (public preview with signup CTA)
+        if (noAccessContainer) {
+            setupSignupButtons(noAccessContainer);
+            return;
+        }
+        
         if (!form) return;
 
         // Get member info from data attributes (set by Handlebars template)
