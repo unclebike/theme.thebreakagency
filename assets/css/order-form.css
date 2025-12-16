@@ -883,6 +883,16 @@
     display: contents;
 }
 
+/* Hide empty paragraphs that Ghost inserts (they break grid layout with display:contents) */
+.order-form--preview .fading-content > p:empty {
+    display: none;
+}
+
+/* Ensure product cards from fading-content participate in grid properly */
+.order-form--preview .fading-content > .kg-product-card {
+    grid-column: span 1;
+}
+
 /* Preview mode - locked/skeleton appearance for product cards */
 .order-form--preview .kg-product-card-image:not(.skeleton) {
     filter: blur(8px);
@@ -935,9 +945,10 @@
     opacity: 0.4;
 }
 
-/* Custom signup CTA card - spans 2 columns like horizontal product card */
-.order-form-preview-cta {
+/* Custom signup CTA card - spans 2 columns, flows in grid with product cards */
+.order-form--preview .order-form-preview-cta {
     grid-column: span 2;
+    margin-bottom: 0;
     background: var(--background-color);
     border: 2px solid #f97316;
     border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
@@ -946,10 +957,10 @@
     overflow: hidden;
 }
 
-/* Only go single column on mobile - let grid handle tablet naturally */
+/* Single column on mobile to match grid */
 @media screen and (max-width: 768px) {
-    .order-form-preview-cta {
-        grid-column: 1;
+    .order-form--preview .order-form-preview-cta {
+        grid-column: span 1;
     }
 }
 
