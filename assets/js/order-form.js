@@ -40,18 +40,13 @@
             transformProductCard(card, cardFlags[index]);
         });
 
-        // Initialize Lightense for product images if available
-        // Use full-res images stored in data-full-src for lightbox
-        if (typeof Lightense !== 'undefined') {
-            // Lightense will use data-src if available, otherwise src
-            Lightense('.order-form .kg-product-card-image', {
-                background: 'var(--background-color)'
-            });
-        }
+        // Setup custom lightbox that loads full image on demand
+        setupLightbox(form);
     }
 
     /**
-     * Progressive image loading - loads small thumbnails first, then full images
+     * Progressive image loading - loads small thumbnails only
+     * Full images load on-demand when user clicks to enlarge
      * Ghost CDN supports /size/w{width}/ in URLs for resizing
      */
     function setupProgressiveImages(form) {
@@ -69,22 +64,79 @@
                 '/content/images/size/w300/'
             );
             
-            // Store full URL for Lightense
-            img.setAttribute('data-src', fullSrc);
+            // Store full URL for on-demand loading
+            img.setAttribute('data-full-src', fullSrc);
             
-            // Start with small image and blur
+            // Use small image only
             img.src = smallSrc;
-            img.classList.add('img-loading');
+        });
+    }
+
+    /**
+     * Custom lightbox that shows blurred thumbnail while loading full image
+     */
+    function setupLightbox(form) {
+        const images = form.querySelectorAll('.kg-product-card-image');
+        
+        // Create lightbox overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'order-form-lightbox';
+        overlay.innerHTML = `
+            <div class="lightbox-backdrop"></div>
+            <div class="lightbox-content">
+                <img class="lightbox-img lightbox-img-thumb" src="" alt="">
+                <img class="lightbox-img lightbox-img-full" src="" alt="">
+                <div class="lightbox-spinner"></div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        
+        const backdrop = overlay.querySelector('.lightbox-backdrop');
+        const thumbImg = overlay.querySelector('.lightbox-img-thumb');
+        const fullImg = overlay.querySelector('.lightbox-img-full');
+        const spinner = overlay.querySelector('.lightbox-spinner');
+        
+        // Close on backdrop click or escape
+        backdrop.addEventListener('click', closeLightbox);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && overlay.classList.contains('active')) {
+                closeLightbox();
+            }
+        });
+        
+        function closeLightbox() {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            // Reset images
+            setTimeout(() => {
+                thumbImg.src = '';
+                fullImg.src = '';
+                fullImg.classList.remove('loaded');
+            }, 300);
+        }
+        
+        function openLightbox(img) {
+            const thumbSrc = img.src;
+            const fullSrc = img.getAttribute('data-full-src') || img.src;
             
-            // Preload full image in background
-            const fullImg = new Image();
-            fullImg.onload = () => {
-                // Swap to full image and remove blur
-                img.src = fullSrc;
-                img.classList.remove('img-loading');
-                img.classList.add('img-loaded');
+            // Show overlay with blurred thumbnail
+            thumbImg.src = thumbSrc;
+            fullImg.classList.remove('loaded');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Load full image
+            const loader = new Image();
+            loader.onload = () => {
+                fullImg.src = fullSrc;
+                fullImg.classList.add('loaded');
             };
-            fullImg.src = fullSrc;
+            loader.src = fullSrc;
+        }
+        
+        // Attach click handlers to images
+        images.forEach(img => {
+            img.addEventListener('click', () => openLightbox(img));
         });
     }
 
