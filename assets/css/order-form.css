@@ -628,6 +628,65 @@
     color: #fff !important;
 }
 
+/* =====================
+   Signup Button & Message (non-logged-in users)
+   ===================== */
+
+.order-form-signup-message {
+    font-family: var(--font2);
+    font-size: clamp(14px, calc(0.97vw * var(--scale)), 28px);
+    line-height: 1.5;
+    opacity: 0.8;
+    margin: 0 0 clamp(16px, calc(1.11vw * var(--scale)), 32px) 0;
+}
+
+.order-form-signup-btn {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    padding: clamp(14px, calc(0.97vw * var(--scale)), 28px) clamp(24px, calc(1.67vw * var(--scale)), 48px);
+    font-size: clamp(16px, calc(1.11vw * var(--scale)), 32px);
+    font-weight: 600;
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
+    background: var(--ghost-accent-color, #f97316);
+    color: #fff;
+    border: none;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-family: var(--font2);
+}
+
+.order-form-signup-btn:hover:not(:disabled) {
+    opacity: 0.85;
+}
+
+.order-form-signup-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Success state - green */
+.order-form-signup-btn.success {
+    background: #16a34a;
+}
+
+/* Error state - red */
+.order-form-signup-btn.error {
+    background: #dc2626;
+}
+
+/* Bottom signup button (in catalog area for non-logged-in) */
+.order-form .order-form-signup-card {
+    grid-column: 1 / -1;
+    margin-top: clamp(32px, calc(2.22vw * var(--scale)), 64px);
+}
+
+.order-form .order-form-signup-card .order-form-signup-btn {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
 /* Visual indicator when draft was loaded */
 .order-form.draft-loaded .order-form-customer-info {
     border-color: var(--ghost-accent-color, #3b82f6);

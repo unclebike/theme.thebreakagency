@@ -37,6 +37,7 @@
                             data-page-slug="{{slug}}"
                         >
                             <div class="order-form-customer-info">
+                                {{#if @member}}
                                 <h3 class="order-form-section-title">Your Information</h3>
                                 <div class="order-form-fields">
                                     <div class="order-form-field order-form-field-half">
@@ -72,6 +73,23 @@
                                         <textarea id="order-notes" name="notes" rows="3" placeholder="Any special requests or notes..."></textarea>
                                     </div>
                                 </div>
+                                {{else}}
+                                <h3 class="order-form-section-title">Sign Up to Order</h3>
+                                <p class="order-form-signup-message">Create a free account to save your selections and place orders.</p>
+                                <div class="order-form-fields">
+                                    <div class="order-form-field order-form-field-half">
+                                        <label for="order-name">Name <span class="required">*</span></label>
+                                        <input type="text" id="order-name" name="name" required placeholder="Your full name">
+                                    </div>
+                                    <div class="order-form-field order-form-field-half">
+                                        <label for="order-email">Email <span class="required">*</span></label>
+                                        <input type="email" id="order-email" name="email" required placeholder="your@email.com">
+                                    </div>
+                                    <div class="order-form-field order-form-field-full">
+                                        <button type="button" class="order-form-signup-btn">Sign Up</button>
+                                    </div>
+                                </div>
+                                {{/if}}
                             </div>
                             <h3 class="order-form-section-title order-form-products-title">Select Products</h3>
                             {{content}}

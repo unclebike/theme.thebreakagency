@@ -37,12 +37,10 @@
         const memberEmail = form.dataset.memberEmail;
         const memberName = form.dataset.memberName;
         const pageSlug = form.dataset.pageSlug;
+        const isLoggedIn = !!memberUuid;
 
-        setupSubmitButton(form, memberUuid, pageSlug);
-        
         const productCards = Array.from(form.querySelectorAll('.kg-product-card'));
-        if (!productCards.length) return;
-
+        
         // Determine which cards should be horizontal or small square
         const cardFlags = detectCardFlags(productCards);
 
@@ -53,9 +51,11 @@
         // Setup custom lightbox that loads full image on demand
         setupLightbox(form);
 
-        // Setup draft functionality for logged-in members
-        if (memberUuid && pageSlug) {
+        if (isLoggedIn) {
+            // Logged-in user: full order functionality
+            setupSubmitButton(form, memberUuid, pageSlug);
             setupDraftButtons(form, memberUuid, pageSlug);
+            
             // Pre-fill member info if available
             if (memberEmail) {
                 const emailInput = form.querySelector('[name="email"]');
@@ -67,14 +67,15 @@
             }
             // Auto-load saved draft
             loadDraft(form, memberUuid, pageSlug);
-        }
-
-        // Add hidden fields for member tracking (used when submitting order)
-        if (memberUuid) {
+            
+            // Add hidden fields for member tracking
             addHiddenField(form, '_member_uuid', memberUuid);
-        }
-        if (pageSlug) {
-            addHiddenField(form, '_page_slug', pageSlug);
+            if (pageSlug) {
+                addHiddenField(form, '_page_slug', pageSlug);
+            }
+        } else {
+            // Non-logged-in user: signup flow
+            setupSignupButtons(form);
         }
     }
 
@@ -342,6 +343,109 @@
         // Store references for loadDraft to use
         form._saveDraftBtn = saveBtn;
         form._saveDraftBtnTextEl = saveBtnTextEl;
+    }
+
+    /**
+     * Setup signup buttons for non-logged-in users
+     * Adds bottom signup button and wires up Ghost member signup
+     */
+    function setupSignupButtons(form) {
+        // Hide the submit button card (from Ghost editor) for non-logged-in users
+        const submitCard = form.querySelector('.kg-button-card');
+        if (submitCard) {
+            submitCard.style.display = 'none';
+        }
+        
+        // Get existing signup button in customer info section
+        const topSignupBtn = form.querySelector('.order-form-signup-btn');
+        
+        // Create bottom signup button (after product catalog)
+        const bottomSignupCard = document.createElement('div');
+        bottomSignupCard.className = 'order-form-signup-card';
+        bottomSignupCard.innerHTML = `
+            <button type="button" class="order-form-signup-btn">Sign Up to Order</button>
+        `;
+        form.appendChild(bottomSignupCard);
+        
+        const bottomSignupBtn = bottomSignupCard.querySelector('.order-form-signup-btn');
+        
+        // Signup handler - uses Ghost's member signup
+        async function handleSignup(btn) {
+            const nameInput = form.querySelector('[name="name"]');
+            const emailInput = form.querySelector('[name="email"]');
+            
+            const name = nameInput?.value.trim();
+            const email = emailInput?.value.trim();
+            
+            if (!name) {
+                nameInput?.focus();
+                return;
+            }
+            if (!email) {
+                emailInput?.focus();
+                return;
+            }
+            
+            // Validate email format
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                emailInput?.focus();
+                return;
+            }
+            
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Signing up...';
+            btn.classList.remove('success', 'error');
+            
+            try {
+                // Use Ghost's member signup API
+                const response = await fetch('/members/api/send-magic-link/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        requestSrc: 'order-form',
+                    }),
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Signup failed');
+                }
+                
+                // Success - show confirmation
+                btn.classList.add('success');
+                btn.textContent = 'Check your email!';
+                
+                // Also update the other button
+                const otherBtn = btn === topSignupBtn ? bottomSignupBtn : topSignupBtn;
+                if (otherBtn) {
+                    otherBtn.classList.add('success');
+                    otherBtn.textContent = 'Check your email!';
+                    otherBtn.disabled = true;
+                }
+                
+            } catch (error) {
+                console.error('Signup failed:', error);
+                btn.classList.add('error');
+                btn.textContent = 'Error - try again';
+                btn.disabled = false;
+                
+                // Reset after 3 seconds
+                setTimeout(() => {
+                    btn.classList.remove('error');
+                    btn.textContent = originalText;
+                }, 3000);
+            }
+        }
+        
+        // Wire up both buttons
+        if (topSignupBtn) {
+            topSignupBtn.addEventListener('click', () => handleSignup(topSignupBtn));
+        }
+        bottomSignupBtn.addEventListener('click', () => handleSignup(bottomSignupBtn));
     }
 
     /**
