@@ -672,6 +672,11 @@
                         if (row) updateRowState(row, qty);
                     }
                 });
+                
+                // Update MOQ state for all product cards after loading quantities
+                form.querySelectorAll('.kg-product-card[data-moq]').forEach(card => {
+                    updateProductMOQState(card);
+                });
             }
 
             // Show loaded indicator
