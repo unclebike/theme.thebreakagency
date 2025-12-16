@@ -874,9 +874,14 @@
 
 /* Preview mode uses same grid as logged-in form */
 /* Hide the default Ghost CTA in the order form preview (we use our own) */
-.order-form--preview .post-upgrade-cta,
-.order-form--preview .fading-content {
+.order-form--preview .post-upgrade-cta {
     display: none;
+}
+
+/* Remove the fading effect from preview content - we want it visible */
+.order-form--preview .fading-content {
+    -webkit-mask-image: none;
+    mask-image: none;
 }
 
 /* Preview mode - locked/skeleton appearance for product cards */
