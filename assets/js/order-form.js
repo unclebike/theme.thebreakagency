@@ -347,7 +347,7 @@
 
     /**
      * Setup signup buttons for non-logged-in users
-     * Adds bottom signup button and wires up Ghost member signup
+     * Adds bottom signup/login buttons and wires up Ghost member signup/signin
      */
     function setupSignupButtons(form) {
         // Hide the submit button card (from Ghost editor) for non-logged-in users
@@ -356,24 +356,47 @@
             submitCard.style.display = 'none';
         }
         
-        // Get existing signup button in customer info section
+        // Get existing buttons in customer info section
         const topSignupBtn = form.querySelector('.order-form-signup-btn');
+        const topLoginBtn = form.querySelector('.order-form-login-btn');
         
-        // Create bottom signup button (after product catalog)
-        const bottomSignupCard = document.createElement('div');
-        bottomSignupCard.className = 'order-form-signup-card';
-        bottomSignupCard.innerHTML = `
+        // Create bottom button card (after product catalog)
+        const bottomBtnCard = document.createElement('div');
+        bottomBtnCard.className = 'order-form-signup-card';
+        bottomBtnCard.innerHTML = `
             <button type="button" class="order-form-signup-btn">Sign Up to Order</button>
+            <button type="button" class="order-form-login-btn" style="display: none;">Login as Purchaser</button>
         `;
-        form.appendChild(bottomSignupCard);
+        form.appendChild(bottomBtnCard);
         
-        const bottomSignupBtn = bottomSignupCard.querySelector('.order-form-signup-btn');
+        const bottomSignupBtn = bottomBtnCard.querySelector('.order-form-signup-btn');
+        const bottomLoginBtn = bottomBtnCard.querySelector('.order-form-login-btn');
         
-        // Signup handler - uses Ghost's member signup
-        async function handleSignup(btn) {
-            const nameInput = form.querySelector('[name="name"]');
-            const emailInput = form.querySelector('[name="email"]');
+        const nameInput = form.querySelector('[name="name"]');
+        const emailInput = form.querySelector('[name="email"]');
+        
+        // Show/hide login button based on name field content
+        function updateButtonVisibility() {
+            const hasName = nameInput?.value.trim().length > 0;
+            const hasEmail = emailInput?.value.trim().length > 0;
             
+            // Show login button only when email has content but name is empty
+            const showLogin = hasEmail && !hasName;
+            
+            if (topLoginBtn) {
+                topLoginBtn.style.display = showLogin ? '' : 'none';
+            }
+            if (bottomLoginBtn) {
+                bottomLoginBtn.style.display = showLogin ? '' : 'none';
+            }
+        }
+        
+        // Listen to input changes
+        nameInput?.addEventListener('input', updateButtonVisibility);
+        emailInput?.addEventListener('input', updateButtonVisibility);
+        
+        // Signup handler - uses Ghost's member signup (requires name + email)
+        async function handleSignup(btn) {
             const name = nameInput?.value.trim();
             const email = emailInput?.value.trim();
             
@@ -415,37 +438,97 @@
                     throw new Error('Signup failed');
                 }
                 
-                // Success - show confirmation
-                btn.classList.add('success');
-                btn.textContent = 'Check your email!';
-                
-                // Also update the other button
-                const otherBtn = btn === topSignupBtn ? bottomSignupBtn : topSignupBtn;
-                if (otherBtn) {
-                    otherBtn.classList.add('success');
-                    otherBtn.textContent = 'Check your email!';
-                    otherBtn.disabled = true;
-                }
+                // Success - show confirmation on all buttons
+                showSuccessState([topSignupBtn, bottomSignupBtn, topLoginBtn, bottomLoginBtn]);
                 
             } catch (error) {
                 console.error('Signup failed:', error);
-                btn.classList.add('error');
-                btn.textContent = 'Error - try again';
-                btn.disabled = false;
-                
-                // Reset after 3 seconds
-                setTimeout(() => {
-                    btn.classList.remove('error');
-                    btn.textContent = originalText;
-                }, 3000);
+                showErrorState(btn, originalText);
             }
         }
         
-        // Wire up both buttons
+        // Login handler - uses Ghost's signin magic link (email only)
+        async function handleLogin(btn) {
+            const email = emailInput?.value.trim();
+            
+            if (!email) {
+                emailInput?.focus();
+                return;
+            }
+            
+            // Validate email format
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                emailInput?.focus();
+                return;
+            }
+            
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            btn.classList.remove('success', 'error');
+            
+            try {
+                // Use Ghost's signin magic link API
+                const response = await fetch('/members/api/send-magic-link/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        emailType: 'signin',
+                        requestSrc: window.location.href,
+                    }),
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Login failed');
+                }
+                
+                // Success - show confirmation on all buttons
+                showSuccessState([topSignupBtn, bottomSignupBtn, topLoginBtn, bottomLoginBtn]);
+                
+            } catch (error) {
+                console.error('Login failed:', error);
+                showErrorState(btn, originalText);
+            }
+        }
+        
+        // Helper to show success state on multiple buttons
+        function showSuccessState(buttons) {
+            buttons.forEach(btn => {
+                if (btn) {
+                    btn.classList.add('success');
+                    btn.textContent = 'Check your email!';
+                    btn.disabled = true;
+                }
+            });
+        }
+        
+        // Helper to show error state with reset
+        function showErrorState(btn, originalText) {
+            btn.classList.add('error');
+            btn.textContent = 'Error - try again';
+            btn.disabled = false;
+            
+            // Reset after 3 seconds
+            setTimeout(() => {
+                btn.classList.remove('error');
+                btn.textContent = originalText;
+            }, 3000);
+        }
+        
+        // Wire up signup buttons
         if (topSignupBtn) {
             topSignupBtn.addEventListener('click', () => handleSignup(topSignupBtn));
         }
         bottomSignupBtn.addEventListener('click', () => handleSignup(bottomSignupBtn));
+        
+        // Wire up login buttons
+        if (topLoginBtn) {
+            topLoginBtn.addEventListener('click', () => handleLogin(topLoginBtn));
+        }
+        bottomLoginBtn.addEventListener('click', () => handleLogin(bottomLoginBtn));
     }
 
     /**

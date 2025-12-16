@@ -677,17 +677,76 @@
     background: #dc2626;
 }
 
-/* Bottom signup button (in catalog area for non-logged-in) */
+/* Login button (for existing purchasers) */
+.order-form-login-btn {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    padding: clamp(14px, calc(0.97vw * var(--scale)), 28px) clamp(24px, calc(1.67vw * var(--scale)), 48px);
+    font-size: clamp(16px, calc(1.11vw * var(--scale)), 32px);
+    font-weight: 600;
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
+    background: transparent;
+    color: #f97316;
+    border: 2px solid #f97316;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-family: var(--font2);
+}
+
+.order-form-login-btn:hover:not(:disabled) {
+    background: #f97316;
+    color: #fff;
+}
+
+.order-form-login-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Success state - green */
+.order-form-login-btn.success {
+    background: #16a34a;
+    border-color: #16a34a;
+    color: #fff;
+}
+
+/* Error state - red */
+.order-form-login-btn.error {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: #fff;
+}
+
+/* Button row layout (top form) */
+.order-form-btn-row {
+    display: flex;
+    gap: clamp(12px, calc(0.83vw * var(--scale)), 24px);
+    flex-wrap: wrap;
+}
+
+.order-form-btn-row .order-form-signup-btn,
+.order-form-btn-row .order-form-login-btn {
+    flex: 1;
+    min-width: 150px;
+}
+
+/* Bottom button card (in catalog area for non-logged-in) */
 .order-form .order-form-signup-card {
     grid-column: 1 / -1;
     margin-top: clamp(32px, calc(2.22vw * var(--scale)), 64px);
     display: flex;
     justify-content: center;
+    gap: clamp(12px, calc(0.83vw * var(--scale)), 24px);
+    flex-wrap: wrap;
 }
 
-.order-form .order-form-signup-card .order-form-signup-btn {
-    width: 100%;
-    max-width: 400px;
+.order-form .order-form-signup-card .order-form-signup-btn,
+.order-form .order-form-signup-card .order-form-login-btn {
+    width: auto;
+    flex: 1;
+    max-width: 250px;
 }
 
 /* Visual indicator when draft was loaded */
