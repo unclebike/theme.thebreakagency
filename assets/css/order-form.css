@@ -928,13 +928,25 @@
     display: none;
 }
 
-/* Custom signup CTA card - styled as horizontal grid item */
+/* Custom signup CTA card - spans 2 columns like horizontal product card */
 .order-form-preview-cta {
-    grid-column: 1 / -1;
+    grid-column: span 2;
     background: var(--background-color);
     border: 2px solid #f97316;
     border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
     padding: clamp(24px, calc(1.67vw * var(--scale)), 48px);
+}
+
+@media screen and (max-width: 1024px) {
+    .order-form-preview-cta {
+        grid-column: 1 / -1;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .order-form-preview-cta {
+        grid-column: 1;
+    }
 }
 
 .order-form-preview-cta .order-form-section-title {
@@ -977,10 +989,23 @@
 }
 
 .skeleton-card--horizontal {
-    grid-column: 1 / -1;
+    grid-column: span 2;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: clamp(16px, calc(1.11vw * var(--scale)), 32px);
+}
+
+@media screen and (max-width: 1024px) {
+    .skeleton-card--horizontal {
+        grid-column: 1 / -1;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .skeleton-card--horizontal {
+        grid-column: 1;
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Skeleton elements with shimmer animation */
@@ -1050,12 +1075,8 @@
     margin-top: clamp(8px, calc(0.56vw * var(--scale)), 16px);
 }
 
-/* Responsive skeleton cards */
+/* Responsive skeleton image fix */
 @media screen and (max-width: 768px) {
-    .skeleton-card--horizontal {
-        grid-template-columns: 1fr;
-    }
-    
     .skeleton-card--horizontal .skeleton-image {
         margin-bottom: clamp(12px, calc(0.83vw * var(--scale)), 24px);
     }
