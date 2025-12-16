@@ -731,21 +731,31 @@
         const productId = buttonUrl.replace(/^#/, '').trim();
         if (!productId) return;
 
-        // Parse sizes and MOQ from button text
-        // Format: "S,M,L,XL,#25" where #25 is optional MOQ
+        // Parse sizes, MOQ, and price from button text
+        // Format: "S,M,L,XL,#25,$41.99" where #25 is optional MOQ, $41.99 is optional price
         const buttonText = buttonEl.textContent.trim();
         
-        // Extract MOQ if present (skip in preview mode)
+        // Extract MOQ and price if present (skip in preview mode)
         let moq = null;
+        let price = null;
         let sizesText = buttonText;
         if (!isPreviewMode) {
+            // Extract MOQ (#XX)
             const moqMatch = buttonText.match(/#(\d+)/);
             if (moqMatch) {
                 moq = parseInt(moqMatch[1]);
-                sizesText = buttonText.replace(/#\d+/, '').trim();
-                // Remove trailing comma if MOQ was at end
-                sizesText = sizesText.replace(/,\s*$/, '');
+                sizesText = sizesText.replace(/#\d+/, '').trim();
             }
+            
+            // Extract price ($XX.XX or $XX)
+            const priceMatch = sizesText.match(/\$(\d+(?:\.\d{2})?)/);
+            if (priceMatch) {
+                price = priceMatch[1]; // Store without $ sign
+                sizesText = sizesText.replace(/\$\d+(?:\.\d{2})?/, '').trim();
+            }
+            
+            // Remove trailing/leading commas
+            sizesText = sizesText.replace(/^,\s*|,\s*$/g, '');
         }
         
         const sizes = sizesText
@@ -755,7 +765,7 @@
         if (!sizes.length) return;
 
         // Build size grid and replace button
-        const sizeGrid = createSizeGrid(productId, sizes, isPreviewMode);
+        const sizeGrid = createSizeGrid(productId, sizes, isPreviewMode, moq, price, flags.smallSquare);
         const buttonContainer = card.querySelector('.kg-product-card-button-container');
         (buttonContainer || buttonEl).replaceWith(sizeGrid);
 
@@ -942,12 +952,18 @@
         };
     }
 
-    function createSizeGrid(productId, sizes, isPreviewMode = false) {
+    function createSizeGrid(productId, sizes, isPreviewMode = false, moq = null, price = null, isSmallCard = false) {
         const container = document.createElement('div');
         container.className = 'size-qty-grid';
         
         if (isPreviewMode) {
             container.classList.add('skeleton-controls');
+        }
+
+        // Add price/MOQ chips row (skip in preview mode)
+        if (!isPreviewMode) {
+            const chipsRow = createPriceMoqChips(price, moq, isSmallCard);
+            container.appendChild(chipsRow);
         }
 
         sizes.forEach(size => {
@@ -956,6 +972,81 @@
         });
 
         return container;
+    }
+
+    /**
+     * Create price and MOQ chips row
+     * @param {string|null} price - Price value (without $)
+     * @param {number|null} moq - Minimum order quantity
+     * @param {boolean} isSmallCard - If true, use compact strikethrough for no MOQ
+     */
+    function createPriceMoqChips(price, moq, isSmallCard = false) {
+        const row = document.createElement('div');
+        row.className = 'price-moq-chips';
+        
+        // Price chip
+        if (price !== null) {
+            const priceChip = document.createElement('div');
+            priceChip.className = 'info-chip price-chip';
+            
+            const priceCaption = document.createElement('span');
+            priceCaption.className = 'info-chip-caption';
+            priceCaption.textContent = 'PRICE';
+            
+            const priceValue = document.createElement('span');
+            priceValue.className = 'info-chip-value';
+            priceValue.textContent = price;
+            
+            priceChip.appendChild(priceCaption);
+            priceChip.appendChild(priceValue);
+            row.appendChild(priceChip);
+        }
+        
+        // MOQ chip
+        const moqChip = document.createElement('div');
+        moqChip.className = 'info-chip moq-chip';
+        
+        if (moq !== null) {
+            // Has MOQ - show ratio (starts at 0/moq)
+            const moqCaption = document.createElement('span');
+            moqCaption.className = 'info-chip-caption';
+            moqCaption.textContent = 'MOQ';
+            
+            const moqValue = document.createElement('span');
+            moqValue.className = 'info-chip-value moq-ratio';
+            moqValue.dataset.moq = moq;
+            moqValue.textContent = `0/${moq}`;
+            
+            moqChip.appendChild(moqCaption);
+            moqChip.appendChild(moqValue);
+        } else {
+            // No MOQ
+            if (isSmallCard) {
+                // Small card: strikethrough "MOQ" in accent color
+                moqChip.classList.add('moq-chip--no-minimum', 'moq-chip--small');
+                const moqText = document.createElement('span');
+                moqText.className = 'info-chip-value moq-strikethrough';
+                moqText.textContent = 'MOQ';
+                moqChip.appendChild(moqText);
+            } else {
+                // Regular/horizontal card: show "NO MINIMUM"
+                moqChip.classList.add('moq-chip--no-minimum', 'moq-chip--met');
+                const moqCaption = document.createElement('span');
+                moqCaption.className = 'info-chip-caption';
+                moqCaption.textContent = 'MOQ';
+                
+                const moqValue = document.createElement('span');
+                moqValue.className = 'info-chip-value';
+                moqValue.textContent = 'NO MINIMUM';
+                
+                moqChip.appendChild(moqCaption);
+                moqChip.appendChild(moqValue);
+            }
+        }
+        
+        row.appendChild(moqChip);
+        
+        return row;
     }
 
     function createSizeRow(productId, size, isPreviewMode = false) {
@@ -1117,6 +1208,7 @@
     /**
      * Update MOQ state for a product card
      * Checks if total quantity meets minimum order quantity
+     * Updates the MOQ chip ratio display
      */
     function updateProductMOQState(card) {
         const moq = parseInt(card.dataset.moq);
@@ -1127,6 +1219,22 @@
         card.querySelectorAll('.qty-input').forEach(input => {
             total += parseInt(input.value) || 0;
         });
+        
+        // Update MOQ chip ratio display
+        const moqRatio = card.querySelector('.moq-ratio');
+        if (moqRatio) {
+            moqRatio.textContent = `${total}/${moq}`;
+        }
+        
+        // Update MOQ chip met/unmet state
+        const moqChip = card.querySelector('.moq-chip');
+        if (moqChip) {
+            if (total >= moq) {
+                moqChip.classList.add('moq-chip--met');
+            } else {
+                moqChip.classList.remove('moq-chip--met');
+            }
+        }
         
         // Toggle under-moq class based on whether minimum is met
         if (total < moq) {

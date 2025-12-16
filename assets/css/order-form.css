@@ -170,6 +170,89 @@
     line-height: 1;
 }
 
+/* =====================
+   Price/MOQ Chips
+   ===================== */
+
+/* Chips row - spans full width of size grid */
+.price-moq-chips {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: clamp(8px, calc(0.56vw * var(--scale)), 16px);
+    margin-bottom: clamp(4px, calc(0.28vw * var(--scale)), 8px);
+}
+
+/* Individual chip - styled like size labels */
+.info-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: clamp(8px, calc(0.56vw * var(--scale)), 16px) clamp(12px, calc(0.83vw * var(--scale)), 24px);
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
+}
+
+.info-chip-caption {
+    font-family: var(--font1);
+    font-size: clamp(10px, calc(0.69vw * var(--scale)), 20px);
+    font-weight: 500;
+    text-transform: uppercase;
+    opacity: 0.6;
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+.info-chip-value {
+    font-family: var(--font1);
+    font-size: clamp(18px, calc(1.25vw * var(--scale)), 36px);
+    font-weight: 600;
+    line-height: 1;
+}
+
+/* MOQ chip - met state (green) */
+.moq-chip--met {
+    background: rgba(22, 163, 74, 0.15);
+}
+
+.moq-chip--met .info-chip-caption,
+.moq-chip--met .info-chip-value {
+    color: #16a34a;
+}
+
+/* MOQ chip - small card strikethrough style */
+.moq-chip--small {
+    flex-direction: row;
+    align-items: center;
+    background: transparent;
+    padding: clamp(4px, calc(0.28vw * var(--scale)), 8px) clamp(8px, calc(0.56vw * var(--scale)), 16px);
+}
+
+.moq-chip--small .moq-strikethrough {
+    font-family: var(--font1);
+    font-size: clamp(14px, calc(0.97vw * var(--scale)), 24px);
+    font-weight: 600;
+    text-decoration: line-through;
+    color: var(--ghost-accent-color);
+    opacity: 0.8;
+}
+
+/* Small card price/moq chips - more compact, side by side */
+.order-form-product-small .price-moq-chips {
+    margin-bottom: clamp(2px, calc(0.14vw * var(--scale)), 4px);
+}
+
+.order-form-product-small .info-chip {
+    padding: clamp(4px, calc(0.28vw * var(--scale)), 8px) clamp(8px, calc(0.56vw * var(--scale)), 16px);
+}
+
+.order-form-product-small .info-chip-caption {
+    font-size: clamp(8px, calc(0.56vw * var(--scale)), 14px);
+}
+
+.order-form-product-small .info-chip-value {
+    font-size: clamp(14px, calc(0.97vw * var(--scale)), 24px);
+}
+
 /* Quantity Controls */
 .qty-controls {
     display: flex;
