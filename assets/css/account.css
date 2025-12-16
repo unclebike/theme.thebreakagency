@@ -66,6 +66,53 @@ html[data-primary-font="Thunder"] .account-data-row {
     text-align: left;
 }
 
+/* Catalogs section */
+.account-catalogs {
+    margin-top: max(32px, calc(2.22vw * var(--scale)));
+    padding-top: max(24px, calc(1.67vw * var(--scale)));
+    border-top: 1px solid var(--text-color);
+}
+
+.account-catalogs-title {
+    font-family: var(--font1);
+    font-size: max(24px, calc(1.67vw * var(--scale)));
+    font-weight: 600;
+    margin: 0 0 max(16px, calc(1.11vw * var(--scale))) 0;
+    text-align: center;
+}
+
+.account-catalogs-list {
+    display: flex;
+    flex-direction: column;
+    gap: max(8px, calc(0.56vw * var(--scale)));
+}
+
+.account-catalog-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: max(16px, calc(1.11vw * var(--scale))) max(20px, calc(1.39vw * var(--scale)));
+    background: var(--text-color);
+    color: var(--background-color);
+    text-decoration: none;
+    font-family: var(--font1);
+    font-size: max(18px, calc(1.25vw * var(--scale)));
+    font-weight: 500;
+    border-radius: max(6px, calc(0.42vw * var(--scale)));
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.account-catalog-link:hover {
+    opacity: 0.85;
+    transform: translateX(4px);
+}
+
+.account-catalog-link svg {
+    width: max(16px, calc(1.11vw * var(--scale)));
+    height: max(16px, calc(1.11vw * var(--scale)));
+    flex-shrink: 0;
+}
+
 .account-page-buttons {
     display: flex;
     flex-direction: column;

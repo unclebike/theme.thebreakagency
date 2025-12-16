@@ -132,6 +132,20 @@
                             {{/foreach}}
                         {{/unless}}
 
+                        {{#if @member.labels}}
+                        <div class="account-catalogs">
+                            <h3 class="account-catalogs-title">{{t "Your Catalogs"}}</h3>
+                            <div class="account-catalogs-list">
+                                {{#foreach @member.labels}}
+                                <a href="/{{slug}}/" class="account-catalog-link">
+                                    {{name}}
+                                    {{> "icons/small-arrow-icon"}}
+                                </a>
+                                {{/foreach}}
+                            </div>
+                        </div>
+                        {{/if}}
+
                         <div class="account-page-buttons">
                             <a href="javascript:" class="button" data-members-signout>
                                 {{t "Sign out"}}
