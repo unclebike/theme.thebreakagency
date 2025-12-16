@@ -30,15 +30,10 @@
 
     function initOrderForm() {
         const form = document.querySelector('.order-form');
-        const noAccessContainer = document.querySelector('.order-form-no-access');
-        
-        // Handle no-access state (public preview with signup CTA)
-        if (noAccessContainer) {
-            setupSignupButtons(noAccessContainer);
-            return;
-        }
-        
         if (!form) return;
+        
+        // Check if this is preview mode (no access)
+        const isPreviewMode = form.classList.contains('order-form--preview');
 
         // Get member info from data attributes (set by Handlebars template)
         const memberUuid = form.dataset.memberUuid;
@@ -47,14 +42,21 @@
         const pageSlug = form.dataset.pageSlug;
         const isLoggedIn = !!memberUuid;
 
-        const productCards = Array.from(form.querySelectorAll('.kg-product-card'));
+        // Get product cards (exclude skeleton cards which are already styled)
+        const productCards = Array.from(form.querySelectorAll('.kg-product-card:not(.skeleton-card)'));
         
         // Determine which cards should be horizontal or small square
         const cardFlags = detectCardFlags(productCards);
 
         productCards.forEach((card, index) => {
-            transformProductCard(card, cardFlags[index]);
+            transformProductCard(card, cardFlags[index], isPreviewMode);
         });
+
+        // Preview mode: setup signup CTA and skip full functionality
+        if (isPreviewMode) {
+            setupSignupButtons(form);
+            return;
+        }
 
         // Setup custom lightbox that loads full image on demand
         setupLightbox(form);
@@ -542,13 +544,17 @@
         if (topSignupBtn) {
             topSignupBtn.addEventListener('click', () => handleSignup(topSignupBtn));
         }
-        bottomSignupBtn.addEventListener('click', () => handleSignup(bottomSignupBtn));
+        if (bottomSignupBtn) {
+            bottomSignupBtn.addEventListener('click', () => handleSignup(bottomSignupBtn));
+        }
         
         // Wire up login buttons
         if (topLoginBtn) {
             topLoginBtn.addEventListener('click', () => handleLogin(topLoginBtn));
         }
-        bottomLoginBtn.addEventListener('click', () => handleLogin(bottomLoginBtn));
+        if (bottomLoginBtn) {
+            bottomLoginBtn.addEventListener('click', () => handleLogin(bottomLoginBtn));
+        }
     }
 
     /**
@@ -688,7 +694,7 @@
         return flags;
     }
 
-    function transformProductCard(card, flags) {
+    function transformProductCard(card, flags, isPreviewMode = false) {
         const titleEl = card.querySelector('.kg-product-card-title');
         const productName = titleEl?.textContent.trim() || 'Unknown Product';
         
@@ -708,19 +714,22 @@
         if (!sizes.length) return;
 
         // Build size grid and replace button
-        const sizeGrid = createSizeGrid(productId, sizes);
+        const sizeGrid = createSizeGrid(productId, sizes, isPreviewMode);
         const buttonContainer = card.querySelector('.kg-product-card-button-container');
         (buttonContainer || buttonEl).replaceWith(sizeGrid);
 
-        // Add hidden product name field
-        const hiddenName = document.createElement('input');
-        hiddenName.type = 'hidden';
-        hiddenName.name = `${productId}_name`;
-        hiddenName.value = productName;
-        card.appendChild(hiddenName);
-
         // Mark as transformed
         card.classList.add('order-form-product');
+
+        // In preview mode, don't add hidden fields (form won't be submitted)
+        if (!isPreviewMode) {
+            // Add hidden product name field
+            const hiddenName = document.createElement('input');
+            hiddenName.type = 'hidden';
+            hiddenName.name = `${productId}_name`;
+            hiddenName.value = productName;
+            card.appendChild(hiddenName);
+        }
 
         // Apply layout variants
         if (flags.smallSquare) {
@@ -729,9 +738,9 @@
             applyHorizontalLayout(card, sizeGrid);
         }
 
-        // Setup expandable description for non-small, non-horizontal cards
+        // Setup expandable description for non-small, non-horizontal cards (not in preview)
         const description = card.querySelector('.kg-product-card-description');
-        if (description && !flags.smallSquare && !flags.horizontal) {
+        if (description && !flags.smallSquare && !flags.horizontal && !isPreviewMode) {
             setupExpandableDescription(description, sizeGrid);
         }
     }
@@ -885,21 +894,29 @@
         };
     }
 
-    function createSizeGrid(productId, sizes) {
+    function createSizeGrid(productId, sizes, isPreviewMode = false) {
         const container = document.createElement('div');
         container.className = 'size-qty-grid';
+        
+        if (isPreviewMode) {
+            container.classList.add('skeleton-controls');
+        }
 
         sizes.forEach(size => {
-            const row = createSizeRow(productId, size);
+            const row = createSizeRow(productId, size, isPreviewMode);
             container.appendChild(row);
         });
 
         return container;
     }
 
-    function createSizeRow(productId, size) {
+    function createSizeRow(productId, size, isPreviewMode = false) {
         const row = document.createElement('div');
         row.className = 'size-qty-row';
+        
+        if (isPreviewMode) {
+            row.classList.add('skeleton-row');
+        }
 
         // Parse size prefix shortcodes: Y=Youth, U=Unisex, M=Mens, W=Womens, none=Adult
         // Prefix must be followed by a valid size (S, M, L, XL, XXL, etc.)
@@ -927,78 +944,101 @@
             displaySize = size;
         }
 
-        // Size label with caption
+        // Size label - in preview mode, show skeleton placeholder
         const label = document.createElement('span');
         label.className = 'size-label';
         
-        const captionEl = document.createElement('span');
-        captionEl.className = 'size-label-caption';
-        captionEl.textContent = caption;
-        label.appendChild(captionEl);
-        
-        const textEl = document.createElement('span');
-        textEl.className = 'size-label-text';
-        textEl.textContent = displaySize;
-        label.appendChild(textEl);
+        if (isPreviewMode) {
+            // Skeleton placeholder for size label
+            const skeletonLabel = document.createElement('div');
+            skeletonLabel.className = 'skeleton skeleton-size-label';
+            label.appendChild(skeletonLabel);
+        } else {
+            const captionEl = document.createElement('span');
+            captionEl.className = 'size-label-caption';
+            captionEl.textContent = caption;
+            label.appendChild(captionEl);
+            
+            const textEl = document.createElement('span');
+            textEl.className = 'size-label-text';
+            textEl.textContent = displaySize;
+            label.appendChild(textEl);
+        }
 
-        // Quantity controls
+        // Quantity controls - in preview mode, show skeleton placeholders
         const controls = document.createElement('div');
         controls.className = 'qty-controls';
 
-        const minusBtn = document.createElement('button');
-        minusBtn.type = 'button';
-        minusBtn.className = 'qty-btn qty-minus';
-        minusBtn.textContent = '-';
-        minusBtn.setAttribute('aria-label', `Decrease ${size} quantity`);
+        if (isPreviewMode) {
+            // Skeleton placeholders for controls (visual only, no functionality)
+            const skeletonMinus = document.createElement('div');
+            skeletonMinus.className = 'skeleton skeleton-qty-btn';
+            
+            const skeletonInput = document.createElement('div');
+            skeletonInput.className = 'skeleton skeleton-qty-input';
+            
+            const skeletonPlus = document.createElement('div');
+            skeletonPlus.className = 'skeleton skeleton-qty-btn';
+            
+            controls.appendChild(skeletonMinus);
+            controls.appendChild(skeletonInput);
+            controls.appendChild(skeletonPlus);
+        } else {
+            const minusBtn = document.createElement('button');
+            minusBtn.type = 'button';
+            minusBtn.className = 'qty-btn qty-minus';
+            minusBtn.textContent = '-';
+            minusBtn.setAttribute('aria-label', `Decrease ${size} quantity`);
 
-        // Create a safe field name from size (lowercase, no spaces)
-        const sizeKey = size.toLowerCase().replace(/[^a-z0-9]/g, '');
-        const input = document.createElement('input');
-        input.type = 'number';
-        input.className = 'qty-input';
-        input.name = `${productId}_${sizeKey}`;
-        input.value = '0';
-        input.min = '0';
-        input.max = '999';
-        input.setAttribute('aria-label', `${size} quantity`);
+            // Create a safe field name from size (lowercase, no spaces)
+            const sizeKey = size.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.className = 'qty-input';
+            input.name = `${productId}_${sizeKey}`;
+            input.value = '0';
+            input.min = '0';
+            input.max = '999';
+            input.setAttribute('aria-label', `${size} quantity`);
 
-        const plusBtn = document.createElement('button');
-        plusBtn.type = 'button';
-        plusBtn.className = 'qty-btn qty-plus';
-        plusBtn.textContent = '+';
-        plusBtn.setAttribute('aria-label', `Increase ${size} quantity`);
+            const plusBtn = document.createElement('button');
+            plusBtn.type = 'button';
+            plusBtn.className = 'qty-btn qty-plus';
+            plusBtn.textContent = '+';
+            plusBtn.setAttribute('aria-label', `Increase ${size} quantity`);
 
-        // Event listeners
-        minusBtn.addEventListener('click', () => {
-            const current = parseInt(input.value) || 0;
-            if (current > 0) {
-                input.value = current - 1;
-                updateRowState(row, current - 1);
-            }
-        });
+            // Event listeners
+            minusBtn.addEventListener('click', () => {
+                const current = parseInt(input.value) || 0;
+                if (current > 0) {
+                    input.value = current - 1;
+                    updateRowState(row, current - 1);
+                }
+            });
 
-        plusBtn.addEventListener('click', () => {
-            const current = parseInt(input.value) || 0;
-            input.value = current + 1;
-            updateRowState(row, current + 1);
-        });
+            plusBtn.addEventListener('click', () => {
+                const current = parseInt(input.value) || 0;
+                input.value = current + 1;
+                updateRowState(row, current + 1);
+            });
 
-        input.addEventListener('change', () => {
-            let val = parseInt(input.value) || 0;
-            if (val < 0) val = 0;
-            input.value = val;
-            updateRowState(row, val);
-        });
+            input.addEventListener('change', () => {
+                let val = parseInt(input.value) || 0;
+                if (val < 0) val = 0;
+                input.value = val;
+                updateRowState(row, val);
+            });
 
-        input.addEventListener('input', () => {
-            let val = parseInt(input.value) || 0;
-            if (val < 0) val = 0;
-            updateRowState(row, val);
-        });
+            input.addEventListener('input', () => {
+                let val = parseInt(input.value) || 0;
+                if (val < 0) val = 0;
+                updateRowState(row, val);
+            });
 
-        controls.appendChild(minusBtn);
-        controls.appendChild(input);
-        controls.appendChild(plusBtn);
+            controls.appendChild(minusBtn);
+            controls.appendChild(input);
+            controls.appendChild(plusBtn);
+        }
 
         row.appendChild(label);
         row.appendChild(controls);

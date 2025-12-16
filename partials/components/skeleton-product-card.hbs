@@ -1,29 +1,151 @@
 {{!--
     Skeleton Product Card
     A placeholder card that mimics product card layout with shimmer animation
+    Uses same class structure as real product cards for grid consistency
     
     Parameters:
-    - horizontal: Boolean - if true, displays as horizontal card spanning full width
+    - horizontal: Boolean - horizontal layout spanning 2 columns (6 control rows)
+    - small: Boolean - compact layout for one-size items (1 control row)
+    - (default): Regular square card (4 control rows)
 --}}
 
 {{#if horizontal}}
-<div class="skeleton-card skeleton-card--horizontal">
-    <div class="skeleton skeleton-image"></div>
-    <div class="skeleton-content">
-        <div class="skeleton skeleton-title"></div>
-        <div class="skeleton skeleton-text"></div>
-        <div class="skeleton skeleton-text--medium"></div>
-        <div class="skeleton skeleton-button"></div>
+<div class="kg-product-card order-form-product order-form-product-horizontal skeleton-card">
+    <div class="kg-product-card-container">
+        <div class="order-form-left-column">
+            <div class="skeleton skeleton-image kg-product-card-image"></div>
+            <div class="kg-product-card-title-container">
+                <div class="skeleton skeleton-title"></div>
+            </div>
+            <div class="kg-product-card-description">
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text skeleton-text--short"></div>
+            </div>
+        </div>
+        <div class="order-form-right-column">
+            <div class="size-qty-grid skeleton-controls">
+                {{!-- 6 control rows for horizontal --}}
+                <div class="size-qty-row skeleton-row">
+                    <div class="size-label"><div class="skeleton skeleton-size-label"></div></div>
+                    <div class="qty-controls">
+                        <div class="skeleton skeleton-qty-btn"></div>
+                        <div class="skeleton skeleton-qty-input"></div>
+                        <div class="skeleton skeleton-qty-btn"></div>
+                    </div>
+                </div>
+                <div class="size-qty-row skeleton-row">
+                    <div class="size-label"><div class="skeleton skeleton-size-label"></div></div>
+                    <div class="qty-controls">
+                        <div class="skeleton skeleton-qty-btn"></div>
+                        <div class="skeleton skeleton-qty-input"></div>
+                        <div class="skeleton skeleton-qty-btn"></div>
+                    </div>
+                </div>
+                <div class="size-qty-row skeleton-row">
+                    <div class="size-label"><div class="skeleton skeleton-size-label"></div></div>
+                    <div class="qty-controls">
+                        <div class="skeleton skeleton-qty-btn"></div>
+                        <div class="skeleton skeleton-qty-input"></div>
+                        <div class="skeleton skeleton-qty-btn"></div>
+                    </div>
+                </div>
+                <div class="size-qty-row skeleton-row">
+                    <div class="size-label"><div class="skeleton skeleton-size-label"></div></div>
+                    <div class="qty-controls">
+                        <div class="skeleton skeleton-qty-btn"></div>
+                        <div class="skeleton skeleton-qty-input"></div>
+                        <div class="skeleton skeleton-qty-btn"></div>
+                    </div>
+                </div>
+                <div class="size-qty-row skeleton-row">
+                    <div class="size-label"><div class="skeleton skeleton-size-label"></div></div>
+                    <div class="qty-controls">
+                        <div class="skeleton skeleton-qty-btn"></div>
+                        <div class="skeleton skeleton-qty-input"></div>
+                        <div class="skeleton skeleton-qty-btn"></div>
+                    </div>
+                </div>
+                <div class="size-qty-row skeleton-row">
+                    <div class="size-label"><div class="skeleton skeleton-size-label"></div></div>
+                    <div class="qty-controls">
+                        <div class="skeleton skeleton-qty-btn"></div>
+                        <div class="skeleton skeleton-qty-input"></div>
+                        <div class="skeleton skeleton-qty-btn"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{else if small}}
+<div class="kg-product-card order-form-product order-form-product-small skeleton-card">
+    <div class="kg-product-card-container">
+        <div class="skeleton skeleton-image kg-product-card-image"></div>
+        <div class="kg-product-card-title-container">
+            <div class="skeleton skeleton-title"></div>
+        </div>
+        <div class="kg-product-card-description">
+            <div class="skeleton skeleton-text skeleton-text--short"></div>
+        </div>
+        <div class="size-qty-grid skeleton-controls">
+            {{!-- 1 control row for small/SQ --}}
+            <div class="size-qty-row skeleton-row">
+                <div class="size-label"><div class="skeleton skeleton-size-label"></div></div>
+                <div class="qty-controls">
+                    <div class="skeleton skeleton-qty-btn"></div>
+                    <div class="skeleton skeleton-qty-input"></div>
+                    <div class="skeleton skeleton-qty-btn"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {{else}}
-<div class="skeleton-card">
-    <div class="skeleton skeleton-image"></div>
-    <div class="skeleton-content">
-        <div class="skeleton skeleton-title"></div>
-        <div class="skeleton skeleton-text"></div>
-        <div class="skeleton skeleton-text--short"></div>
-        <div class="skeleton skeleton-button"></div>
+<div class="kg-product-card order-form-product skeleton-card">
+    <div class="kg-product-card-container">
+        <div class="skeleton skeleton-image kg-product-card-image"></div>
+        <div class="kg-product-card-title-container">
+            <div class="skeleton skeleton-title"></div>
+        </div>
+        <div class="kg-product-card-description">
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-text skeleton-text--short"></div>
+        </div>
+        <div class="size-qty-grid skeleton-controls">
+            {{!-- 4 control rows for regular --}}
+            <div class="size-qty-row skeleton-row">
+                <div class="size-label"><div class="skeleton skeleton-size-label"></div></div>
+                <div class="qty-controls">
+                    <div class="skeleton skeleton-qty-btn"></div>
+                    <div class="skeleton skeleton-qty-input"></div>
+                    <div class="skeleton skeleton-qty-btn"></div>
+                </div>
+            </div>
+            <div class="size-qty-row skeleton-row">
+                <div class="size-label"><div class="skeleton skeleton-size-label"></div></div>
+                <div class="qty-controls">
+                    <div class="skeleton skeleton-qty-btn"></div>
+                    <div class="skeleton skeleton-qty-input"></div>
+                    <div class="skeleton skeleton-qty-btn"></div>
+                </div>
+            </div>
+            <div class="size-qty-row skeleton-row">
+                <div class="size-label"><div class="skeleton skeleton-size-label"></div></div>
+                <div class="qty-controls">
+                    <div class="skeleton skeleton-qty-btn"></div>
+                    <div class="skeleton skeleton-qty-input"></div>
+                    <div class="skeleton skeleton-qty-btn"></div>
+                </div>
+            </div>
+            <div class="size-qty-row skeleton-row">
+                <div class="size-label"><div class="skeleton skeleton-size-label"></div></div>
+                <div class="qty-controls">
+                    <div class="skeleton skeleton-qty-btn"></div>
+                    <div class="skeleton skeleton-qty-input"></div>
+                    <div class="skeleton skeleton-qty-btn"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {{/if}}

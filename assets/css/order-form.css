@@ -872,65 +872,63 @@
    Public Preview (no access)
    ===================== */
 
-/* Preview container - show content above paywall */
-.order-form-preview {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(16px, calc(1.11vw * var(--scale)), 32px);
-}
-
-/* Ensure all grid items can shrink */
-.order-form-preview > * {
-    min-width: 0;
-}
-
-/* Style product cards in preview the same as in the form */
-.order-form-preview .kg-product-card {
-    background: var(--background-color);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
-    padding: clamp(16px, calc(1.11vw * var(--scale)), 32px);
-    display: flex;
-    flex-direction: column;
-}
-
-.order-form-preview .kg-product-card-image {
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
-    margin-bottom: clamp(12px, calc(0.83vw * var(--scale)), 24px);
-}
-
-.order-form-preview .kg-product-card-title-container {
-    margin-bottom: clamp(8px, calc(0.56vw * var(--scale)), 16px);
-}
-
-.order-form-preview .kg-product-card-title {
-    font-family: var(--font1);
-    font-size: clamp(18px, calc(1.25vw * var(--scale)), 28px);
-    font-weight: 600;
-    line-height: 1.2;
-    margin: 0;
-}
-
-.order-form-preview .kg-product-card-description {
-    font-family: var(--font2);
-    font-size: clamp(14px, calc(0.97vw * var(--scale)), 20px);
-    line-height: 1.5;
-    opacity: 0.8;
-    margin: 0;
-}
-
-/* Hide buttons in preview (they won't work anyway) */
-.order-form-preview .kg-product-card-button {
-    display: none;
-}
-
+/* Preview mode uses same grid as logged-in form */
 /* Hide the default Ghost CTA in the order form preview (we use our own) */
-.order-form-preview .post-upgrade-cta,
-.order-form-preview .fading-content {
+.order-form--preview .post-upgrade-cta,
+.order-form--preview .fading-content {
     display: none;
+}
+
+/* Preview mode - locked/skeleton appearance for product cards */
+.order-form--preview .kg-product-card-image:not(.skeleton) {
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+}
+
+/* Hide real text content in preview, show skeleton shimmer */
+.order-form--preview .kg-product-card:not(.skeleton-card) .kg-product-card-title {
+    color: transparent;
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.06) 25%,
+        rgba(0, 0, 0, 0.1) 50%,
+        rgba(0, 0, 0, 0.06) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+    border-radius: 4px;
+    display: inline-block;
+    min-width: 60%;
+}
+
+.order-form--preview .kg-product-card:not(.skeleton-card) .kg-product-card-description p,
+.order-form--preview .kg-product-card:not(.skeleton-card) .kg-product-card-description {
+    color: transparent;
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.06) 25%,
+        rgba(0, 0, 0, 0.1) 50%,
+        rgba(0, 0, 0, 0.06) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+/* Disable controls visually in preview */
+.order-form--preview .size-qty-grid {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.order-form--preview .size-qty-row {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.order-form--preview .qty-btn,
+.order-form--preview .qty-input,
+.order-form--preview .size-label {
+    opacity: 0.4;
 }
 
 /* Custom signup CTA card - spans 2 columns like horizontal product card */
@@ -944,12 +942,7 @@
     overflow: hidden;
 }
 
-@media screen and (max-width: 1024px) {
-    .order-form-preview-cta {
-        grid-column: 1 / -1;
-    }
-}
-
+/* Only go single column on mobile - let grid handle tablet naturally */
 @media screen and (max-width: 768px) {
     .order-form-preview-cta {
         grid-column: 1;
@@ -986,35 +979,11 @@
    Skeleton Product Cards (preview placeholders)
    ===================== */
 
+/* Skeleton cards use kg-product-card classes for grid consistency */
+/* Additional skeleton-specific styles */
 .skeleton-card {
-    background: var(--background-color);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
-    padding: clamp(16px, calc(1.11vw * var(--scale)), 32px);
-    display: flex;
-    flex-direction: column;
     min-width: 0;
     overflow: hidden;
-}
-
-.skeleton-card--horizontal {
-    grid-column: span 2;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(16px, calc(1.11vw * var(--scale)), 32px);
-}
-
-@media screen and (max-width: 1024px) {
-    .skeleton-card--horizontal {
-        grid-column: 1 / -1;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .skeleton-card--horizontal {
-        grid-column: 1;
-        grid-template-columns: 1fr;
-    }
 }
 
 /* Skeleton elements with shimmer animation */
@@ -1039,27 +1008,14 @@
     }
 }
 
-.skeleton-image {
+/* Skeleton image placeholder */
+.skeleton-card .skeleton-image {
     width: 100%;
     aspect-ratio: 1;
     border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
-    margin-bottom: clamp(12px, calc(0.83vw * var(--scale)), 24px);
 }
 
-.skeleton-card--horizontal .skeleton-image {
-    margin-bottom: 0;
-}
-
-.skeleton-content {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(8px, calc(0.56vw * var(--scale)), 16px);
-}
-
-.skeleton-card--horizontal .skeleton-content {
-    justify-content: center;
-}
-
+/* Skeleton text placeholders */
 .skeleton-title {
     height: clamp(20px, calc(1.39vw * var(--scale)), 32px);
     width: 70%;
@@ -1068,6 +1024,7 @@
 .skeleton-text {
     height: clamp(14px, calc(0.97vw * var(--scale)), 20px);
     width: 100%;
+    margin-bottom: clamp(4px, calc(0.28vw * var(--scale)), 8px);
 }
 
 .skeleton-text--short {
@@ -1078,28 +1035,28 @@
     width: 80%;
 }
 
-.skeleton-button {
-    height: clamp(40px, calc(2.78vw * var(--scale)), 56px);
-    width: 100%;
-    margin-top: clamp(8px, calc(0.56vw * var(--scale)), 16px);
+/* Skeleton size/qty controls */
+.skeleton-controls {
+    pointer-events: none;
 }
 
-/* Responsive skeleton image fix */
-@media screen and (max-width: 768px) {
-    .skeleton-card--horizontal .skeleton-image {
-        margin-bottom: clamp(12px, calc(0.83vw * var(--scale)), 24px);
-    }
+.skeleton-controls .skeleton-row {
+    background: rgba(0, 0, 0, 0.03);
 }
 
-/* Responsive preview grid */
-@media screen and (max-width: 1024px) {
-    .order-form-preview {
-        grid-template-columns: repeat(2, 1fr);
-    }
+.skeleton-size-label {
+    width: clamp(32px, calc(2.22vw * var(--scale)), 48px);
+    height: clamp(20px, calc(1.39vw * var(--scale)), 32px);
 }
 
-@media screen and (max-width: 768px) {
-    .order-form-preview {
-        grid-template-columns: 1fr;
-    }
+.skeleton-qty-btn {
+    width: clamp(36px, calc(2.5vw * var(--scale)), 72px);
+    height: clamp(36px, calc(2.5vw * var(--scale)), 72px);
+    border-radius: 50%;
+}
+
+.skeleton-qty-input {
+    width: clamp(48px, calc(3.33vw * var(--scale)), 96px);
+    height: clamp(36px, calc(2.5vw * var(--scale)), 72px);
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
 }
