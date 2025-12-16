@@ -16,16 +16,29 @@
  * - Odd number of cards: last card auto-becomes horizontal
  * - Use #H flag to force any card horizontal
  * - Use #SQ flag for compact one-size items (smaller square)
+ * 
+ * Draft Saving (for logged-in members):
+ * - Save Draft button appears for logged-in Ghost members
+ * - Drafts are stored in Cloudflare KV, keyed by member UUID + page slug
+ * - Drafts auto-load when returning to the page
  */
 
 (function() {
     'use strict';
 
+    const API_BASE = 'https://thebreaksales.ca/api';
+
     function initOrderForm() {
         const form = document.querySelector('.order-form');
         if (!form) return;
 
-        setupSubmitButton(form);
+        // Get member info from data attributes (set by Handlebars template)
+        const memberUuid = form.dataset.memberUuid;
+        const memberEmail = form.dataset.memberEmail;
+        const memberName = form.dataset.memberName;
+        const pageSlug = form.dataset.pageSlug;
+
+        setupSubmitButton(form, memberUuid, pageSlug);
         
         const productCards = Array.from(form.querySelectorAll('.kg-product-card'));
         if (!productCards.length) return;
@@ -39,6 +52,41 @@
 
         // Setup custom lightbox that loads full image on demand
         setupLightbox(form);
+
+        // Setup draft functionality for logged-in members
+        if (memberUuid && pageSlug) {
+            setupDraftButtons(form, memberUuid, pageSlug);
+            // Pre-fill member info if available
+            if (memberEmail) {
+                const emailInput = form.querySelector('[name="email"]');
+                if (emailInput && !emailInput.value) emailInput.value = memberEmail;
+            }
+            if (memberName) {
+                const nameInput = form.querySelector('[name="name"]');
+                if (nameInput && !nameInput.value) nameInput.value = memberName;
+            }
+            // Auto-load saved draft
+            loadDraft(form, memberUuid, pageSlug);
+        }
+
+        // Add hidden fields for member tracking (used when submitting order)
+        if (memberUuid) {
+            addHiddenField(form, '_member_uuid', memberUuid);
+        }
+        if (pageSlug) {
+            addHiddenField(form, '_page_slug', pageSlug);
+        }
+    }
+
+    function addHiddenField(form, name, value) {
+        let field = form.querySelector(`[name="${name}"]`);
+        if (!field) {
+            field = document.createElement('input');
+            field.type = 'hidden';
+            field.name = name;
+            form.appendChild(field);
+        }
+        field.value = value;
     }
 
     /**
@@ -91,7 +139,7 @@
         });
     }
 
-    function setupSubmitButton(form) {
+    function setupSubmitButton(form, memberUuid, pageSlug) {
         const submitButton = form.querySelector('.kg-button-card .kg-btn');
         if (!submitButton) return;
 
@@ -127,6 +175,181 @@
             form.submit();
         });
         submitButton.closest('.kg-button-card').classList.add('order-form-submit-card');
+    }
+
+    /**
+     * Setup Save Draft button for logged-in members
+     */
+    function setupDraftButtons(form, memberUuid, pageSlug) {
+        const submitCard = form.querySelector('.order-form-submit-card');
+        if (!submitCard) return;
+
+        // Create save draft button
+        const saveBtn = document.createElement('button');
+        saveBtn.type = 'button';
+        saveBtn.className = 'kg-btn order-form-save-btn';
+        saveBtn.innerHTML = '<span class="save-btn-text">Save Draft</span>';
+        
+        // Create status indicator
+        const statusEl = document.createElement('span');
+        statusEl.className = 'order-form-draft-status';
+        
+        // Insert save button before submit button
+        const submitBtn = submitCard.querySelector('.kg-btn');
+        if (submitBtn) {
+            submitBtn.parentNode.insertBefore(saveBtn, submitBtn);
+            submitBtn.parentNode.appendChild(statusEl);
+        }
+
+        // Mark form as having draft capability
+        form.classList.add('has-draft-capability');
+
+        // Save draft click handler
+        saveBtn.addEventListener('click', async () => {
+            saveBtn.disabled = true;
+            saveBtn.classList.add('saving');
+            statusEl.textContent = 'Saving...';
+            statusEl.className = 'order-form-draft-status saving';
+
+            try {
+                await saveDraft(form, memberUuid, pageSlug);
+                statusEl.textContent = 'Draft saved!';
+                statusEl.className = 'order-form-draft-status success';
+                form.classList.add('draft-saved');
+                
+                // Clear success message after 3 seconds
+                setTimeout(() => {
+                    statusEl.textContent = '';
+                    statusEl.className = 'order-form-draft-status';
+                }, 3000);
+            } catch (error) {
+                console.error('Failed to save draft:', error);
+                statusEl.textContent = 'Failed to save';
+                statusEl.className = 'order-form-draft-status error';
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.classList.remove('saving');
+            }
+        });
+    }
+
+    /**
+     * Collect form data for saving as draft
+     */
+    function collectFormData(form) {
+        const customer = {
+            name: form.querySelector('[name="name"]')?.value || '',
+            email: form.querySelector('[name="email"]')?.value || '',
+            phone: form.querySelector('[name="phone"]')?.value || '',
+            address: form.querySelector('[name="address"]')?.value || '',
+            city: form.querySelector('[name="city"]')?.value || '',
+            province: form.querySelector('[name="province"]')?.value || '',
+            postalCode: form.querySelector('[name="postal_code"]')?.value || '',
+            notes: form.querySelector('[name="notes"]')?.value || '',
+        };
+
+        // Collect all quantity inputs
+        const products = {};
+        form.querySelectorAll('.qty-input').forEach(input => {
+            const qty = parseInt(input.value) || 0;
+            if (qty > 0) {
+                products[input.name] = qty;
+            }
+        });
+
+        return { customer, products };
+    }
+
+    /**
+     * Save draft to Cloudflare KV via worker
+     */
+    async function saveDraft(form, memberUuid, pageSlug) {
+        const { customer, products } = collectFormData(form);
+
+        const response = await fetch(`${API_BASE}/draft/save`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                memberUuid,
+                pageSlug,
+                customer,
+                products,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save draft');
+        }
+
+        return response.json();
+    }
+
+    /**
+     * Load draft from Cloudflare KV and populate form
+     */
+    async function loadDraft(form, memberUuid, pageSlug) {
+        try {
+            const response = await fetch(
+                `${API_BASE}/draft/load?memberUuid=${encodeURIComponent(memberUuid)}&pageSlug=${encodeURIComponent(pageSlug)}`
+            );
+
+            if (!response.ok) return;
+
+            const data = await response.json();
+            if (!data.found || !data.draft) return;
+
+            const { customer, products } = data.draft;
+
+            // Populate customer fields (don't overwrite if already filled)
+            if (customer) {
+                setFieldIfEmpty(form, 'name', customer.name);
+                setFieldIfEmpty(form, 'email', customer.email);
+                setFieldIfEmpty(form, 'phone', customer.phone);
+                setFieldIfEmpty(form, 'address', customer.address);
+                setFieldIfEmpty(form, 'city', customer.city);
+                setFieldIfEmpty(form, 'province', customer.province);
+                setFieldIfEmpty(form, 'postal_code', customer.postalCode);
+                setFieldIfEmpty(form, 'notes', customer.notes);
+            }
+
+            // Populate product quantities
+            if (products) {
+                Object.entries(products).forEach(([fieldName, qty]) => {
+                    const input = form.querySelector(`[name="${fieldName}"]`);
+                    if (input) {
+                        input.value = qty;
+                        // Update row state to show highlight
+                        const row = input.closest('.size-qty-row');
+                        if (row) updateRowState(row, qty);
+                    }
+                });
+            }
+
+            // Show loaded indicator
+            form.classList.add('draft-loaded');
+            
+            // Show brief notification
+            const statusEl = form.querySelector('.order-form-draft-status');
+            if (statusEl) {
+                statusEl.textContent = 'Draft restored';
+                statusEl.className = 'order-form-draft-status loaded';
+                setTimeout(() => {
+                    statusEl.textContent = '';
+                    statusEl.className = 'order-form-draft-status';
+                }, 3000);
+            }
+
+        } catch (error) {
+            console.error('Failed to load draft:', error);
+        }
+    }
+
+    function setFieldIfEmpty(form, name, value) {
+        if (!value) return;
+        const field = form.querySelector(`[name="${name}"]`);
+        if (field && !field.value) {
+            field.value = value;
+        }
     }
 
     function detectCardFlags(cards) {

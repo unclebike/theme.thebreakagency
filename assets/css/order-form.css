@@ -547,6 +547,110 @@
     opacity: 0.85;
 }
 
+/* =====================
+   Save Draft Button & Status
+   ===================== */
+
+/* Button container layout */
+.order-form .order-form-submit-card .kg-btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, calc(0.83vw * var(--scale)), 24px);
+    align-items: stretch;
+}
+
+/* Save Draft button - secondary style */
+.order-form .order-form-save-btn {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    padding: clamp(14px, calc(0.97vw * var(--scale)), 28px) clamp(24px, calc(1.67vw * var(--scale)), 48px);
+    font-size: clamp(16px, calc(1.11vw * var(--scale)), 32px);
+    font-weight: 600;
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
+    background: transparent;
+    color: var(--text-color);
+    border: 2px solid var(--text-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-family: var(--font2);
+}
+
+.order-form .order-form-save-btn:hover:not(:disabled) {
+    background: var(--text-color);
+    color: var(--background-color);
+}
+
+.order-form .order-form-save-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.order-form .order-form-save-btn.saving .save-btn-text::after {
+    content: '...';
+    animation: ellipsis 1.5s infinite;
+}
+
+@keyframes ellipsis {
+    0% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+}
+
+/* Draft status message */
+.order-form-draft-status {
+    display: block;
+    text-align: center;
+    font-family: var(--font2);
+    font-size: clamp(14px, calc(0.97vw * var(--scale)), 28px);
+    min-height: clamp(20px, calc(1.39vw * var(--scale)), 40px);
+    transition: all 0.3s ease;
+}
+
+.order-form-draft-status:empty {
+    min-height: 0;
+}
+
+.order-form-draft-status.saving {
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
+.order-form-draft-status.success {
+    color: #16a34a;
+}
+
+.order-form-draft-status.error {
+    color: #dc2626;
+}
+
+.order-form-draft-status.loaded {
+    color: var(--ghost-accent-color, #3b82f6);
+}
+
+/* Visual indicator when draft was loaded */
+.order-form.draft-loaded .order-form-customer-info {
+    border-color: var(--ghost-accent-color, #3b82f6);
+    box-shadow: 0 0 0 1px var(--ghost-accent-color, #3b82f6);
+}
+
+/* Fade out the highlight after a moment */
+.order-form.draft-loaded .order-form-customer-info {
+    animation: draft-loaded-highlight 3s ease-out forwards;
+}
+
+@keyframes draft-loaded-highlight {
+    0% {
+        border-color: var(--ghost-accent-color, #3b82f6);
+        box-shadow: 0 0 0 2px rgba(var(--ghost-accent-color-rgb, 59, 130, 246), 0.3);
+    }
+    100% {
+        border-color: rgba(0, 0, 0, 0.1);
+        box-shadow: none;
+    }
+}
+
 /* Mobile adjustments */
 @media screen and (max-width: 768px) {
     /* Customer info */

@@ -29,6 +29,12 @@
                             class="order-form"
                             action="https://thebreaksales.ca/api/order"
                             method="POST"
+                            {{#if @member}}
+                            data-member-uuid="{{@member.uuid}}"
+                            data-member-email="{{@member.email}}"
+                            data-member-name="{{@member.name}}"
+                            {{/if}}
+                            data-page-slug="{{slug}}"
                         >
                             <div class="order-form-customer-info">
                                 <h3 class="order-form-section-title">Your Information</h3>
