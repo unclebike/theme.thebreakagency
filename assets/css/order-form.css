@@ -525,74 +525,62 @@
 }
 
 /* Submit Button Card - contains Save Draft + Send Order buttons */
+/* Side by side on desktop, stacked on mobile */
 .order-form .order-form-submit-card {
     margin-top: clamp(32px, calc(2.22vw * var(--scale)), 64px);
-}
-
-/* Button container - side by side on desktop, stacked on mobile */
-.order-form .order-form-submit-card .kg-btn-container {
     display: flex;
     flex-direction: row;
     gap: clamp(12px, calc(0.83vw * var(--scale)), 24px);
     justify-content: center;
     align-items: stretch;
     max-width: 600px;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 @media screen and (max-width: 768px) {
-    .order-form .order-form-submit-card .kg-btn-container {
+    .order-form .order-form-submit-card {
         flex-direction: column;
         max-width: 400px;
     }
 }
 
-/* Send Order button (from Ghost editor) */
-.order-form .order-form-submit-card .kg-btn {
-    width: 100%;
-    justify-content: center;
-    display: flex;
-    padding: clamp(14px, calc(0.97vw * var(--scale)), 28px) clamp(24px, calc(1.67vw * var(--scale)), 48px);
-    font-size: clamp(16px, calc(1.11vw * var(--scale)), 32px);
-    font-weight: 600;
-    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
+/* Shared button styles for Save Draft and Send Order */
+.order-form .order-form-submit-card .kg-btn,
+.order-form .order-form-save-btn {
+    /* Reset for both <a> and <button> elements */
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+    border: none;
     background: var(--text-color);
     color: var(--background-color);
+    
+    /* Shared styles */
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: clamp(14px, calc(0.97vw * var(--scale)), 28px) clamp(24px, calc(1.67vw * var(--scale)), 48px);
+    font-family: var(--font2);
+    font-size: clamp(16px, calc(1.11vw * var(--scale)), 32px);
+    font-weight: 600;
+    line-height: 1.2;
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
     text-decoration: none;
     transition: all 0.2s ease;
+    cursor: pointer;
     box-sizing: border-box;
 }
 
-.order-form .order-form-submit-card .kg-btn:hover:not(:disabled):not(.success):not(.error) {
+.order-form .order-form-submit-card .kg-btn:hover:not(:disabled):not(.success):not(.error),
+.order-form .order-form-save-btn:hover:not(:disabled):not(.success):not(.restored) {
     opacity: 0.85;
 }
 
 /* =====================
-   Save Draft Button & Status
+   Save Draft Button States
    ===================== */
-
-/* Save Draft button - matches submit button style */
-.order-form .order-form-save-btn {
-    width: 100%;
-    justify-content: center;
-    display: flex;
-    padding: clamp(14px, calc(0.97vw * var(--scale)), 28px) clamp(24px, calc(1.67vw * var(--scale)), 48px);
-    font-size: clamp(16px, calc(1.11vw * var(--scale)), 32px);
-    font-weight: 600;
-    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
-    background: var(--text-color);
-    color: var(--background-color);
-    border: none;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    font-family: var(--font2);
-    box-sizing: border-box;
-}
-
-.order-form .order-form-save-btn:hover:not(:disabled):not(.success):not(.restored) {
-    opacity: 0.85;
-}
 
 .order-form .order-form-save-btn:disabled {
     opacity: 0.6;
