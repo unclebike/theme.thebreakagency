@@ -30,9 +30,6 @@
         const productCards = Array.from(form.querySelectorAll('.kg-product-card'));
         if (!productCards.length) return;
 
-        // Setup progressive image loading first
-        setupProgressiveImages(form);
-
         // Determine which cards should be horizontal or small square
         const cardFlags = detectCardFlags(productCards);
 
@@ -45,44 +42,11 @@
     }
 
     /**
-     * Progressive image loading - ensures small thumbnails are used
-     * Inline script in template handles early swap, this is a fallback
-     * Full images load on-demand when user clicks to enlarge
-     */
-    function setupProgressiveImages(form) {
-        // Target all images in the form, not just product card images
-        const images = form.querySelectorAll('img');
-        
-        images.forEach(img => {
-            // Skip if already processed by inline script
-            if (img.getAttribute('data-full-src')) return;
-            
-            const fullSrc = img.src;
-            
-            // Only process Ghost-hosted images that haven't been resized
-            if (!fullSrc.includes('/content/images/') || fullSrc.includes('/size/')) return;
-            
-            // Create small version URL (300px wide, webp format)
-            // Note: Ghost requires /format/ param for dynamic resizing to work
-            const smallSrc = fullSrc.replace(
-                '/content/images/',
-                '/content/images/size/w300/format/webp/'
-            );
-            
-            // Store full URL for on-demand loading
-            img.setAttribute('data-full-src', fullSrc);
-            
-            // Use small image only
-            img.src = smallSrc;
-        });
-    }
-
-    /**
-     * Custom lightbox that shows blurred thumbnail while loading full image
+     * Simple lightbox for product images - uses already-loaded full-size image
      */
     function setupLightbox(form) {
-        // Target all images that have full-src data (product images with progressive loading)
-        const images = form.querySelectorAll('img[data-full-src]');
+        const images = form.querySelectorAll('.kg-product-card-image');
+        if (!images.length) return;
         
         // Create lightbox overlay
         const overlay = document.createElement('div');
@@ -90,20 +54,17 @@
         overlay.innerHTML = `
             <div class="lightbox-backdrop"></div>
             <div class="lightbox-content">
-                <img class="lightbox-img lightbox-img-thumb" src="" alt="">
-                <img class="lightbox-img lightbox-img-full" src="" alt="">
-                <div class="lightbox-spinner"></div>
+                <img class="lightbox-img" src="" alt="">
             </div>
         `;
         document.body.appendChild(overlay);
         
         const backdrop = overlay.querySelector('.lightbox-backdrop');
-        const thumbImg = overlay.querySelector('.lightbox-img-thumb');
-        const fullImg = overlay.querySelector('.lightbox-img-full');
-        const spinner = overlay.querySelector('.lightbox-spinner');
+        const lightboxImg = overlay.querySelector('.lightbox-img');
         
         // Close on backdrop click or escape
         backdrop.addEventListener('click', closeLightbox);
+        lightboxImg.addEventListener('click', closeLightbox);
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && overlay.classList.contains('active')) {
                 closeLightbox();
@@ -113,31 +74,15 @@
         function closeLightbox() {
             overlay.classList.remove('active');
             document.body.style.overflow = '';
-            // Reset images
             setTimeout(() => {
-                thumbImg.src = '';
-                fullImg.src = '';
-                fullImg.classList.remove('loaded');
+                lightboxImg.src = '';
             }, 300);
         }
         
         function openLightbox(img) {
-            const thumbSrc = img.src;
-            const fullSrc = img.getAttribute('data-full-src') || img.src;
-            
-            // Show overlay with blurred thumbnail
-            thumbImg.src = thumbSrc;
-            fullImg.classList.remove('loaded');
+            lightboxImg.src = img.src;
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
-            
-            // Load full image
-            const loader = new Image();
-            loader.onload = () => {
-                fullImg.src = fullSrc;
-                fullImg.classList.add('loaded');
-            };
-            loader.src = fullSrc;
         }
         
         // Attach click handlers to images

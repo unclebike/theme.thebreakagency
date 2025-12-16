@@ -331,48 +331,7 @@
     max-width: 90vw;
     max-height: 90vh;
     object-fit: contain;
-}
-
-/* Thumbnail - blurred, shown immediately */
-.lightbox-img-thumb {
-    filter: blur(20px);
-    transform: scale(1.1);
-    transition: opacity 0.3s ease;
-}
-
-/* Full image - sharp, fades in over thumbnail */
-.lightbox-img-full {
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.lightbox-img-full.loaded {
-    opacity: 1;
-}
-
-/* Loading spinner */
-.lightbox-spinner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(0, 0, 0, 0.1);
-    border-top-color: var(--text-color, #000);
-    border-radius: 50%;
-    animation: lightbox-spin 0.8s linear infinite;
-}
-
-.lightbox-img-full.loaded ~ .lightbox-spinner {
-    opacity: 0;
-}
-
-@keyframes lightbox-spin {
-    to { transform: translate(-50%, -50%) rotate(360deg); }
+    cursor: pointer;
 }
 
 /* Regular (non-horizontal) card styling */

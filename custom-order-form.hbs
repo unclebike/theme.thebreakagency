@@ -69,32 +69,6 @@
                             </div>
                             <h3 class="order-form-section-title order-form-products-title">Select Products</h3>
                             {{content}}
-                            {{!-- Add responsive srcset to product images - Ghost doesn't do this automatically for product cards --}}
-                            <script>
-                                (function() {
-                                    document.querySelectorAll('.order-form .kg-product-card-image').forEach(function(img) {
-                                        var src = img.getAttribute('src');
-                                        if (src && src.indexOf('/content/images/') !== -1 && src.indexOf('/size/') === -1) {
-                                            // Store full URL for lightbox
-                                            img.setAttribute('data-full-src', src);
-                                            
-                                            // Build srcset with multiple sizes (webp format for better compression)
-                                            var basePath = src.replace('/content/images/', '/content/images/size/');
-                                            var pathParts = src.split('/content/images/')[1];
-                                            var srcset = 
-                                                '/content/images/size/w300/format/webp/' + pathParts + ' 300w, ' +
-                                                '/content/images/size/w600/format/webp/' + pathParts + ' 600w, ' +
-                                                '/content/images/size/w1000/format/webp/' + pathParts + ' 1000w';
-                                            
-                                            img.setAttribute('srcset', srcset);
-                                            img.setAttribute('sizes', '(max-width: 600px) 300px, (max-width: 1200px) 400px, 400px');
-                                            
-                                            // Set small version as fallback src
-                                            img.setAttribute('src', '/content/images/size/w300/format/webp/' + pathParts);
-                                        }
-                                    });
-                                })();
-                            </script>
                         </form>
                     </div>
                 </div>
