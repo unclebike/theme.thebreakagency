@@ -577,7 +577,7 @@
     font-family: var(--font2);
 }
 
-.order-form .order-form-save-btn:hover:not(:disabled):not(.success) {
+.order-form .order-form-save-btn:hover:not(:disabled):not(.success):not(.restored) {
     opacity: 0.85;
 }
 
@@ -590,32 +590,42 @@
     opacity: 0.7;
 }
 
-/* Success state - green background */
+/* Save Draft success state - green */
 .order-form .order-form-save-btn.success {
     background: #16a34a;
     color: #fff;
 }
 
-/* Draft status message - only used for errors and loaded state */
-.order-form-draft-status {
-    display: block;
-    text-align: center;
-    font-family: var(--font2);
-    font-size: clamp(14px, calc(0.97vw * var(--scale)), 28px);
-    min-height: clamp(20px, calc(1.39vw * var(--scale)), 40px);
-    transition: all 0.3s ease;
+/* Save Draft error state - red */
+.order-form .order-form-save-btn.error {
+    background: #dc2626;
+    color: #fff;
 }
 
-.order-form-draft-status:empty {
-    min-height: 0;
+/* Save Draft restored state - brand orange */
+.order-form .order-form-save-btn.restored {
+    background: var(--ghost-accent-color, #f97316);
+    color: #fff;
 }
 
-.order-form-draft-status.error {
-    color: #dc2626;
+/* =====================
+   Submit Button States
+   ===================== */
+
+.order-form .order-form-submit-btn.sending {
+    opacity: 0.7;
 }
 
-.order-form-draft-status.loaded {
-    color: var(--ghost-accent-color, #3b82f6);
+/* Submit success state - green */
+.order-form .order-form-submit-btn.success {
+    background: #16a34a !important;
+    color: #fff !important;
+}
+
+/* Submit error state - red */
+.order-form .order-form-submit-btn.error {
+    background: #dc2626 !important;
+    color: #fff !important;
 }
 
 /* Visual indicator when draft was loaded */

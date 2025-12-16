@@ -143,8 +143,47 @@
         const submitButton = form.querySelector('.kg-button-card .kg-btn');
         if (!submitButton) return;
 
-        // Wire up the button to submit the form
-        submitButton.addEventListener('click', (e) => {
+        submitButton.closest('.kg-button-card').classList.add('order-form-submit-card');
+
+        // Config
+        const defaultText = 'Send Order';
+        const successText = 'Success!';
+        const sendingText = 'Sending...';
+        const errorText = 'Error';
+
+        // Wrap submit button text for state changes
+        submitButton.textContent = '';
+        const btnTextEl = document.createElement('span');
+        btnTextEl.className = 'submit-btn-text';
+        btnTextEl.textContent = defaultText;
+        submitButton.appendChild(btnTextEl);
+        submitButton.classList.add('order-form-submit-btn');
+
+        // Store references on form for other functions to use
+        form._submitBtn = submitButton;
+        form._submitBtnTextEl = btnTextEl;
+        form._submitDefaultText = defaultText;
+
+        // Function to reset submit button state
+        function resetSubmitBtnState() {
+            submitButton.classList.remove('success', 'error');
+            btnTextEl.textContent = defaultText;
+        }
+
+        // Listen for quantity changes to reset success/error state
+        form.addEventListener('input', (e) => {
+            if (e.target.classList.contains('qty-input')) {
+                resetSubmitBtnState();
+            }
+        });
+        form.addEventListener('click', (e) => {
+            if (e.target.classList.contains('qty-btn')) {
+                resetSubmitBtnState();
+            }
+        });
+
+        // Wire up the button to submit the form via AJAX
+        submitButton.addEventListener('click', async (e) => {
             e.preventDefault();
             
             // Basic validation before submit
@@ -171,10 +210,59 @@
                 alert('Please select at least one item.');
                 return;
             }
-            
-            form.submit();
+
+            // Show sending state
+            submitButton.disabled = true;
+            submitButton.classList.remove('success', 'error');
+            submitButton.classList.add('sending');
+            btnTextEl.textContent = sendingText;
+
+            try {
+                // Collect form data
+                const formData = new FormData(form);
+                const data = {};
+                formData.forEach((value, key) => {
+                    data[key] = value;
+                });
+
+                // Submit to API
+                const response = await fetch(`${API_BASE}/order`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Order submission failed');
+                }
+
+                // Success!
+                submitButton.classList.remove('sending');
+                submitButton.classList.add('success');
+                btnTextEl.textContent = successText;
+                
+                // Delete draft after successful order (for logged-in users)
+                if (memberUuid && pageSlug) {
+                    try {
+                        await fetch(`${API_BASE}/draft/delete`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ memberUuid, pageSlug }),
+                        });
+                    } catch (e) {
+                        // Ignore draft deletion errors
+                    }
+                }
+
+            } catch (error) {
+                console.error('Order submission failed:', error);
+                submitButton.classList.remove('sending');
+                submitButton.classList.add('error');
+                btnTextEl.textContent = errorText;
+            } finally {
+                submitButton.disabled = false;
+            }
         });
-        submitButton.closest('.kg-button-card').classList.add('order-form-submit-card');
     }
 
     /**
@@ -184,78 +272,76 @@
         const submitCard = form.querySelector('.order-form-submit-card');
         if (!submitCard) return;
 
-        const defaultText = 'Send Draft';
-        const successText = 'Success!';
-        const savingText = 'Saving...';
+        // Save Draft button config
+        const saveDraftText = 'Save Draft';
+        const saveDraftSuccessText = 'Success!';
+        const saveDraftSavingText = 'Saving...';
 
         // Create save draft button
         const saveBtn = document.createElement('button');
         saveBtn.type = 'button';
         saveBtn.className = 'kg-btn order-form-save-btn';
-        saveBtn.innerHTML = `<span class="save-btn-text">${defaultText}</span>`;
+        saveBtn.innerHTML = `<span class="save-btn-text">${saveDraftText}</span>`;
         
-        const btnTextEl = saveBtn.querySelector('.save-btn-text');
-        
-        // Create status indicator (for errors and loaded state only)
-        const statusEl = document.createElement('span');
-        statusEl.className = 'order-form-draft-status';
+        const saveBtnTextEl = saveBtn.querySelector('.save-btn-text');
         
         // Insert save button before submit button
-        const submitBtn = submitCard.querySelector('.kg-btn');
+        const submitBtn = form._submitBtn;
         if (submitBtn) {
             submitBtn.parentNode.insertBefore(saveBtn, submitBtn);
-            submitBtn.parentNode.appendChild(statusEl);
         }
 
         // Mark form as having draft capability
         form.classList.add('has-draft-capability');
 
-        // Function to reset button to default state
-        function resetButtonState() {
-            saveBtn.classList.remove('success');
-            btnTextEl.textContent = defaultText;
+        // Function to reset Save Draft button to default state
+        function resetSaveBtnState() {
+            saveBtn.classList.remove('success', 'restored');
+            saveBtnTextEl.textContent = saveDraftText;
         }
 
-        // Listen for quantity changes to reset success state
+        // Listen for quantity changes to reset Save Draft button state
         form.addEventListener('input', (e) => {
             if (e.target.classList.contains('qty-input')) {
-                resetButtonState();
+                resetSaveBtnState();
             }
         });
 
-        // Also reset on +/- button clicks (they don't always trigger input event)
+        // Also reset on +/- button clicks
         form.addEventListener('click', (e) => {
             if (e.target.classList.contains('qty-btn')) {
-                resetButtonState();
+                resetSaveBtnState();
             }
         });
 
         // Save draft click handler
         saveBtn.addEventListener('click', async () => {
             saveBtn.disabled = true;
-            saveBtn.classList.remove('success');
+            saveBtn.classList.remove('success', 'restored');
             saveBtn.classList.add('saving');
-            btnTextEl.textContent = savingText;
-            statusEl.textContent = '';
-            statusEl.className = 'order-form-draft-status';
+            saveBtnTextEl.textContent = saveDraftSavingText;
 
             try {
                 await saveDraft(form, memberUuid, pageSlug);
                 saveBtn.classList.remove('saving');
                 saveBtn.classList.add('success');
-                btnTextEl.textContent = successText;
+                saveBtnTextEl.textContent = saveDraftSuccessText;
                 form.classList.add('draft-saved');
                 // Success state persists until quantity changes
             } catch (error) {
                 console.error('Failed to save draft:', error);
                 saveBtn.classList.remove('saving');
-                btnTextEl.textContent = defaultText;
-                statusEl.textContent = 'Failed to save';
-                statusEl.className = 'order-form-draft-status error';
+                saveBtnTextEl.textContent = saveDraftText;
+                // Show error state
+                saveBtn.classList.add('error');
             } finally {
                 saveBtn.disabled = false;
             }
         });
+
+        // Store references for loadDraft to use
+        form._saveDraftBtn = saveBtn;
+        form._saveDraftBtnTextEl = saveBtnTextEl;
     }
 
     /**
@@ -353,14 +439,16 @@
             // Show loaded indicator
             form.classList.add('draft-loaded');
             
-            // Show brief notification
-            const statusEl = form.querySelector('.order-form-draft-status');
-            if (statusEl) {
-                statusEl.textContent = 'Draft restored';
-                statusEl.className = 'order-form-draft-status loaded';
+            // Show restored state on Save Draft button (orange, temporary)
+            const saveBtn = form._saveDraftBtn;
+            const saveBtnTextEl = form._saveDraftBtnTextEl;
+            if (saveBtn && saveBtnTextEl) {
+                saveBtn.classList.add('restored');
+                saveBtnTextEl.textContent = 'Draft Restored';
+                // Reset after 3 seconds
                 setTimeout(() => {
-                    statusEl.textContent = '';
-                    statusEl.className = 'order-form-draft-status';
+                    saveBtn.classList.remove('restored');
+                    saveBtnTextEl.textContent = 'Save Draft';
                 }, 3000);
             }
 
