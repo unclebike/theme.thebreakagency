@@ -45,18 +45,21 @@
     }
 
     /**
-     * Progressive image loading - loads small thumbnails only
+     * Progressive image loading - ensures small thumbnails are used
+     * Inline script in template handles early swap, this is a fallback
      * Full images load on-demand when user clicks to enlarge
-     * Ghost CDN supports /size/w{width}/ in URLs for resizing
      */
     function setupProgressiveImages(form) {
         const images = form.querySelectorAll('.kg-product-card-image');
         
         images.forEach(img => {
+            // Skip if already processed by inline script
+            if (img.getAttribute('data-full-src')) return;
+            
             const fullSrc = img.src;
             
-            // Only process Ghost-hosted images
-            if (!fullSrc.includes('/content/images/')) return;
+            // Only process Ghost-hosted images that haven't been resized
+            if (!fullSrc.includes('/content/images/') || fullSrc.includes('/size/')) return;
             
             // Create small version URL (300px wide)
             const smallSrc = fullSrc.replace(
