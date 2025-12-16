@@ -132,11 +132,11 @@
                             {{/foreach}}
                         {{/unless}}
 
-                        {{#if @member.labels}}
+                        {{#if ../_locals.member.labels}}
                         <div class="account-catalogs">
                             <h3 class="account-catalogs-title">{{t "Your Catalogs"}}</h3>
                             <div class="account-catalogs-list">
-                                {{#foreach @member.labels}}
+                                {{#foreach ../_locals.member.labels}}
                                 <a href="/{{slug}}/" class="account-catalog-link">
                                     {{name}}
                                     {{> "icons/small-arrow-icon"}}
