@@ -963,6 +963,104 @@
     font-size: 0.85em;
 }
 
+/* =====================
+   Skeleton Product Cards (preview placeholders)
+   ===================== */
+
+.skeleton-card {
+    background: var(--background-color);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
+    padding: clamp(16px, calc(1.11vw * var(--scale)), 32px);
+    display: flex;
+    flex-direction: column;
+}
+
+.skeleton-card--horizontal {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, calc(1.11vw * var(--scale)), 32px);
+}
+
+/* Skeleton elements with shimmer animation */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.06) 25%,
+        rgba(0, 0, 0, 0.1) 50%,
+        rgba(0, 0, 0, 0.06) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+    border-radius: clamp(4px, calc(0.28vw * var(--scale)), 8px);
+}
+
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skeleton-image {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
+    margin-bottom: clamp(12px, calc(0.83vw * var(--scale)), 24px);
+}
+
+.skeleton-card--horizontal .skeleton-image {
+    margin-bottom: 0;
+}
+
+.skeleton-content {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(8px, calc(0.56vw * var(--scale)), 16px);
+}
+
+.skeleton-card--horizontal .skeleton-content {
+    justify-content: center;
+}
+
+.skeleton-title {
+    height: clamp(20px, calc(1.39vw * var(--scale)), 32px);
+    width: 70%;
+}
+
+.skeleton-text {
+    height: clamp(14px, calc(0.97vw * var(--scale)), 20px);
+    width: 100%;
+}
+
+.skeleton-text--short {
+    width: 60%;
+}
+
+.skeleton-text--medium {
+    width: 80%;
+}
+
+.skeleton-button {
+    height: clamp(40px, calc(2.78vw * var(--scale)), 56px);
+    width: 100%;
+    margin-top: clamp(8px, calc(0.56vw * var(--scale)), 16px);
+}
+
+/* Responsive skeleton cards */
+@media screen and (max-width: 768px) {
+    .skeleton-card--horizontal {
+        grid-template-columns: 1fr;
+    }
+    
+    .skeleton-card--horizontal .skeleton-image {
+        margin-bottom: clamp(12px, calc(0.83vw * var(--scale)), 24px);
+    }
+}
+
 /* Responsive preview grid */
 @media screen and (max-width: 1024px) {
     .order-form-preview {

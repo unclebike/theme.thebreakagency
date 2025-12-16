@@ -1,0 +1,29 @@
+{{!--
+    Skeleton Product Card
+    A placeholder card that mimics product card layout with shimmer animation
+    
+    Parameters:
+    - horizontal: Boolean - if true, displays as horizontal card spanning full width
+--}}
+
+{{#if horizontal}}
+<div class="skeleton-card skeleton-card--horizontal">
+    <div class="skeleton skeleton-image"></div>
+    <div class="skeleton-content">
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-text--medium"></div>
+        <div class="skeleton skeleton-button"></div>
+    </div>
+</div>
+{{else}}
+<div class="skeleton-card">
+    <div class="skeleton skeleton-image"></div>
+    <div class="skeleton-content">
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-text--short"></div>
+        <div class="skeleton skeleton-button"></div>
+    </div>
+</div>
+{{/if}}
