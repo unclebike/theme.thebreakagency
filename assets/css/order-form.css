@@ -133,6 +133,11 @@
     border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+/* Regular cards (not horizontal, not small): single column layout for full-width rows */
+.order-form .kg-product-card:not(.order-form-product-horizontal):not(.order-form-product-small) .size-qty-grid {
+    grid-template-columns: 1fr;
+}
+
 .size-qty-row {
     display: flex;
     align-items: center;
