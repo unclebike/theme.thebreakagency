@@ -867,3 +867,70 @@
         font-size: 14px !important;
     }
 }
+
+/* =====================
+   Public Preview (no access)
+   ===================== */
+
+/* Preview container - show content above paywall */
+.order-form-preview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, calc(1.11vw * var(--scale)), 32px);
+}
+
+/* Style product cards in preview the same as in the form */
+.order-form-preview .kg-product-card {
+    background: var(--background-color);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
+    padding: clamp(16px, calc(1.11vw * var(--scale)), 32px);
+    display: flex;
+    flex-direction: column;
+}
+
+.order-form-preview .kg-product-card-image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
+    margin-bottom: clamp(12px, calc(0.83vw * var(--scale)), 24px);
+}
+
+.order-form-preview .kg-product-card-title-container {
+    margin-bottom: clamp(8px, calc(0.56vw * var(--scale)), 16px);
+}
+
+.order-form-preview .kg-product-card-title {
+    font-family: var(--font1);
+    font-size: clamp(18px, calc(1.25vw * var(--scale)), 28px);
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.order-form-preview .kg-product-card-description {
+    font-family: var(--font2);
+    font-size: clamp(14px, calc(0.97vw * var(--scale)), 20px);
+    line-height: 1.5;
+    opacity: 0.8;
+    margin: 0;
+}
+
+/* Hide buttons in preview (they won't work anyway) */
+.order-form-preview .kg-product-card-button {
+    display: none;
+}
+
+/* Responsive preview grid */
+@media screen and (max-width: 1024px) {
+    .order-form-preview {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .order-form-preview {
+        grid-template-columns: 1fr;
+    }
+}

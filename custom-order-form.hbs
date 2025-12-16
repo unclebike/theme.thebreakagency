@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="{{asset "css/order-form.css"}}" />
 
         <article class="article" data-is-post="false" data-post-header-type="{{@custom.post_header_type}}" data-has-featured-image="{{#if feature_image}}true{{else}}false{{/if}}"
-        data-right-aligned-template="false" data-has-video="false" data-has-header="{{#match @page.show_title_and_feature_image}}true{{else}}false{{/match}}">
+        data-right-aligned-template="false" data-has-video="false" data-has-header="{{#match @page.show_title_and_feature_image}}true{{else}}false{{/match}}" data-has-access="{{#if access}}true{{else}}false{{/if}}">
             {{#match @page.show_title_and_feature_image}}
                 {{#if feature_image}}
                     {{#match @custom.post_header_type "Background Media"}}
@@ -25,6 +25,8 @@
             <div class="post-content wide-container{{#if @custom.use_page_load_animations}} hidden-post-content{{/if}}">
                 <div class="post-content-inner-wrapper">
                     <div class="post-content-inner">
+                        {{!-- Show contact/signup form for users with access --}}
+                        {{#if access}}
                         <form 
                             class="order-form"
                             action="https://thebreaksales.ca/api/order"
@@ -95,6 +97,12 @@
                             <h3 class="order-form-section-title order-form-products-title">Select Products</h3>
                             {{content}}
                         </form>
+                        {{else}}
+                        {{!-- No access: show public preview content + CTA --}}
+                        <div class="order-form-preview">
+                            {{content}}
+                        </div>
+                        {{/if}}
                     </div>
                 </div>
             </div>
@@ -105,7 +113,9 @@
             applyImageCalloutGridPattern();
         </script>
         <script src="{{asset "js/post-content.js"}}"></script>
+        {{#if access}}
         <script src="{{asset "js/order-form.js"}}"></script>
+        {{/if}}
     </main>
 {{/post}}
 
