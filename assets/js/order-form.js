@@ -50,7 +50,8 @@
      * Full images load on-demand when user clicks to enlarge
      */
     function setupProgressiveImages(form) {
-        const images = form.querySelectorAll('.kg-product-card-image');
+        // Target all images in the form, not just product card images
+        const images = form.querySelectorAll('img');
         
         images.forEach(img => {
             // Skip if already processed by inline script
@@ -80,7 +81,8 @@
      * Custom lightbox that shows blurred thumbnail while loading full image
      */
     function setupLightbox(form) {
-        const images = form.querySelectorAll('.kg-product-card-image');
+        // Target all images that have full-src data (product images with progressive loading)
+        const images = form.querySelectorAll('img[data-full-src]');
         
         // Create lightbox overlay
         const overlay = document.createElement('div');
