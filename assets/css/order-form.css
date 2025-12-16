@@ -629,6 +629,22 @@
     color: #fff !important;
 }
 
+/* Submit MOQ warning state - red (for minimum order quantity warnings) */
+.order-form .order-form-submit-btn.moq-warning {
+    background: #dc2626 !important;
+    color: #fff !important;
+}
+
+/* =====================
+   Minimum Order Quantity (MOQ)
+   ===================== */
+
+/* Product card under minimum order quantity - red border */
+.order-form .kg-product-card.under-moq {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 1px #dc2626;
+}
+
 /* =====================
    Signup Button & Message (non-logged-in users)
    ===================== */

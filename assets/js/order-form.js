@@ -161,6 +161,11 @@
         const successText = 'Success!';
         const sendingText = 'Sending...';
         const errorText = 'Error';
+        const moqWarningText = 'Confirm products meet minimum order quantity';
+        const moqConfirmText = 'Send Draft Anyway';
+
+        // MOQ submit state: 0 = default, 1 = warning, 2 = confirm
+        let moqSubmitState = 0;
 
         // Wrap submit button text for state changes
         submitButton.textContent = '';
@@ -175,13 +180,14 @@
         form._submitBtnTextEl = btnTextEl;
         form._submitDefaultText = defaultText;
 
-        // Function to reset submit button state
+        // Function to reset submit button state (including MOQ state)
         function resetSubmitBtnState() {
-            submitButton.classList.remove('success', 'error');
+            moqSubmitState = 0;
+            submitButton.classList.remove('success', 'error', 'moq-warning');
             btnTextEl.textContent = defaultText;
         }
 
-        // Listen for quantity changes to reset success/error state
+        // Listen for quantity changes to reset success/error/MOQ state
         form.addEventListener('input', (e) => {
             if (e.target.classList.contains('qty-input')) {
                 resetSubmitBtnState();
@@ -222,9 +228,26 @@
                 return;
             }
 
+            // MOQ 3-click flow
+            if (hasProductsUnderMOQ(form)) {
+                if (moqSubmitState === 0) {
+                    // First click with MOQ issues - show warning
+                    moqSubmitState = 1;
+                    submitButton.classList.add('moq-warning');
+                    btnTextEl.textContent = moqWarningText;
+                    return;
+                } else if (moqSubmitState === 1) {
+                    // Second click - show confirm option
+                    moqSubmitState = 2;
+                    btnTextEl.textContent = moqConfirmText;
+                    return;
+                }
+                // Third click (moqSubmitState === 2) - proceed with submit
+            }
+
             // Show sending state
             submitButton.disabled = true;
-            submitButton.classList.remove('success', 'error');
+            submitButton.classList.remove('success', 'error', 'moq-warning');
             submitButton.classList.add('sending');
             btnTextEl.textContent = sendingText;
 
@@ -251,6 +274,7 @@
                 submitButton.classList.remove('sending');
                 submitButton.classList.add('success');
                 btnTextEl.textContent = successText;
+                moqSubmitState = 0; // Reset MOQ state on success
                 
                 // Delete draft after successful order (for logged-in users)
                 if (memberUuid && pageSlug) {
@@ -270,6 +294,7 @@
                 submitButton.classList.remove('sending');
                 submitButton.classList.add('error');
                 btnTextEl.textContent = errorText;
+                moqSubmitState = 0; // Reset MOQ state on error
             } finally {
                 submitButton.disabled = false;
             }
@@ -706,8 +731,24 @@
         const productId = buttonUrl.replace(/^#/, '').trim();
         if (!productId) return;
 
-        // Parse sizes from button text
-        const sizes = (buttonEl.textContent.trim())
+        // Parse sizes and MOQ from button text
+        // Format: "S,M,L,XL,#25" where #25 is optional MOQ
+        const buttonText = buttonEl.textContent.trim();
+        
+        // Extract MOQ if present (skip in preview mode)
+        let moq = null;
+        let sizesText = buttonText;
+        if (!isPreviewMode) {
+            const moqMatch = buttonText.match(/#(\d+)/);
+            if (moqMatch) {
+                moq = parseInt(moqMatch[1]);
+                sizesText = buttonText.replace(/#\d+/, '').trim();
+                // Remove trailing comma if MOQ was at end
+                sizesText = sizesText.replace(/,\s*$/, '');
+            }
+        }
+        
+        const sizes = sizesText
             .split(',')
             .map(s => s.trim())
             .filter(Boolean);
@@ -721,7 +762,7 @@
         // Mark as transformed
         card.classList.add('order-form-product');
 
-        // In preview mode, don't add hidden fields (form won't be submitted)
+        // In preview mode, don't add hidden fields or MOQ tracking
         if (!isPreviewMode) {
             // Add hidden product name field
             const hiddenName = document.createElement('input');
@@ -729,6 +770,13 @@
             hiddenName.name = `${productId}_name`;
             hiddenName.value = productName;
             card.appendChild(hiddenName);
+            
+            // Store MOQ on card if present
+            if (moq !== null) {
+                card.dataset.moq = moq;
+                // Initially mark as under MOQ (0 < moq)
+                card.classList.add('under-moq');
+            }
         }
 
         // Apply layout variants
@@ -1013,6 +1061,9 @@
                 if (current > 0) {
                     input.value = current - 1;
                     updateRowState(row, current - 1);
+                    // Update MOQ state for the product card
+                    const card = row.closest('.kg-product-card');
+                    if (card) updateProductMOQState(card);
                 }
             });
 
@@ -1020,6 +1071,9 @@
                 const current = parseInt(input.value) || 0;
                 input.value = current + 1;
                 updateRowState(row, current + 1);
+                // Update MOQ state for the product card
+                const card = row.closest('.kg-product-card');
+                if (card) updateProductMOQState(card);
             });
 
             input.addEventListener('change', () => {
@@ -1027,12 +1081,18 @@
                 if (val < 0) val = 0;
                 input.value = val;
                 updateRowState(row, val);
+                // Update MOQ state for the product card
+                const card = row.closest('.kg-product-card');
+                if (card) updateProductMOQState(card);
             });
 
             input.addEventListener('input', () => {
                 let val = parseInt(input.value) || 0;
                 if (val < 0) val = 0;
                 updateRowState(row, val);
+                // Update MOQ state for the product card
+                const card = row.closest('.kg-product-card');
+                if (card) updateProductMOQState(card);
             });
 
             controls.appendChild(minusBtn);
@@ -1052,6 +1112,35 @@
         } else {
             row.classList.remove('has-quantity');
         }
+    }
+
+    /**
+     * Update MOQ state for a product card
+     * Checks if total quantity meets minimum order quantity
+     */
+    function updateProductMOQState(card) {
+        const moq = parseInt(card.dataset.moq);
+        if (!moq) return;
+        
+        // Sum all quantities for this product
+        let total = 0;
+        card.querySelectorAll('.qty-input').forEach(input => {
+            total += parseInt(input.value) || 0;
+        });
+        
+        // Toggle under-moq class based on whether minimum is met
+        if (total < moq) {
+            card.classList.add('under-moq');
+        } else {
+            card.classList.remove('under-moq');
+        }
+    }
+
+    /**
+     * Check if any products in the form are under their MOQ
+     */
+    function hasProductsUnderMOQ(form) {
+        return form.querySelectorAll('.kg-product-card.under-moq').length > 0;
     }
 
     // Initialize when DOM is ready
