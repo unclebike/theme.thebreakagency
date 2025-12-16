@@ -878,11 +878,9 @@
     display: none;
 }
 
-/* Make fading-content transparent to grid - children flow directly in parent grid */
+/* Make fading-content transparent to grid - real product cards flow directly in parent grid */
 .order-form--preview .fading-content {
     display: contents;
-    -webkit-mask-image: none;
-    mask-image: none;
 }
 
 /* Preview mode - locked/skeleton appearance for product cards */
