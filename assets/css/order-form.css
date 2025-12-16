@@ -889,8 +889,21 @@
 }
 
 /* Ensure product cards from fading-content participate in grid properly */
+/* Default to single column, horizontal cards override this below */
 .order-form--preview .fading-content > .kg-product-card {
     grid-column: span 1;
+}
+
+/* Horizontal cards from fading-content span 2 columns */
+.order-form--preview .fading-content > .kg-product-card.order-form-product-horizontal {
+    grid-column: span 2;
+}
+
+/* Mobile: horizontal cards go single column */
+@media screen and (max-width: 768px) {
+    .order-form--preview .fading-content > .kg-product-card.order-form-product-horizontal {
+        grid-column: span 1;
+    }
 }
 
 /* Preview mode - locked/skeleton appearance for product cards */
@@ -945,9 +958,9 @@
     opacity: 0.4;
 }
 
-/* Custom signup CTA card - spans 2 columns, flows in grid with product cards */
+/* Custom signup CTA card - full width */
 .order-form--preview .order-form-preview-cta {
-    grid-column: span 2;
+    grid-column: 1 / -1;
     margin-bottom: 0;
     background: var(--background-color);
     border: 2px solid #f97316;
@@ -955,13 +968,6 @@
     padding: clamp(24px, calc(1.67vw * var(--scale)), 48px);
     min-width: 0;
     overflow: hidden;
-}
-
-/* Single column on mobile to match grid */
-@media screen and (max-width: 768px) {
-    .order-form--preview .order-form-preview-cta {
-        grid-column: span 1;
-    }
 }
 
 .order-form-preview-cta .order-form-section-title {
