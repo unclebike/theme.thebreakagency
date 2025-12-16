@@ -1007,7 +1007,7 @@
         moqChip.className = 'info-chip moq-chip';
         
         if (moq !== null) {
-            // Has MOQ - show ratio (starts at 0/moq)
+            // Has MOQ - show just the number when 0, ratio when > 0
             const moqCaption = document.createElement('span');
             moqCaption.className = 'info-chip-caption';
             moqCaption.textContent = 'MOQ';
@@ -1015,7 +1015,7 @@
             const moqValue = document.createElement('span');
             moqValue.className = 'info-chip-value moq-ratio';
             moqValue.dataset.moq = moq;
-            moqValue.textContent = `0/${moq}`;
+            moqValue.textContent = moq; // Start with just the number
             
             moqChip.appendChild(moqCaption);
             moqChip.appendChild(moqValue);
@@ -1221,9 +1221,10 @@
         });
         
         // Update MOQ chip ratio display
+        // Show just the number when 0, ratio format when > 0
         const moqRatio = card.querySelector('.moq-ratio');
         if (moqRatio) {
-            moqRatio.textContent = `${total}/${moq}`;
+            moqRatio.textContent = total === 0 ? moq : `${total}/${moq}`;
         }
         
         // Update MOQ chip met/unmet state
