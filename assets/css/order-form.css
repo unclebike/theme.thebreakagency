@@ -481,17 +481,28 @@
 .order-form .order-form-product-small .size-qty-grid {
     margin-top: clamp(6px, calc(0.42vw * var(--scale)), 12px);
     padding-top: clamp(6px, calc(0.42vw * var(--scale)), 12px);
-    /* Use grid layout so chips can span full width */
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-items: center;
+    /* Flex row layout - chips and size row sit side by side */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: clamp(6px, calc(0.42vw * var(--scale)), 12px);
 }
 
-/* Center the single size row in small cards */
-.order-form .order-form-product-small .size-qty-row {
-    grid-column: 1 / -1;
-    width: auto;
-    justify-self: center;
+/* Small card chips row - inline with size, not spanning */
+.order-form .order-form-product-small .price-moq-chips {
+    display: flex;
+    gap: clamp(6px, calc(0.42vw * var(--scale)), 12px);
+    margin-bottom: 0;
+}
+
+/* Small card chips match size row height */
+.order-form .order-form-product-small .info-chip {
+    flex: 0 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 /* Horizontal product card layout - spans 2 columns */
