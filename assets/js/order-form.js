@@ -30,6 +30,14 @@
 
     function initOrderForm() {
         const form = document.querySelector('.order-form');
+        const noAccessContainer = document.querySelector('.order-form-no-access');
+        
+        // Handle no-access state (public preview)
+        if (noAccessContainer) {
+            setupSignupButtons(noAccessContainer);
+            return;
+        }
+        
         if (!form) return;
 
         // Get member info from data attributes (set by Handlebars template)
@@ -349,31 +357,38 @@
      * Setup signup buttons for non-logged-in users
      * Adds bottom signup/login buttons and wires up Ghost member signup/signin
      */
-    function setupSignupButtons(form) {
+    function setupSignupButtons(container) {
         // Hide the submit button card (from Ghost editor) for non-logged-in users
-        const submitCard = form.querySelector('.kg-button-card');
+        const submitCard = container.querySelector('.kg-button-card');
         if (submitCard) {
             submitCard.style.display = 'none';
         }
         
         // Get existing buttons in customer info section
-        const topSignupBtn = form.querySelector('.order-form-signup-btn');
-        const topLoginBtn = form.querySelector('.order-form-login-btn');
+        const topSignupBtn = container.querySelector('.order-form-signup-btn');
+        const topLoginBtn = container.querySelector('.order-form-login-btn');
         
-        // Create bottom button card (after product catalog)
-        const bottomBtnCard = document.createElement('div');
-        bottomBtnCard.className = 'order-form-signup-card';
-        bottomBtnCard.innerHTML = `
-            <button type="button" class="order-form-signup-btn">Sign Up to Order</button>
-            <button type="button" class="order-form-login-btn" style="display: none;">Login as Purchaser</button>
-        `;
-        form.appendChild(bottomBtnCard);
+        // Only create bottom buttons for the full form (not for no-access preview)
+        let bottomSignupBtn = null;
+        let bottomLoginBtn = null;
         
-        const bottomSignupBtn = bottomBtnCard.querySelector('.order-form-signup-btn');
-        const bottomLoginBtn = bottomBtnCard.querySelector('.order-form-login-btn');
+        const isFullForm = container.classList.contains('order-form');
+        if (isFullForm) {
+            // Create bottom button card (after product catalog)
+            const bottomBtnCard = document.createElement('div');
+            bottomBtnCard.className = 'order-form-signup-card';
+            bottomBtnCard.innerHTML = `
+                <button type="button" class="order-form-signup-btn">Sign Up to Order</button>
+                <button type="button" class="order-form-login-btn" style="display: none;">Login as Purchaser</button>
+            `;
+            container.appendChild(bottomBtnCard);
+            
+            bottomSignupBtn = bottomBtnCard.querySelector('.order-form-signup-btn');
+            bottomLoginBtn = bottomBtnCard.querySelector('.order-form-login-btn');
+        }
         
-        const nameInput = form.querySelector('[name="name"]');
-        const emailInput = form.querySelector('[name="email"]');
+        const nameInput = container.querySelector('[name="name"]');
+        const emailInput = container.querySelector('[name="email"]');
         
         // Show/hide login button based on name field content
         function updateButtonVisibility() {

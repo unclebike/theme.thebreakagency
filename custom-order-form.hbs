@@ -25,8 +25,9 @@
             <div class="post-content wide-container{{#if @custom.use_page_load_animations}} hidden-post-content{{/if}}">
                 <div class="post-content-inner-wrapper">
                     <div class="post-content-inner">
-                        {{!-- Show contact/signup form for users with access --}}
+                        {{!-- Show contact/signup form --}}
                         {{#if access}}
+                        {{!-- Full access: show complete order form --}}
                         <form 
                             class="order-form"
                             action="https://thebreaksales.ca/api/order"
@@ -98,9 +99,32 @@
                             {{content}}
                         </form>
                         {{else}}
-                        {{!-- No access: show public preview content + CTA --}}
-                        <div class="order-form-preview">
-                            {{content}}
+                        {{!-- No access: show signup/login form first, then preview content --}}
+                        <div class="order-form-no-access">
+                            <div class="order-form-customer-info">
+                                <h3 class="order-form-section-title">Sign Up to View Catalog</h3>
+                                <p class="order-form-signup-message">Create a free account or sign in to access the full catalog and place orders.</p>
+                                <div class="order-form-fields">
+                                    <div class="order-form-field order-form-field-half">
+                                        <label for="order-name">Name <span class="required">*</span></label>
+                                        <input type="text" id="order-name" name="name" required placeholder="Your full name">
+                                    </div>
+                                    <div class="order-form-field order-form-field-half">
+                                        <label for="order-email">Email <span class="required">*</span></label>
+                                        <input type="email" id="order-email" name="email" required placeholder="your@email.com">
+                                    </div>
+                                    <div class="order-form-field order-form-field-full order-form-btn-row">
+                                        <button type="button" class="order-form-signup-btn">Sign Up</button>
+                                        <button type="button" class="order-form-login-btn" style="display: none;">Login as Purchaser</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {{!-- Preview products (content above the paywall) --}}
+                            <h3 class="order-form-section-title order-form-products-title">Preview Products</h3>
+                            <div class="order-form-preview">
+                                {{content}}
+                            </div>
                         </div>
                         {{/if}}
                     </div>
@@ -113,9 +137,7 @@
             applyImageCalloutGridPattern();
         </script>
         <script src="{{asset "js/post-content.js"}}"></script>
-        {{#if access}}
         <script src="{{asset "js/order-form.js"}}"></script>
-        {{/if}}
     </main>
 {{/post}}
 
