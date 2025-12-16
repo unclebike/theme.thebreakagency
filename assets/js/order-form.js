@@ -61,10 +61,11 @@
             // Only process Ghost-hosted images that haven't been resized
             if (!fullSrc.includes('/content/images/') || fullSrc.includes('/size/')) return;
             
-            // Create small version URL (300px wide)
+            // Create small version URL (300px wide, webp format)
+            // Note: Ghost requires /format/ param for dynamic resizing to work
             const smallSrc = fullSrc.replace(
                 '/content/images/',
-                '/content/images/size/w300/'
+                '/content/images/size/w300/format/webp/'
             );
             
             // Store full URL for on-demand loading
