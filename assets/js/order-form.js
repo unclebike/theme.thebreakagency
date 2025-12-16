@@ -390,19 +390,24 @@
         const nameInput = container.querySelector('[name="name"]');
         const emailInput = container.querySelector('[name="email"]');
         
-        // Show/hide login button based on name field content
+        // Show/hide buttons based on name field content
+        // Login shows by default (for existing users with just email)
+        // Sign Up shows when name is entered (for new users)
         function updateButtonVisibility() {
             const hasName = nameInput?.value.trim().length > 0;
-            const hasEmail = emailInput?.value.trim().length > 0;
             
-            // Show login button only when email has content but name is empty
-            const showLogin = hasEmail && !hasName;
-            
+            // Show signup button when name has content, login button when name is empty
             if (topLoginBtn) {
-                topLoginBtn.style.display = showLogin ? '' : 'none';
+                topLoginBtn.style.display = hasName ? 'none' : '';
+            }
+            if (topSignupBtn) {
+                topSignupBtn.style.display = hasName ? '' : 'none';
             }
             if (bottomLoginBtn) {
-                bottomLoginBtn.style.display = showLogin ? '' : 'none';
+                bottomLoginBtn.style.display = hasName ? 'none' : '';
+            }
+            if (bottomSignupBtn) {
+                bottomSignupBtn.style.display = hasName ? '' : 'none';
             }
         }
         
