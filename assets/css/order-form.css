@@ -524,11 +524,22 @@
     display: none;
 }
 
-/* Submit Button - matches product card button positioning */
+/* Submit Button Card - contains Save Draft + Send Order buttons */
 .order-form .order-form-submit-card {
     margin-top: clamp(32px, calc(2.22vw * var(--scale)), 64px);
 }
 
+/* Button container - stack buttons vertically with gap, centered */
+.order-form .order-form-submit-card .kg-btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, calc(0.83vw * var(--scale)), 24px);
+    align-items: center;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Send Order button (from Ghost editor) */
 .order-form .order-form-submit-card .kg-btn {
     width: 100%;
     justify-content: center;
@@ -541,23 +552,16 @@
     color: var(--background-color);
     text-decoration: none;
     transition: all 0.2s ease;
+    box-sizing: border-box;
 }
 
-.order-form .order-form-submit-card .kg-btn:hover {
+.order-form .order-form-submit-card .kg-btn:hover:not(:disabled):not(.success):not(.error) {
     opacity: 0.85;
 }
 
 /* =====================
    Save Draft Button & Status
    ===================== */
-
-/* Button container layout */
-.order-form .order-form-submit-card .kg-btn-container {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(12px, calc(0.83vw * var(--scale)), 24px);
-    align-items: stretch;
-}
 
 /* Save Draft button - matches submit button style */
 .order-form .order-form-save-btn {
@@ -575,6 +579,7 @@
     transition: all 0.2s ease;
     cursor: pointer;
     font-family: var(--font2);
+    box-sizing: border-box;
 }
 
 .order-form .order-form-save-btn:hover:not(:disabled):not(.success):not(.restored) {
@@ -680,11 +685,13 @@
 .order-form .order-form-signup-card {
     grid-column: 1 / -1;
     margin-top: clamp(32px, calc(2.22vw * var(--scale)), 64px);
+    display: flex;
+    justify-content: center;
 }
 
 .order-form .order-form-signup-card .order-form-signup-btn {
+    width: 100%;
     max-width: 400px;
-    margin: 0 auto;
 }
 
 /* Visual indicator when draft was loaded */
