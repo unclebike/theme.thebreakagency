@@ -883,6 +883,11 @@
     display: contents;
 }
 
+/* Disable the fading gradient overlay - display:contents breaks pseudo-element positioning */
+.order-form--preview .fading-content::after {
+    display: none;
+}
+
 /* Hide empty paragraphs that Ghost inserts (they break grid layout with display:contents) */
 .order-form--preview .fading-content > p:empty {
     display: none;
