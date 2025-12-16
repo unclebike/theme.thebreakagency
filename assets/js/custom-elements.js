@@ -806,12 +806,18 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             allPostsMobileTrigger(){
+                // Wait for GSAP to be available
+                if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+                    setTimeout(() => this.allPostsMobileTrigger(), 100);
+                    return;
+                }
+
                 let container = this.container;
                 let selector = '.all-posts-item';
               
                 gsap.registerPlugin(ScrollTrigger);
               
-                killScrollTrigger(selector);
+                if (typeof killScrollTrigger === 'function') killScrollTrigger(selector);
               
                 document.querySelectorAll(selector).forEach(heading => {
                   let img = heading.querySelector('.all-posts-background-image');
@@ -1021,6 +1027,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 animateSlideContent(initial = true) {
+                    // Skip if GSAP not available
+                    if (typeof gsap === 'undefined') return;
+
                     let slide = this.querySelector('.slide.is-selected');
 
                     gsap.to(slide.querySelectorAll('.slide-ease-in-animation'), {
@@ -1149,8 +1158,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         })
                         .finally(() => {
                             this.init();
-                            setCreativePostImages();
-                            resetScrollTriggers();
+                            if (typeof setCreativePostImages === 'function') setCreativePostImages();
+                            if (typeof resetScrollTriggers === 'function') resetScrollTriggers();
                             let settings = document.querySelector('settings-sidebar')
                             if(settings){
                                 settings.showHideSettingButtons();
@@ -1181,7 +1190,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     if (!container || !circleAnimation) return;
 
-                    killScrollTrigger('.slider-with-circles');
+                    if (typeof killScrollTrigger === 'function') killScrollTrigger('.slider-with-circles');
 
                     if (window.matchMedia('(max-width: 1080px)').matches) {
                         container.style.marginBottom = '';
@@ -1315,6 +1324,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }  
 
             footerSlider(){
+                // Wait for GSAP to be available
+                if (typeof gsap === 'undefined') {
+                    setTimeout(() => this.footerSlider(), 100);
+                    return;
+                }
+
                 const slides = this.container.querySelectorAll('.footer-slide');
 
                 const sliderTimeline = gsap.timeline({ repeat: -1 });
