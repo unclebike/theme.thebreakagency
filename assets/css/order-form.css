@@ -723,13 +723,12 @@
 .order-form-btn-row {
     display: flex;
     gap: clamp(12px, calc(0.83vw * var(--scale)), 24px);
-    flex-wrap: wrap;
 }
 
 .order-form-btn-row .order-form-signup-btn,
 .order-form-btn-row .order-form-login-btn {
-    flex: 1;
-    min-width: 150px;
+    width: auto;
+    flex: 1 1 auto;
 }
 
 /* Bottom button card (in catalog area for non-logged-in) */
@@ -739,14 +738,31 @@
     display: flex;
     justify-content: center;
     gap: clamp(12px, calc(0.83vw * var(--scale)), 24px);
-    flex-wrap: wrap;
 }
 
 .order-form .order-form-signup-card .order-form-signup-btn,
 .order-form .order-form-signup-card .order-form-login-btn {
     width: auto;
-    flex: 1;
+    flex: 1 1 auto;
     max-width: 250px;
+}
+
+/* Stack buttons on mobile */
+@media (max-width: 480px) {
+    .order-form-btn-row {
+        flex-direction: column;
+    }
+    
+    .order-form .order-form-signup-card {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .order-form .order-form-signup-card .order-form-signup-btn,
+    .order-form .order-form-signup-card .order-form-login-btn {
+        max-width: 100%;
+        width: 100%;
+    }
 }
 
 /* Visual indicator when draft was loaded */
