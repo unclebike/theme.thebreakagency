@@ -69,11 +69,10 @@
                             </div>
                             <h3 class="order-form-section-title order-form-products-title">Select Products</h3>
                             {{content}}
-                            {{!-- Swap to small images ASAP before browser loads full-size --}}
+                            {{!-- Swap to small images ASAP - lazy loading defers actual download --}}
                             <script>
                                 (function() {
-                                    // Target all images in the order form that are from Ghost's content folder
-                                    document.querySelectorAll('.order-form img').forEach(function(img) {
+                                    document.querySelectorAll('.order-form .kg-product-card-image').forEach(function(img) {
                                         var src = img.getAttribute('src');
                                         if (src && src.indexOf('/content/images/') !== -1 && src.indexOf('/size/') === -1) {
                                             img.setAttribute('data-full-src', src);
