@@ -161,7 +161,7 @@
         const successText = 'Success!';
         const sendingText = 'Sending...';
         const errorText = 'Error';
-        const moqWarningText = 'Confirm products meet minimum order quantity';
+        const moqWarningText = 'Confirm MOQ before submission';
         const moqConfirmText = 'Send Draft Anyway';
 
         // MOQ submit state: 0 = default, 1 = warning, 2 = confirm
