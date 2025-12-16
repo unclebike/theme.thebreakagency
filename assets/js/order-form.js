@@ -30,6 +30,9 @@
         const productCards = Array.from(form.querySelectorAll('.kg-product-card'));
         if (!productCards.length) return;
 
+        // Setup progressive image loading first
+        setupProgressiveImages(form);
+
         // Determine which cards should be horizontal or small square
         const cardFlags = detectCardFlags(productCards);
 
@@ -38,11 +41,51 @@
         });
 
         // Initialize Lightense for product images if available
+        // Use full-res images stored in data-full-src for lightbox
         if (typeof Lightense !== 'undefined') {
+            // Lightense will use data-src if available, otherwise src
             Lightense('.order-form .kg-product-card-image', {
                 background: 'var(--background-color)'
             });
         }
+    }
+
+    /**
+     * Progressive image loading - loads small thumbnails first, then full images
+     * Ghost CDN supports /size/w{width}/ in URLs for resizing
+     */
+    function setupProgressiveImages(form) {
+        const images = form.querySelectorAll('.kg-product-card-image');
+        
+        images.forEach(img => {
+            const fullSrc = img.src;
+            
+            // Only process Ghost-hosted images
+            if (!fullSrc.includes('/content/images/')) return;
+            
+            // Create small version URL (300px wide)
+            const smallSrc = fullSrc.replace(
+                '/content/images/',
+                '/content/images/size/w300/'
+            );
+            
+            // Store full URL for Lightense
+            img.setAttribute('data-src', fullSrc);
+            
+            // Start with small image and blur
+            img.src = smallSrc;
+            img.classList.add('img-loading');
+            
+            // Preload full image in background
+            const fullImg = new Image();
+            fullImg.onload = () => {
+                // Swap to full image and remove blur
+                img.src = fullSrc;
+                img.classList.remove('img-loading');
+                img.classList.add('img-loaded');
+            };
+            fullImg.src = fullSrc;
+        });
     }
 
     function setupSubmitButton(form) {

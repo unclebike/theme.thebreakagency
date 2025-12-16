@@ -285,6 +285,16 @@
 /* Product images are clickable for lightbox */
 .order-form .kg-product-card-image {
     cursor: pointer;
+    transition: filter 0.3s ease-out;
+}
+
+/* Progressive image loading - blur while loading */
+.order-form .kg-product-card-image.img-loading {
+    filter: blur(8px);
+}
+
+.order-form .kg-product-card-image.img-loaded {
+    filter: blur(0);
 }
 
 /* Regular (non-horizontal) card styling */
