@@ -1008,27 +1008,11 @@
     }
 }
 
-/* Skeleton image placeholder - sized to match real product card images */
+/* Skeleton image placeholder - use 100% width, let aspect-ratio control height */
 .skeleton-card .skeleton-image {
-    width: clamp(250px, calc(20vw * var(--scale)), 350px);
-    height: clamp(250px, calc(20vw * var(--scale)), 350px);
+    width: 100%;
     aspect-ratio: 1;
     border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
-}
-
-/* Horizontal skeleton card image matches horizontal product card sizing */
-.skeleton-card.order-form-product-horizontal .skeleton-image {
-    width: clamp(200px, calc(17.36vw * var(--scale)), 400px);
-    height: clamp(200px, calc(17.36vw * var(--scale)), 400px);
-    min-width: clamp(200px, calc(17.36vw * var(--scale)), 400px);
-}
-
-/* Small skeleton card image */
-.skeleton-card.order-form-product-small .skeleton-image {
-    width: clamp(150px, calc(13.89vw * var(--scale)), 200px);
-    height: clamp(150px, calc(13.89vw * var(--scale)), 200px);
-    max-width: clamp(150px, calc(13.89vw * var(--scale)), 200px);
-    margin: 0 auto;
 }
 
 /* Skeleton text placeholders */
