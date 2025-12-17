@@ -5,7 +5,19 @@
    ===================== */
 .order-form-hero {
     /* Fluid padding: ~25vw mobile → ~20vw desktop */
-    padding-top: clamp(120px, 22vw, 280px);
+    padding-top: clamp(140px, 22vw, 280px);
+}
+
+@media screen and (max-width: 1080px) {
+    .order-form-hero {
+        padding-top: clamp(140px, 22vw, 280px);
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .order-form-hero {
+        padding-top: clamp(140px, 25vw, 280px);
+    }
 }
 
 /* =====================
