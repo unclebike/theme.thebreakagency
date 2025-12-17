@@ -1,6 +1,14 @@
 /* Order Form Styles */
 
 /* =====================
+   Hero - Fluid Padding
+   ===================== */
+.order-form-hero {
+    /* Fluid padding: ~25vw mobile → ~20vw desktop */
+    padding-top: clamp(120px, 22vw, 280px);
+}
+
+/* =====================
    Hero Title - Fluid Fit
    ===================== */
 .order-form-hero h1 {
