@@ -237,11 +237,11 @@
 
 .moq-chip--small .moq-strikethrough {
     font-family: var(--font1);
-    font-size: clamp(14px, calc(0.97vw * var(--scale)), 24px);
-    font-weight: 600;
+    font-size: clamp(16px, calc(1.11vw * var(--scale)), 28px);
+    font-weight: 700;
     text-decoration: line-through;
+    text-decoration-thickness: 2px;
     color: var(--ghost-accent-color);
-    opacity: 0.8;
 }
 
 /* Small card price/moq chips - keep full width, compact sizing */
