@@ -181,33 +181,12 @@
         if (data.labels && data.labels.length > 0) {
             const list = container.querySelector('.account-catalogs-list');
             
-            // Fetch page titles for each label (label.name = page slug)
-            const labelPromises = data.labels.map(async label => {
-                const pageSlug = label.name;
-                try {
-                    // Fetch page by slug from Ghost Content API
-                    const pageResponse = await fetch(`/ghost/api/content/pages/slug/${pageSlug}/?key={{@site.content_api_key}}`);
-                    const pageData = await pageResponse.json();
-                    return {
-                        slug: pageSlug,
-                        title: pageData.pages?.[0]?.title || pageSlug
-                    };
-                } catch {
-                    // Fallback to formatted slug if page fetch fails
-                    return {
-                        slug: pageSlug,
-                        title: pageSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
-                    };
-                }
-            });
-            
-            const catalogs = await Promise.all(labelPromises);
-            
-            catalogs.forEach(catalog => {
+            data.labels.forEach(label => {
                 const link = document.createElement('a');
-                link.href = `/${catalog.slug}/`;
+                link.href = `/${label.name}/`;
                 link.className = 'account-catalog-link';
-                link.innerHTML = `${catalog.title} <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+                // Use pageTitle from worker (falls back to label.name if page not found)
+                link.innerHTML = `${label.pageTitle || label.name} <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
                 list.appendChild(link);
             });
             
