@@ -51,7 +51,6 @@ html[data-primary-font="Thunder"] .secondary-paragraph-wrapper {
 
 @media screen and (max-width: 1080px) {
     .secondary-hero {
-        padding-top: 148px;
     }
 
     .secondary-hero-content {
@@ -86,7 +85,6 @@ html[data-primary-font="Thunder"] .secondary-paragraph-wrapper {
 
 @media screen and (max-width: 767px) { 
     .secondary-hero {
-        padding-top: 128px;
     }
 
     html[data-primary-font="Thunder"] .secondary-hero-content  {
