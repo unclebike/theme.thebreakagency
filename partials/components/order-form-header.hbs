@@ -1,0 +1,45 @@
+<link rel="stylesheet" type="text/css" href="{{asset "css/secondary-hero.css"}}" />
+
+<section class="secondary-hero order-form-hero">
+    <div class="secondary-hero-inner wide-container">
+        <div class="secondary-hero-content">
+            <div class="secondary-heading-wrapper">
+                <h1 class="dark{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                    {{title}}
+                </h1>
+                <span class="catalog-subtitle dark{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">Catalog</span>
+            </div>
+
+            {{#if custom_excerpt}}
+            <div class="excerpt-and-authors{{#if @custom.use_page_load_animations}} ease-in-animation{{/if}}">
+                <div class="secondary-paragraph-wrapper">
+                    <p class="paragraph">
+                        {{custom_excerpt}}
+                    </p>
+                </div>
+            </div>
+            {{/if}}
+
+            {{#if feature_image}}
+                <div class="post-main-image-wrapper{{#if @custom.use_page_load_animations}} ease-in-animation-no-stagger{{/if}}">
+                    <figure>
+                        <img             
+                            srcset="{{img_url feature_image size="s" format="webp"}} 320w,
+                                    {{img_url feature_image size="xm" format="webp"}} 440w,
+                                    {{img_url feature_image size="m" format="webp"}} 720w,
+                                    {{img_url feature_image size="l" format="webp"}} 960w,
+                                    {{img_url feature_image size="xl" format="webp"}} 1200w,
+                                    {{img_url feature_image size="xxl" format="webp"}} 2000w,
+                                    {{img_url feature_image size="2k" format="webp"}} 2560w,
+                                    {{img_url feature_image size="4k" format="webp"}} 3840w"
+                            src="{{img_url feature_image size="xxl"}}"
+                            alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
+                        >              
+                    </figure>
+                </div>
+            {{else}}
+                <div class="hero-border{{#if @custom.use_page_load_animations}} opacity-animation{{/if}}"></div>
+            {{/if}}
+        </div>         
+    </div>
+</section>

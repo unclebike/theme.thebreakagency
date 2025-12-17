@@ -1,6 +1,27 @@
 /* Order Form Styles */
 
 /* =====================
+   Hero Title - Fluid Fit
+   ===================== */
+.order-form-hero h1 {
+    white-space: nowrap;
+    /* Fluid font size: scales with viewport to prevent wrapping
+       Min: 1.5rem, Preferred: 5vw, Max: uses theme display heading size */
+    font-size: clamp(1.5rem, 5vw, var(--display-heading, 4.5rem));
+}
+
+.catalog-subtitle {
+    display: block;
+    font-family: var(--font1);
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.6;
+    margin-top: 0.25em;
+}
+
+/* =====================
    Customer Info Section
    ===================== */
 .order-form-customer-info {
