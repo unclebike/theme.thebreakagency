@@ -264,19 +264,40 @@
             }
             
             try {
-                // Collect form data and convert to URL-encoded string
+                // Collect form data into an object
                 const formData = new FormData(form);
-                const urlEncodedData = new URLSearchParams(formData).toString();
+                const formDataObj = {};
                 
-                // Submit to Google Forms (no-cors mode with URL-encoded data)
-                await fetch(submitUrl, {
+                for (const [key, value] of formData.entries()) {
+                    // Handle multiple values (checkboxes)
+                    if (formDataObj[key]) {
+                        if (Array.isArray(formDataObj[key])) {
+                            formDataObj[key].push(value);
+                        } else {
+                            formDataObj[key] = [formDataObj[key], value];
+                        }
+                    } else {
+                        formDataObj[key] = value;
+                    }
+                }
+                
+                // Submit via our proxy to avoid CORS issues
+                const response = await fetch(`${API_BASE}/google-form/submit`, {
                     method: 'POST',
-                    mode: 'no-cors',
                     headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json',
                     },
-                    body: urlEncodedData,
+                    body: JSON.stringify({
+                        submitUrl: submitUrl,
+                        formData: formDataObj,
+                    }),
                 });
+                
+                const result = await response.json();
+                
+                if (!result.success) {
+                    throw new Error(result.error || 'Submission failed');
+                }
                 
                 // Handle step completion
                 completeStep(flow, stepIndex);
