@@ -108,6 +108,12 @@
                     currentFlow.pendingContent = [];
                 }
                 
+                // Hide all forms except the first one in the flow
+                // (first form will be shown via loading state)
+                if (currentFlow.forms.length > 0) {
+                    element.classList.add('google-form-flow-hidden');
+                }
+                
                 // Add the form
                 const formStep = {
                     type: 'form',
@@ -198,6 +204,8 @@
             return;
         }
         
+        // Unhide if this was a hidden pending form
+        element.classList.remove('google-form-flow-hidden');
         element.classList.remove('google-form-loading');
         element.classList.add('google-form-card');
         element.classList.add('google-form-card--active');
