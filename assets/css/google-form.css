@@ -24,7 +24,9 @@
     border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
     background: var(--background-color);
     max-width: 700px;
+    width: 100%;
     margin: 0 auto clamp(16px, calc(1.11vw * var(--scale)), 24px) auto;
+    box-sizing: border-box;
 }
 
 /* =====================
