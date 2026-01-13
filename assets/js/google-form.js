@@ -264,40 +264,13 @@
             }
             
             try {
-                // Collect form data into an object
+                // Collect form data
                 const formData = new FormData(form);
-                const formDataObj = {};
                 
-                for (const [key, value] of formData.entries()) {
-                    // Handle multiple values (checkboxes)
-                    if (formDataObj[key]) {
-                        if (Array.isArray(formDataObj[key])) {
-                            formDataObj[key].push(value);
-                        } else {
-                            formDataObj[key] = [formDataObj[key], value];
-                        }
-                    } else {
-                        formDataObj[key] = value;
-                    }
-                }
-                
-                // Submit via our proxy to avoid CORS issues
-                const response = await fetch(`${API_BASE}/google-form/submit`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        submitUrl: submitUrl,
-                        formData: formDataObj,
-                    }),
-                });
-                
-                const result = await response.json();
-                
-                if (!result.success) {
-                    throw new Error(result.error || 'Submission failed');
-                }
+                // Submit directly to Google Forms using no-cors mode
+                // This works because Google Forms accepts POST submissions from any origin
+                // We use a hidden iframe approach to handle the submission properly
+                await submitViaIframe(submitUrl, formData);
                 
                 // Handle step completion
                 completeStep(flow, stepIndex);
@@ -451,6 +424,72 @@
         
         // Remove the original hidden button cards
         flow.buttons.forEach(btn => btn.remove());
+    }
+
+    /**
+     * Submit form data via hidden iframe (bypasses CORS)
+     * This is the most reliable method for Google Forms submissions
+     */
+    function submitViaIframe(submitUrl, formData) {
+        return new Promise((resolve, reject) => {
+            // Create unique iframe name
+            const iframeName = 'google-form-iframe-' + Date.now();
+            
+            // Create hidden iframe
+            const iframe = document.createElement('iframe');
+            iframe.name = iframeName;
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            
+            // Create a temporary form
+            const tempForm = document.createElement('form');
+            tempForm.method = 'POST';
+            tempForm.action = submitUrl;
+            tempForm.target = iframeName;
+            tempForm.style.display = 'none';
+            
+            // Add form data as hidden inputs
+            for (const [key, value] of formData.entries()) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                tempForm.appendChild(input);
+            }
+            
+            document.body.appendChild(tempForm);
+            
+            // Handle iframe load (means submission completed)
+            let hasResolved = false;
+            iframe.onload = () => {
+                if (!hasResolved) {
+                    hasResolved = true;
+                    // Clean up
+                    setTimeout(() => {
+                        document.body.removeChild(iframe);
+                        document.body.removeChild(tempForm);
+                    }, 100);
+                    resolve();
+                }
+            };
+            
+            // Timeout fallback (in case onload doesn't fire)
+            setTimeout(() => {
+                if (!hasResolved) {
+                    hasResolved = true;
+                    // Clean up
+                    try {
+                        document.body.removeChild(iframe);
+                        document.body.removeChild(tempForm);
+                    } catch (e) {}
+                    // Assume success after timeout (Google Forms doesn't give us a response)
+                    resolve();
+                }
+            }, 5000);
+            
+            // Submit the form
+            tempForm.submit();
+        });
     }
 
     /**
