@@ -64,6 +64,11 @@
                 "name": "Order Form",
                 "for": ["page"],
                 "slug": "order-form"
+            },
+            {
+                "name": "Google Form",
+                "for": ["page"],
+                "slug": "google-form"
             }
         ],
         "card_assets": {

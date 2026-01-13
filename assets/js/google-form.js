@@ -1,17 +1,21 @@
 /**
- * Google Form Integration
+ * Google Form Integration with Multi-Step Flow Support
  * 
  * Detects Ghost URL cards containing Google Form links and transforms them
  * into styled, themed forms that submit directly to Google Forms.
  * 
- * Usage:
- * 1. In Ghost editor, add a URL card with a Google Form link
- * 2. The form will be automatically detected and rendered with theme styling
- * 3. Submissions go directly to Google Forms
+ * Features:
+ * - Single form: renders standalone (no progress indicator)
+ * - Multiple consecutive forms: creates a flow with progress indicator
+ * - Buttons after forms: shown after final form submission
+ * - Content between forms: revealed as user progresses
+ * - Separator breaks the chain into independent flows
  * 
- * Configuration (optional data attributes on a following HTML card):
- * - data-success-redirect="/thank-you" - Redirect after successful submission
- * - data-success-message="Custom message" - Custom success text
+ * Usage:
+ * 1. Create a page using the "Google Form" template
+ * 2. Add URL cards with Google Form links
+ * 3. Optionally add button cards after forms (shown on completion)
+ * 4. Use separator (horizontal rule) to break forms into independent groups
  */
 
 (function() {
@@ -22,6 +26,7 @@
     
     // Default messages
     const DEFAULT_SUCCESS_MESSAGE = 'Thanks! Your response has been recorded.';
+    const DEFAULT_COMPLETION_MESSAGE = 'Thank you for completing all forms!';
     const DEFAULT_SUBMIT_TEXT = 'Submit';
     const LOADING_TEXT = 'Submitting...';
 
@@ -29,76 +34,387 @@
      * Initialize Google Forms integration
      */
     function initGoogleForms() {
-        // Find all bookmark cards (URL cards render as .kg-bookmark-card)
-        const bookmarkCards = document.querySelectorAll('.kg-bookmark-card');
+        const container = document.querySelector('.google-form-container');
+        if (!container) return;
         
-        bookmarkCards.forEach(card => {
-            const link = card.querySelector('a.kg-bookmark-container');
-            if (!link) return;
+        // Detect and process form flows
+        const flows = detectFormFlows(container);
+        
+        // Initialize each flow
+        flows.forEach(flow => initializeFlow(flow));
+    }
+
+    /**
+     * Check if an element is a Google Form bookmark card
+     */
+    function isGoogleFormBookmark(element) {
+        if (!element.classList.contains('kg-bookmark-card')) return false;
+        const link = element.querySelector('a.kg-bookmark-container');
+        if (!link) return false;
+        const href = link.getAttribute('href');
+        return href && href.includes('docs.google.com/forms');
+    }
+
+    /**
+     * Extract Google Form URL from a bookmark card
+     */
+    function extractGoogleFormUrl(element) {
+        const link = element.querySelector('a.kg-bookmark-container');
+        return link ? link.getAttribute('href') : null;
+    }
+
+    /**
+     * Detect form flows in the container
+     * Groups consecutive Google Form bookmarks, collects trailing buttons,
+     * and tracks interstitial content. Separators break the chain.
+     */
+    function detectFormFlows(container) {
+        const elements = Array.from(container.children);
+        const flows = [];
+        let currentFlow = null;
+        
+        for (const element of elements) {
+            const isGoogleForm = isGoogleFormBookmark(element);
+            const isButton = element.classList.contains('kg-button-card');
+            const isSeparator = element.classList.contains('kg-divider-card');
             
-            const href = link.getAttribute('href');
-            if (!href || !isGoogleFormUrl(href)) return;
+            if (isSeparator) {
+                // Separator breaks the chain
+                if (currentFlow && currentFlow.forms.length > 0) {
+                    flows.push(currentFlow);
+                }
+                currentFlow = null;
+                // Separator stays visible, not part of any flow
+                continue;
+            }
             
-            // This is a Google Form - transform it
-            transformGoogleFormCard(card, href);
+            if (isGoogleForm) {
+                if (!currentFlow) {
+                    currentFlow = {
+                        id: 'flow-' + Math.random().toString(36).substr(2, 9),
+                        forms: [],
+                        buttons: [],
+                        pendingContent: [],
+                        allElements: [] // Track all elements in order for proper sequencing
+                    };
+                }
+                
+                // If we have pending content, add it before this form
+                if (currentFlow.pendingContent.length > 0) {
+                    currentFlow.allElements.push({
+                        type: 'content',
+                        elements: [...currentFlow.pendingContent]
+                    });
+                    currentFlow.pendingContent = [];
+                }
+                
+                // Add the form
+                const formStep = {
+                    type: 'form',
+                    element: element,
+                    formUrl: extractGoogleFormUrl(element),
+                    formData: null,
+                    state: 'pending'
+                };
+                currentFlow.forms.push(formStep);
+                currentFlow.allElements.push(formStep);
+            }
+            else if (isButton && currentFlow && currentFlow.forms.length > 0) {
+                // Button after form(s) - collect for end
+                currentFlow.buttons.push(element);
+                // Hide button initially
+                element.classList.add('google-form-flow-hidden');
+            }
+            else if (currentFlow && currentFlow.forms.length > 0) {
+                // Other content between forms - save for later reveal
+                currentFlow.pendingContent.push(element);
+                // Hide initially
+                element.classList.add('google-form-flow-hidden');
+            }
+            // If no current flow, element renders normally (independent)
+        }
+        
+        // Don't forget the last flow
+        if (currentFlow && currentFlow.forms.length > 0) {
+            // Add any remaining pending content
+            if (currentFlow.pendingContent.length > 0) {
+                currentFlow.allElements.push({
+                    type: 'content',
+                    elements: [...currentFlow.pendingContent]
+                });
+            }
+            flows.push(currentFlow);
+        }
+        
+        return flows;
+    }
+
+    /**
+     * Initialize a form flow
+     */
+    async function initializeFlow(flow) {
+        const totalForms = flow.forms.length;
+        const isMultiStep = totalForms > 1 || flow.buttons.length > 0;
+        
+        // Set first form as active
+        flow.forms[0].state = 'active';
+        flow.currentFormIndex = 0;
+        
+        // Show loading state on first form
+        showLoadingState(flow.forms[0].element);
+        
+        // Fetch all form structures in parallel
+        try {
+            const formDataPromises = flow.forms.map(step => 
+                fetchFormStructure(step.formUrl)
+            );
+            const formDataResults = await Promise.all(formDataPromises);
+            
+            // Store form data
+            formDataResults.forEach((data, index) => {
+                flow.forms[index].formData = data;
+            });
+            
+            // Render the first form
+            renderFormStep(flow, 0, isMultiStep, totalForms);
+            
+        } catch (error) {
+            console.error('Failed to load form flow:', error);
+            // Show fallback for first form
+            showFallback(flow.forms[0].element, flow.forms[0].formUrl);
+        }
+    }
+
+    /**
+     * Render a form step
+     */
+    function renderFormStep(flow, stepIndex, isMultiStep, totalForms) {
+        const step = flow.forms[stepIndex];
+        const element = step.element;
+        const formData = step.formData;
+        
+        if (!formData) {
+            showFallback(element, step.formUrl);
+            return;
+        }
+        
+        element.classList.remove('google-form-loading');
+        element.classList.add('google-form-card');
+        element.classList.add('google-form-card--active');
+        
+        // Build form HTML with optional progress indicator
+        const progressHtml = isMultiStep 
+            ? `<div class="google-form-progress">Step ${stepIndex + 1} of ${totalForms}</div>`
+            : '';
+        
+        const fieldsHtml = formData.fields.map(field => buildFieldHtml(field)).join('');
+        
+        element.innerHTML = `
+            ${progressHtml}
+            <form class="google-form" novalidate>
+                <div class="google-form-header">
+                    <h3 class="google-form-title">${escapeHtml(formData.title)}</h3>
+                    ${formData.description ? `<p class="google-form-description">${escapeHtml(formData.description)}</p>` : ''}
+                </div>
+                <div class="google-form-fields">
+                    ${fieldsHtml}
+                </div>
+                <div class="google-form-submit">
+                    <button type="submit" class="google-form-btn">
+                        <span class="btn-text">${escapeHtml(DEFAULT_SUBMIT_TEXT)}</span>
+                    </button>
+                </div>
+            </form>
+        `;
+        
+        // Setup form submission
+        const form = element.querySelector('form');
+        setupFormSubmission(form, formData.submitUrl, flow, stepIndex);
+    }
+
+    /**
+     * Setup form submission handler
+     */
+    function setupFormSubmission(form, submitUrl, flow, stepIndex) {
+        const submitBtn = form.querySelector('.google-form-btn');
+        const btnText = submitBtn?.querySelector('.btn-text');
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Validate form
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            // Show loading state
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('loading');
+                if (btnText) btnText.textContent = LOADING_TEXT;
+            }
+            
+            try {
+                // Collect form data
+                const formData = new FormData(form);
+                
+                // Submit to Google Forms (no-cors mode)
+                await fetch(submitUrl, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'no-cors',
+                });
+                
+                // Handle step completion
+                completeStep(flow, stepIndex);
+                
+            } catch (error) {
+                console.error('Form submission failed:', error);
+                
+                // Show error state
+                if (submitBtn) {
+                    submitBtn.classList.remove('loading');
+                    submitBtn.classList.add('error');
+                    if (btnText) btnText.textContent = 'Error - try again';
+                    
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('error');
+                        if (btnText) btnText.textContent = DEFAULT_SUBMIT_TEXT;
+                    }, 3000);
+                }
+            }
         });
     }
 
     /**
-     * Check if a URL is a Google Form
+     * Complete a step and progress to next
      */
-    function isGoogleFormUrl(url) {
-        return url && url.includes('docs.google.com/forms');
-    }
-
-    /**
-     * Transform a bookmark card into a Google Form
-     */
-    async function transformGoogleFormCard(card, formUrl) {
-        // Get configuration from next sibling if it's an HTML card with data attributes
-        const config = getFormConfig(card);
+    function completeStep(flow, stepIndex) {
+        const currentStep = flow.forms[stepIndex];
+        const totalForms = flow.forms.length;
+        const isMultiStep = totalForms > 1 || flow.buttons.length > 0;
+        const hasNextForm = stepIndex < totalForms - 1;
+        const formTitle = currentStep.formData?.title || 'Form';
         
-        // Show loading state
-        showLoadingState(card);
+        // Mark current step as completed
+        currentStep.state = 'completed';
         
-        try {
-            // Fetch form structure from worker
-            const formData = await fetchFormStructure(formUrl);
+        // Transform current form to completed card
+        renderCompletedCard(currentStep.element, stepIndex + 1, formTitle, isMultiStep);
+        
+        // Reveal any content that comes after this form (before next form)
+        revealContentAfterStep(flow, stepIndex);
+        
+        if (hasNextForm) {
+            // Activate next form
+            const nextStep = flow.forms[stepIndex + 1];
+            nextStep.state = 'active';
+            flow.currentFormIndex = stepIndex + 1;
             
-            // Render the form
-            renderForm(card, formData, config);
-            
-        } catch (error) {
-            console.error('Failed to load Google Form:', error);
-            // Fallback to iframe
-            showFallback(card, formUrl);
-        }
-    }
-
-    /**
-     * Get configuration from adjacent HTML card if present
-     */
-    function getFormConfig(card) {
-        const config = {
-            successRedirect: null,
-            successMessage: DEFAULT_SUCCESS_MESSAGE,
-            submitText: DEFAULT_SUBMIT_TEXT,
-        };
-        
-        // Check next sibling for config
-        const nextEl = card.nextElementSibling;
-        if (nextEl && nextEl.classList.contains('kg-html-card')) {
-            const configEl = nextEl.querySelector('[data-google-form-config]');
-            if (configEl) {
-                config.successRedirect = configEl.dataset.successRedirect || null;
-                config.successMessage = configEl.dataset.successMessage || DEFAULT_SUCCESS_MESSAGE;
-                config.submitText = configEl.dataset.submitText || DEFAULT_SUBMIT_TEXT;
-                // Hide the config card
-                nextEl.style.display = 'none';
+            // Render next form
+            renderFormStep(flow, stepIndex + 1, isMultiStep, totalForms);
+        } else {
+            // All forms completed - show buttons card if we have buttons
+            if (flow.buttons.length > 0) {
+                renderButtonsCard(flow);
             }
         }
+    }
+
+    /**
+     * Reveal content elements that come after a step
+     */
+    function revealContentAfterStep(flow, stepIndex) {
+        // Find the position of this form in allElements
+        let foundForm = false;
+        let formCount = 0;
         
-        return config;
+        for (const item of flow.allElements) {
+            if (item.type === 'form') {
+                if (formCount === stepIndex) {
+                    foundForm = true;
+                } else if (foundForm && item.type === 'form') {
+                    // Hit the next form, stop revealing
+                    break;
+                }
+                formCount++;
+            } else if (item.type === 'content' && foundForm) {
+                // Reveal this content
+                item.elements.forEach(el => {
+                    el.classList.remove('google-form-flow-hidden');
+                });
+                // Stop after revealing content before next form
+                break;
+            }
+        }
+    }
+
+    /**
+     * Render a completed step card (collapsed)
+     */
+    function renderCompletedCard(element, stepNumber, title, isMultiStep) {
+        element.classList.remove('google-form-card--active');
+        element.classList.add('google-form-card--completed');
+        
+        const stepLabel = isMultiStep ? `Step ${stepNumber} complete` : 'Complete';
+        
+        element.innerHTML = `
+            <div class="google-form-completed-content">
+                <div class="google-form-completed-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                </div>
+                <div class="google-form-completed-info">
+                    <span class="google-form-completed-step">${escapeHtml(stepLabel)}</span>
+                    <span class="google-form-completed-title">${escapeHtml(title)}</span>
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Render the final buttons card
+     */
+    function renderButtonsCard(flow) {
+        // Create buttons card container
+        const buttonsCard = document.createElement('div');
+        buttonsCard.className = 'google-form-card google-form-buttons-card';
+        
+        // Build buttons HTML from the collected button cards
+        const buttonsHtml = flow.buttons.map(btn => {
+            // Extract the button content from the Ghost button card
+            const link = btn.querySelector('a.kg-btn');
+            if (link) {
+                return `<a href="${escapeHtml(link.getAttribute('href'))}" class="google-form-action-btn" target="${link.getAttribute('target') || '_self'}">${escapeHtml(link.textContent)}</a>`;
+            }
+            return '';
+        }).join('');
+        
+        buttonsCard.innerHTML = `
+            <div class="google-form-completion-message">
+                <div class="google-form-completion-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                </div>
+                <p>${escapeHtml(DEFAULT_COMPLETION_MESSAGE)}</p>
+            </div>
+            <div class="google-form-button-group">
+                ${buttonsHtml}
+            </div>
+        `;
+        
+        // Insert after the last form
+        const lastForm = flow.forms[flow.forms.length - 1].element;
+        lastForm.parentNode.insertBefore(buttonsCard, lastForm.nextSibling);
+        
+        // Remove the original hidden button cards
+        flow.buttons.forEach(btn => btn.remove());
     }
 
     /**
@@ -118,9 +434,9 @@
     /**
      * Show loading state (skeleton shimmer)
      */
-    function showLoadingState(card) {
-        card.classList.add('google-form-loading');
-        card.innerHTML = `
+    function showLoadingState(element) {
+        element.classList.add('google-form-loading');
+        element.innerHTML = `
             <div class="google-form-skeleton">
                 <div class="skeleton skeleton-title"></div>
                 <div class="skeleton skeleton-text"></div>
@@ -133,50 +449,33 @@
     }
 
     /**
-     * Render the form with theme styling
+     * Show iframe fallback
      */
-    function renderForm(card, formData, config) {
-        card.classList.remove('google-form-loading');
-        card.classList.add('google-form-card');
+    function showFallback(element, formUrl) {
+        element.classList.remove('google-form-loading');
+        element.classList.add('google-form-fallback');
         
-        // Build form HTML
-        const formHtml = buildFormHtml(formData, config);
-        card.innerHTML = formHtml;
-        
-        // Setup form submission
-        const form = card.querySelector('form');
-        if (form) {
-            setupFormSubmission(form, formData.submitUrl, config);
+        let embedUrl = formUrl;
+        if (!embedUrl.includes('/viewform')) {
+            embedUrl = embedUrl.replace(/\/edit.*$/, '/viewform');
+            if (!embedUrl.includes('/viewform')) {
+                embedUrl = embedUrl + '/viewform';
+            }
         }
-    }
-
-    /**
-     * Build HTML for the form
-     */
-    function buildFormHtml(formData, config) {
-        const fieldsHtml = formData.fields.map(field => buildFieldHtml(field)).join('');
+        embedUrl = embedUrl.includes('?') 
+            ? embedUrl + '&embedded=true'
+            : embedUrl + '?embedded=true';
         
-        // Show skipped fields notice if any
-        const skippedNotice = formData.skippedFields && formData.skippedFields.length > 0
-            ? `<p class="google-form-notice">Note: Some fields are not supported and have been omitted.</p>`
-            : '';
-        
-        return `
-            <form class="google-form" novalidate>
-                <div class="google-form-header">
-                    <h3 class="google-form-title">${escapeHtml(formData.title)}</h3>
-                    ${formData.description ? `<p class="google-form-description">${escapeHtml(formData.description)}</p>` : ''}
-                </div>
-                <div class="google-form-fields">
-                    ${fieldsHtml}
-                </div>
-                ${skippedNotice}
-                <div class="google-form-submit">
-                    <button type="submit" class="google-form-btn">
-                        <span class="btn-text">${escapeHtml(config.submitText)}</span>
-                    </button>
-                </div>
-            </form>
+        element.innerHTML = `
+            <div class="google-form-fallback-wrapper">
+                <iframe src="${escapeHtml(embedUrl)}" 
+                        class="google-form-iframe"
+                        frameborder="0" 
+                        marginheight="0" 
+                        marginwidth="0">
+                    Loading...
+                </iframe>
+            </div>
         `;
     }
 
@@ -330,123 +629,6 @@
                 <option value="">Select...</option>
                 ${optionsHtml}
             </select>
-        `;
-    }
-
-    /**
-     * Setup form submission handler
-     */
-    function setupFormSubmission(form, submitUrl, config) {
-        const submitBtn = form.querySelector('.google-form-btn');
-        const btnText = submitBtn?.querySelector('.btn-text');
-        
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            // Validate form
-            if (!form.checkValidity()) {
-                form.reportValidity();
-                return;
-            }
-            
-            // Show loading state
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.classList.add('loading');
-                if (btnText) btnText.textContent = LOADING_TEXT;
-            }
-            
-            try {
-                // Collect form data
-                const formData = new FormData(form);
-                
-                // Submit to Google Forms
-                // Note: Google Forms doesn't support CORS, so we use no-cors mode
-                // This means we can't read the response, but the submission will work
-                await fetch(submitUrl, {
-                    method: 'POST',
-                    body: formData,
-                    mode: 'no-cors',
-                });
-                
-                // Show success
-                showSuccess(form.closest('.google-form-card'), config);
-                
-            } catch (error) {
-                console.error('Form submission failed:', error);
-                
-                // Show error state
-                if (submitBtn) {
-                    submitBtn.classList.remove('loading');
-                    submitBtn.classList.add('error');
-                    if (btnText) btnText.textContent = 'Error - try again';
-                    
-                    // Reset after 3 seconds
-                    setTimeout(() => {
-                        submitBtn.disabled = false;
-                        submitBtn.classList.remove('error');
-                        if (btnText) btnText.textContent = config.submitText;
-                    }, 3000);
-                }
-            }
-        });
-    }
-
-    /**
-     * Show success state
-     */
-    function showSuccess(container, config) {
-        // If redirect configured, navigate
-        if (config.successRedirect) {
-            window.location.href = config.successRedirect;
-            return;
-        }
-        
-        // Show success message inline
-        container.classList.add('google-form-success');
-        container.innerHTML = `
-            <div class="google-form-success-content">
-                <div class="google-form-success-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                        <polyline points="22 4 12 14.01 9 11.01"/>
-                    </svg>
-                </div>
-                <p class="google-form-success-message">${escapeHtml(config.successMessage)}</p>
-            </div>
-        `;
-    }
-
-    /**
-     * Show iframe fallback
-     */
-    function showFallback(container, formUrl) {
-        container.classList.remove('google-form-loading');
-        container.classList.add('google-form-fallback');
-        
-        // Ensure URL has /viewform
-        let embedUrl = formUrl;
-        if (!embedUrl.includes('/viewform')) {
-            embedUrl = embedUrl.replace(/\/edit.*$/, '/viewform');
-            if (!embedUrl.includes('/viewform')) {
-                embedUrl = embedUrl + '/viewform';
-            }
-        }
-        // Add embedded parameter
-        embedUrl = embedUrl.includes('?') 
-            ? embedUrl + '&embedded=true'
-            : embedUrl + '?embedded=true';
-        
-        container.innerHTML = `
-            <div class="google-form-fallback-wrapper">
-                <iframe src="${escapeHtml(embedUrl)}" 
-                        class="google-form-iframe"
-                        frameborder="0" 
-                        marginheight="0" 
-                        marginwidth="0">
-                    Loading...
-                </iframe>
-            </div>
         `;
     }
 

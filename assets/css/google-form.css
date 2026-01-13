@@ -2,11 +2,20 @@
  * Google Form Styles
  * 
  * Styles for Google Forms embedded via URL cards.
- * Follows design patterns from order-form.css for consistency.
+ * Includes multi-step flow support with progress indicators,
+ * completed step cards, and trailing buttons card.
  */
 
 /* =====================
-   Container / Card
+   Hidden Elements (Flow Control)
+   ===================== */
+
+.google-form-flow-hidden {
+    display: none !important;
+}
+
+/* =====================
+   Container / Card Base
    ===================== */
 
 .google-form-card {
@@ -15,7 +24,23 @@
     border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
     background: var(--background-color);
     max-width: 700px;
-    margin: 0 auto;
+    margin: 0 auto clamp(16px, calc(1.11vw * var(--scale)), 24px) auto;
+}
+
+/* =====================
+   Progress Indicator
+   ===================== */
+
+.google-form-progress {
+    font-family: var(--font2);
+    font-size: clamp(11px, calc(0.76vw * var(--scale)), 14px);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ghost-accent-color, #3b82f6);
+    margin-bottom: clamp(12px, calc(0.83vw * var(--scale)), 16px);
+    padding-bottom: clamp(12px, calc(0.83vw * var(--scale)), 16px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* =====================
@@ -28,7 +53,7 @@
     border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
     background: var(--background-color);
     max-width: 700px;
-    margin: 0 auto;
+    margin: 0 auto clamp(16px, calc(1.11vw * var(--scale)), 24px) auto;
 }
 
 .google-form-skeleton {
@@ -77,6 +102,129 @@
     100% {
         background-position: -200% 0;
     }
+}
+
+/* =====================
+   Active Form Card
+   ===================== */
+
+.google-form-card--active {
+    /* Active state styling - slightly emphasized */
+}
+
+/* =====================
+   Completed Step Card
+   ===================== */
+
+.google-form-card--completed {
+    padding: clamp(16px, calc(1.11vw * var(--scale)), 24px) clamp(20px, calc(1.39vw * var(--scale)), 32px);
+    background: rgba(22, 163, 74, 0.06);
+    border-color: rgba(22, 163, 74, 0.2);
+}
+
+.google-form-completed-content {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, calc(0.83vw * var(--scale)), 16px);
+}
+
+.google-form-completed-icon {
+    width: clamp(24px, calc(1.67vw * var(--scale)), 32px);
+    height: clamp(24px, calc(1.67vw * var(--scale)), 32px);
+    color: #16a34a;
+    flex-shrink: 0;
+}
+
+.google-form-completed-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.google-form-completed-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.google-form-completed-step {
+    font-family: var(--font2);
+    font-size: clamp(11px, calc(0.76vw * var(--scale)), 13px);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #16a34a;
+}
+
+.google-form-completed-title {
+    font-family: var(--font2);
+    font-size: clamp(14px, calc(0.97vw * var(--scale)), 18px);
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+/* =====================
+   Buttons Card (Final Step)
+   ===================== */
+
+.google-form-buttons-card {
+    text-align: center;
+}
+
+.google-form-completion-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(12px, calc(0.83vw * var(--scale)), 16px);
+    margin-bottom: clamp(20px, calc(1.39vw * var(--scale)), 28px);
+}
+
+.google-form-completion-icon {
+    width: clamp(40px, calc(2.78vw * var(--scale)), 56px);
+    height: clamp(40px, calc(2.78vw * var(--scale)), 56px);
+    color: #16a34a;
+}
+
+.google-form-completion-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.google-form-completion-message p {
+    font-family: var(--font2);
+    font-size: clamp(16px, calc(1.11vw * var(--scale)), 20px);
+    font-weight: 500;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.google-form-button-group {
+    display: flex;
+    gap: clamp(12px, calc(0.83vw * var(--scale)), 16px);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.google-form-action-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: clamp(12px, calc(0.83vw * var(--scale)), 16px) clamp(24px, calc(1.67vw * var(--scale)), 32px);
+    font-family: var(--font2);
+    font-size: clamp(14px, calc(0.97vw * var(--scale)), 17px);
+    font-weight: 600;
+    line-height: 1.2;
+    border: 2px solid var(--ghost-accent-color, #3b82f6);
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 10px);
+    background: transparent;
+    color: var(--ghost-accent-color, #3b82f6);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.google-form-action-btn:hover {
+    background: var(--ghost-accent-color, #3b82f6);
+    color: #fff;
 }
 
 /* =====================
@@ -363,42 +511,6 @@
 }
 
 /* =====================
-   Success State
-   ===================== */
-
-.google-form-success {
-    text-align: center;
-}
-
-.google-form-success-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: clamp(16px, calc(1.11vw * var(--scale)), 24px);
-    padding: clamp(32px, calc(2.22vw * var(--scale)), 48px) clamp(24px, calc(1.67vw * var(--scale)), 32px);
-}
-
-.google-form-success-icon {
-    width: clamp(48px, calc(3.33vw * var(--scale)), 64px);
-    height: clamp(48px, calc(3.33vw * var(--scale)), 64px);
-    color: #16a34a;
-}
-
-.google-form-success-icon svg {
-    width: 100%;
-    height: 100%;
-}
-
-.google-form-success-message {
-    font-family: var(--font2);
-    font-size: clamp(18px, calc(1.25vw * var(--scale)), 22px);
-    font-weight: 500;
-    color: var(--text-color);
-    margin: 0;
-    line-height: 1.4;
-}
-
-/* =====================
    Fallback (iframe)
    ===================== */
 
@@ -407,11 +519,13 @@
     border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
     overflow: hidden;
     background: var(--background-color);
+    max-width: 700px;
+    margin: 0 auto clamp(16px, calc(1.11vw * var(--scale)), 24px) auto;
 }
 
 .google-form-fallback-wrapper {
     position: relative;
-    padding-bottom: 150%; /* Tall aspect ratio for forms */
+    padding-bottom: 150%;
     height: 0;
     overflow: hidden;
 }
@@ -426,18 +540,8 @@
 }
 
 /* =====================
-   Notice / Error
+   Error States
    ===================== */
-
-.google-form-notice {
-    font-family: var(--font2);
-    font-size: clamp(12px, calc(0.83vw * var(--scale)), 14px);
-    color: #6b7280;
-    margin: clamp(12px, calc(0.83vw * var(--scale)), 16px) 0 0 0;
-    padding: clamp(8px, calc(0.56vw * var(--scale)), 12px);
-    background: rgba(0, 0, 0, 0.03);
-    border-radius: clamp(4px, calc(0.28vw * var(--scale)), 6px);
-}
 
 .google-form-error {
     font-family: var(--font2);
@@ -454,6 +558,11 @@
     .google-form-card,
     .google-form-loading {
         padding: 20px;
+        margin-bottom: 16px;
+    }
+    
+    .google-form-card--completed {
+        padding: 14px 18px;
     }
     
     .google-form-header {
@@ -481,5 +590,13 @@
     .google-form-date,
     .google-form-time {
         max-width: 100%;
+    }
+    
+    .google-form-button-group {
+        flex-direction: column;
+    }
+    
+    .google-form-action-btn {
+        width: 100%;
     }
 }

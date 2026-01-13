@@ -1,0 +1,37 @@
+{{!< default}}
+
+{{#post}}
+    <main data-accent-navigation="{{#unless feature_image}}true{{else}}{{#match @custom.post_header_type "Background Media"}}false{{else match @custom.post_header_type "Background Media Centered"}}false{{else}}true{{/match}}{{/unless}}">
+        <link rel="stylesheet" type="text/css" href="{{asset "css/post-content.css"}}" />
+        <link rel="stylesheet" type="text/css" href="{{asset "css/post.css"}}" />
+        <link rel="stylesheet" type="text/css" href="{{asset "css/google-form.css"}}" />
+
+        <article class="article" data-is-post="false" data-post-header-type="{{@custom.post_header_type}}" data-has-featured-image="{{#if feature_image}}true{{else}}false{{/if}}"
+        data-right-aligned-template="false" data-has-video="false" data-has-header="{{#match @page.show_title_and_feature_image}}true{{else}}false{{/match}}">
+            {{#match @page.show_title_and_feature_image}}
+                {{> "components/default-post-header"}}
+            {{/match}}
+
+            <div class="post-content wide-container{{#if @custom.use_page_load_animations}} hidden-post-content{{/if}}">
+                <div class="post-content-inner-wrapper">
+                    <div class="post-content-inner google-form-container">
+                        {{content}}
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <script>
+            applyImageGridPattern();
+            applyImageCalloutGridPattern();
+        </script>
+        <script src="{{asset "js/post-content.js"}}"></script>
+        <script src="{{asset "js/google-form.js"}}"></script>
+    </main>
+{{/post}}
+
+{{#match @custom.footer_type "Creative"}}
+    {{> "components/footer-creative"}}
+{{else}}
+    {{> "components/footer-normal"}}
+{{/match}}
