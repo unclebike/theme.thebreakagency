@@ -1,0 +1,485 @@
+/**
+ * Google Form Styles
+ * 
+ * Styles for Google Forms embedded via URL cards.
+ * Follows design patterns from order-form.css for consistency.
+ */
+
+/* =====================
+   Container / Card
+   ===================== */
+
+.google-form-card {
+    padding: clamp(24px, calc(1.67vw * var(--scale)), 48px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
+    background: var(--background-color);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* =====================
+   Loading Skeleton
+   ===================== */
+
+.google-form-loading {
+    padding: clamp(24px, calc(1.67vw * var(--scale)), 48px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
+    background: var(--background-color);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.google-form-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, calc(1.11vw * var(--scale)), 24px);
+}
+
+.google-form-skeleton .skeleton {
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.06) 25%,
+        rgba(0, 0, 0, 0.1) 50%,
+        rgba(0, 0, 0, 0.06) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+    border-radius: clamp(4px, calc(0.28vw * var(--scale)), 8px);
+}
+
+.google-form-skeleton .skeleton-title {
+    height: clamp(28px, calc(1.94vw * var(--scale)), 40px);
+    width: 60%;
+}
+
+.google-form-skeleton .skeleton-text {
+    height: clamp(16px, calc(1.11vw * var(--scale)), 20px);
+    width: 90%;
+}
+
+.google-form-skeleton .skeleton-field {
+    height: clamp(48px, calc(3.33vw * var(--scale)), 60px);
+    width: 100%;
+}
+
+.google-form-skeleton .skeleton-button {
+    height: clamp(44px, calc(3.06vw * var(--scale)), 56px);
+    width: 140px;
+    margin-top: clamp(8px, calc(0.56vw * var(--scale)), 12px);
+}
+
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* =====================
+   Form Header
+   ===================== */
+
+.google-form-header {
+    margin-bottom: clamp(24px, calc(1.67vw * var(--scale)), 32px);
+    padding-bottom: clamp(16px, calc(1.11vw * var(--scale)), 24px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.google-form-title {
+    font-family: var(--font1);
+    font-size: clamp(24px, calc(1.67vw * var(--scale)), 36px);
+    font-weight: 600;
+    margin: 0 0 clamp(8px, calc(0.56vw * var(--scale)), 12px) 0;
+    line-height: 1.2;
+}
+
+.google-form-description {
+    font-family: var(--font2);
+    font-size: clamp(14px, calc(0.97vw * var(--scale)), 18px);
+    line-height: 1.6;
+    opacity: 0.8;
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+/* =====================
+   Form Fields
+   ===================== */
+
+.google-form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(20px, calc(1.39vw * var(--scale)), 28px);
+}
+
+.google-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(6px, calc(0.42vw * var(--scale)), 10px);
+}
+
+.google-form-label {
+    font-family: var(--font2);
+    font-size: clamp(14px, calc(0.97vw * var(--scale)), 18px);
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.google-form-label .required {
+    color: #dc2626;
+    margin-left: 2px;
+}
+
+.google-form-field-description {
+    font-family: var(--font2);
+    font-size: clamp(12px, calc(0.83vw * var(--scale)), 14px);
+    line-height: 1.5;
+    opacity: 0.6;
+    margin: 0;
+}
+
+/* =====================
+   Input Styles
+   ===================== */
+
+.google-form-input,
+.google-form-textarea,
+.google-form-select {
+    padding: clamp(12px, calc(0.83vw * var(--scale)), 16px) clamp(14px, calc(0.97vw * var(--scale)), 18px);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 10px);
+    font-family: var(--font2);
+    font-size: clamp(16px, calc(1.11vw * var(--scale)), 18px);
+    background: var(--background-color);
+    color: var(--text-color);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.google-form-input::placeholder,
+.google-form-textarea::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.google-form-input:focus,
+.google-form-textarea:focus,
+.google-form-select:focus {
+    outline: none;
+    border-color: var(--ghost-accent-color);
+    box-shadow: 0 0 0 3px rgba(var(--ghost-accent-color-rgb, 0, 0, 0), 0.1);
+}
+
+.google-form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.google-form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right clamp(12px, calc(0.83vw * var(--scale)), 16px) center;
+    padding-right: clamp(36px, calc(2.5vw * var(--scale)), 48px);
+    cursor: pointer;
+}
+
+/* Date/Time inputs */
+.google-form-date,
+.google-form-time {
+    max-width: 250px;
+}
+
+/* =====================
+   Radio Buttons
+   ===================== */
+
+.google-form-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, calc(0.69vw * var(--scale)), 14px);
+}
+
+.google-form-radio-label {
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, calc(0.69vw * var(--scale)), 14px);
+    cursor: pointer;
+    font-family: var(--font2);
+    font-size: clamp(15px, calc(1.04vw * var(--scale)), 17px);
+}
+
+.google-form-radio {
+    width: clamp(20px, calc(1.39vw * var(--scale)), 24px);
+    height: clamp(20px, calc(1.39vw * var(--scale)), 24px);
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.google-form-radio:checked {
+    border-color: var(--ghost-accent-color);
+    background: var(--ghost-accent-color);
+}
+
+.google-form-radio:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--background-color);
+}
+
+.google-form-radio:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--ghost-accent-color-rgb, 0, 0, 0), 0.1);
+}
+
+.google-form-radio-text {
+    line-height: 1.3;
+}
+
+/* =====================
+   Checkboxes
+   ===================== */
+
+.google-form-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, calc(0.69vw * var(--scale)), 14px);
+}
+
+.google-form-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, calc(0.69vw * var(--scale)), 14px);
+    cursor: pointer;
+    font-family: var(--font2);
+    font-size: clamp(15px, calc(1.04vw * var(--scale)), 17px);
+}
+
+.google-form-checkbox {
+    width: clamp(20px, calc(1.39vw * var(--scale)), 24px);
+    height: clamp(20px, calc(1.39vw * var(--scale)), 24px);
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    border-radius: clamp(4px, calc(0.28vw * var(--scale)), 6px);
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.google-form-checkbox:checked {
+    border-color: var(--ghost-accent-color);
+    background: var(--ghost-accent-color);
+}
+
+.google-form-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 6px;
+    height: 10px;
+    border: 2px solid var(--background-color);
+    border-top: none;
+    border-left: none;
+}
+
+.google-form-checkbox:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--ghost-accent-color-rgb, 0, 0, 0), 0.1);
+}
+
+.google-form-checkbox-text {
+    line-height: 1.3;
+}
+
+/* =====================
+   Submit Button
+   ===================== */
+
+.google-form-submit {
+    margin-top: clamp(24px, calc(1.67vw * var(--scale)), 32px);
+    padding-top: clamp(16px, calc(1.11vw * var(--scale)), 24px);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.google-form-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: clamp(14px, calc(0.97vw * var(--scale)), 18px) clamp(28px, calc(1.94vw * var(--scale)), 40px);
+    font-family: var(--font2);
+    font-size: clamp(16px, calc(1.11vw * var(--scale)), 18px);
+    font-weight: 600;
+    line-height: 1.2;
+    border: none;
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 10px);
+    background: var(--ghost-accent-color, #3b82f6);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 140px;
+}
+
+.google-form-btn:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.google-form-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.google-form-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.google-form-btn.loading {
+    opacity: 0.7;
+}
+
+.google-form-btn.error {
+    background: #dc2626;
+}
+
+/* =====================
+   Success State
+   ===================== */
+
+.google-form-success {
+    text-align: center;
+}
+
+.google-form-success-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(16px, calc(1.11vw * var(--scale)), 24px);
+    padding: clamp(32px, calc(2.22vw * var(--scale)), 48px) clamp(24px, calc(1.67vw * var(--scale)), 32px);
+}
+
+.google-form-success-icon {
+    width: clamp(48px, calc(3.33vw * var(--scale)), 64px);
+    height: clamp(48px, calc(3.33vw * var(--scale)), 64px);
+    color: #16a34a;
+}
+
+.google-form-success-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.google-form-success-message {
+    font-family: var(--font2);
+    font-size: clamp(18px, calc(1.25vw * var(--scale)), 22px);
+    font-weight: 500;
+    color: var(--text-color);
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* =====================
+   Fallback (iframe)
+   ===================== */
+
+.google-form-fallback {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
+    overflow: hidden;
+    background: var(--background-color);
+}
+
+.google-form-fallback-wrapper {
+    position: relative;
+    padding-bottom: 150%; /* Tall aspect ratio for forms */
+    height: 0;
+    overflow: hidden;
+}
+
+.google-form-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* =====================
+   Notice / Error
+   ===================== */
+
+.google-form-notice {
+    font-family: var(--font2);
+    font-size: clamp(12px, calc(0.83vw * var(--scale)), 14px);
+    color: #6b7280;
+    margin: clamp(12px, calc(0.83vw * var(--scale)), 16px) 0 0 0;
+    padding: clamp(8px, calc(0.56vw * var(--scale)), 12px);
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: clamp(4px, calc(0.28vw * var(--scale)), 6px);
+}
+
+.google-form-error {
+    font-family: var(--font2);
+    font-size: clamp(14px, calc(0.97vw * var(--scale)), 16px);
+    color: #dc2626;
+    margin: 0;
+}
+
+/* =====================
+   Mobile Adjustments
+   ===================== */
+
+@media screen and (max-width: 768px) {
+    .google-form-card,
+    .google-form-loading {
+        padding: 20px;
+    }
+    
+    .google-form-header {
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+    }
+    
+    .google-form-title {
+        font-size: 22px;
+    }
+    
+    .google-form-fields {
+        gap: 20px;
+    }
+    
+    .google-form-submit {
+        margin-top: 20px;
+        padding-top: 16px;
+    }
+    
+    .google-form-btn {
+        width: 100%;
+    }
+    
+    .google-form-date,
+    .google-form-time {
+        max-width: 100%;
+    }
+}
