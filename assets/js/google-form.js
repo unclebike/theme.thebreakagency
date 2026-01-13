@@ -264,14 +264,18 @@
             }
             
             try {
-                // Collect form data
+                // Collect form data and convert to URL-encoded string
                 const formData = new FormData(form);
+                const urlEncodedData = new URLSearchParams(formData).toString();
                 
-                // Submit to Google Forms (no-cors mode)
+                // Submit to Google Forms (no-cors mode with URL-encoded data)
                 await fetch(submitUrl, {
                     method: 'POST',
-                    body: formData,
                     mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: urlEncodedData,
                 });
                 
                 // Handle step completion
