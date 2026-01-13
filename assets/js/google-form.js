@@ -385,12 +385,12 @@
     }
 
     /**
-     * Render the final buttons card
+     * Render the final buttons card (matches completed step card style)
      */
     function renderButtonsCard(flow) {
-        // Create buttons card container
+        // Create buttons card container - use completed card styling
         const buttonsCard = document.createElement('div');
-        buttonsCard.className = 'google-form-card google-form-buttons-card';
+        buttonsCard.className = 'google-form-card google-form-card--completed google-form-buttons-card';
         
         // Build buttons HTML from the collected button cards
         const buttonsHtml = flow.buttons.map(btn => {
@@ -403,17 +403,20 @@
         }).join('');
         
         buttonsCard.innerHTML = `
-            <div class="google-form-completion-message">
-                <div class="google-form-completion-icon">
+            <div class="google-form-completed-content google-form-completed-content--with-buttons">
+                <div class="google-form-completed-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
                         <polyline points="22 4 12 14.01 9 11.01"/>
                     </svg>
                 </div>
-                <p>${escapeHtml(DEFAULT_COMPLETION_MESSAGE)}</p>
-            </div>
-            <div class="google-form-button-group">
-                ${buttonsHtml}
+                <div class="google-form-completed-info">
+                    <span class="google-form-completed-step">Complete</span>
+                    <span class="google-form-completed-title">${escapeHtml(DEFAULT_COMPLETION_MESSAGE)}</span>
+                </div>
+                <div class="google-form-button-group">
+                    ${buttonsHtml}
+                </div>
             </div>
         `;
         
