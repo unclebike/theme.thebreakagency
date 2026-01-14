@@ -25,7 +25,12 @@
 
             <div class="post-content narrow-container{{#if @custom.use_page_load_animations}} hidden-post-content{{/if}}">
                 <div class="post-content-inner-wrapper">
-                    <div class="post-content-inner google-form-container">
+                    <div class="post-content-inner google-form-container"
+                         data-page-slug="{{slug}}"
+                         {{#if @member}}
+                         data-member-email="{{@member.email}}"
+                         data-member-name="{{@member.name}}"
+                         {{/if}}>
                         {{content}}
                     </div>
                 </div>

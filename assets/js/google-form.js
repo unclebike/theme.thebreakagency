@@ -30,12 +30,92 @@
     const DEFAULT_SUBMIT_TEXT = 'Submit';
     const LOADING_TEXT = 'Submitting...';
 
+    // Member data (populated from container data attributes)
+    let memberData = null;
+    let pageSlug = null;
+
+    /**
+     * Detect contact field type from label using fuzzy matching
+     * Returns: 'firstName', 'lastName', 'email', or null
+     */
+    function detectContactFieldType(label) {
+        if (!label) return null;
+        const lower = label.toLowerCase();
+        
+        // Email detection (check first to avoid false positives with "first email")
+        if (lower.includes('email') || lower.includes('e-mail')) {
+            return 'email';
+        }
+        
+        // First name detection
+        if (lower.includes('first') && (lower.includes('name') || lower === 'first')) {
+            return 'firstName';
+        }
+        
+        // Last name detection  
+        if (lower.includes('last') && (lower.includes('name') || lower === 'last')) {
+            return 'lastName';
+        }
+        if (lower.includes('surname') || lower.includes('family name')) {
+            return 'lastName';
+        }
+        
+        return null;
+    }
+
+    /**
+     * Parse member name into first and last name
+     * Takes first word as first name, rest as last name
+     */
+    function parseMemberName(fullName) {
+        if (!fullName) return { firstName: '', lastName: '' };
+        
+        const parts = fullName.trim().split(/\s+/);
+        if (parts.length === 0) return { firstName: '', lastName: '' };
+        if (parts.length === 1) return { firstName: parts[0], lastName: '' };
+        
+        return {
+            firstName: parts[0],
+            lastName: parts.slice(1).join(' ')
+        };
+    }
+
+    /**
+     * Get pre-fill value for a contact field type
+     */
+    function getPreFillValue(contactType) {
+        if (!memberData) return null;
+        
+        switch (contactType) {
+            case 'email':
+                return memberData.email || null;
+            case 'firstName':
+                return memberData.firstName || null;
+            case 'lastName':
+                return memberData.lastName || null;
+            default:
+                return null;
+        }
+    }
+
     /**
      * Initialize Google Forms integration
      */
     function initGoogleForms() {
         const container = document.querySelector('.google-form-container');
         if (!container) return;
+        
+        // Read member data from container attributes
+        pageSlug = container.dataset.pageSlug || null;
+        
+        if (container.dataset.memberEmail) {
+            const nameParts = parseMemberName(container.dataset.memberName);
+            memberData = {
+                email: container.dataset.memberEmail,
+                firstName: nameParts.firstName,
+                lastName: nameParts.lastName
+            };
+        }
         
         // Detect and process form flows
         const flows = detectFormFlows(container);
@@ -241,6 +321,62 @@
     }
 
     /**
+     * Extract contact info from form for member creation
+     * Returns { firstName, lastName, email } or null if incomplete
+     */
+    function extractContactInfo(form) {
+        const firstNameInput = form.querySelector('[data-contact-type="firstName"]');
+        const lastNameInput = form.querySelector('[data-contact-type="lastName"]');
+        const emailInput = form.querySelector('[data-contact-type="email"]');
+        
+        const firstName = firstNameInput?.value?.trim() || '';
+        const lastName = lastNameInput?.value?.trim() || '';
+        const email = emailInput?.value?.trim() || '';
+        
+        // Need at least email to create a member
+        if (!email) return null;
+        
+        return { firstName, lastName, email };
+    }
+
+    /**
+     * Create or update Ghost member via worker API
+     */
+    async function createOrUpdateMember(contactInfo) {
+        if (!contactInfo || !contactInfo.email) return;
+        
+        const fullName = [contactInfo.firstName, contactInfo.lastName]
+            .filter(Boolean)
+            .join(' ');
+        
+        try {
+            const response = await fetch(`${API_BASE}/member/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: contactInfo.email,
+                    name: fullName,
+                    labels: pageSlug ? [pageSlug] : [],
+                    sendEmail: true
+                }),
+            });
+            
+            const result = await response.json();
+            
+            if (!result.success) {
+                console.warn('Member creation/update failed:', result.error);
+            } else {
+                console.log('Member created/updated:', result.action);
+            }
+        } catch (error) {
+            // Don't fail the form submission if member creation fails
+            console.warn('Member creation error:', error);
+        }
+    }
+
+    /**
      * Setup form submission handler
      */
     function setupFormSubmission(form, submitUrl, flow, stepIndex) {
@@ -299,6 +435,15 @@
                 
                 if (!result.success) {
                     throw new Error(result.error || 'Submission failed');
+                }
+                
+                // If user is NOT a logged-in member, try to create/update member
+                if (!memberData) {
+                    const contactInfo = extractContactInfo(form);
+                    if (contactInfo) {
+                        // Fire and forget - don't block form completion
+                        createOrUpdateMember(contactInfo);
+                    }
                 }
                 
                 // Handle step completion
@@ -524,15 +669,25 @@
         const requiredMark = field.required ? '<span class="required">*</span>' : '';
         const requiredAttr = field.required ? 'required' : '';
         
+        // Detect contact field type for pre-fill
+        const contactType = detectContactFieldType(field.label);
+        const preFillValue = getPreFillValue(contactType);
+        const contactAttr = contactType ? `data-contact-type="${contactType}"` : '';
+        const valueAttr = preFillValue ? `value="${escapeHtml(preFillValue)}"` : '';
+        
         let inputHtml = '';
         
         switch (field.type) {
             case 'text':
+                // Use email input type for email fields
+                const inputType = contactType === 'email' ? 'email' : 'text';
                 inputHtml = `
-                    <input type="text" 
+                    <input type="${inputType}" 
                            name="${escapeHtml(field.id)}" 
                            id="${escapeHtml(field.id)}"
                            ${requiredAttr}
+                           ${contactAttr}
+                           ${valueAttr}
                            class="google-form-input">
                 `;
                 break;
