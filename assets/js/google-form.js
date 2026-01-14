@@ -155,10 +155,13 @@
         
         for (const element of elements) {
             const isGoogleForm = isGoogleFormBookmark(element);
+            const isCallout = element.classList.contains('kg-callout-card');
             // More robust button detection - check class name OR presence of kg-btn link
-            const isButton = element.classList.contains('kg-button-card') || 
+            // But exclude callouts (which may contain buttons inside them)
+            const isButton = !isCallout && (
+                             element.classList.contains('kg-button-card') || 
                              (element.querySelector && element.querySelector('a.kg-btn')) ||
-                             Array.from(element.classList || []).some(cls => cls.toLowerCase().includes('button'));
+                             Array.from(element.classList || []).some(cls => cls.toLowerCase().includes('button')));
             const isSeparator = element.classList.contains('kg-divider-card');
             
             if (isSeparator) {
@@ -222,7 +225,7 @@
                 // Hide button initially
                 element.classList.add('google-form-flow-hidden');
             }
-            else if (element.classList.contains('kg-callout-card') && currentFlow && currentFlow.forms.length > 0) {
+            else if (isCallout && currentFlow && currentFlow.forms.length > 0) {
                 // Callout card after forms - collect for completion card
                 currentFlow.callouts.push(element);
                 currentFlow.hasSeenCallout = true;
