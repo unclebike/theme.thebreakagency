@@ -179,9 +179,11 @@
                     currentFlow = {
                         id: 'flow-' + Math.random().toString(36).substr(2, 9),
                         forms: [],
-                        completionItems: [], // Ordered array of { type: 'button'|'callout'|'bookmark', element }
+                        headerButtons: [], // Buttons before first callout (inline with header)
+                        completionItems: [], // Ordered array of { type: 'button'|'callout'|'bookmark', element } after first callout
                         pendingContent: [],
-                        allElements: [] // Track all elements in order for proper sequencing
+                        allElements: [], // Track all elements in order for proper sequencing
+                        hasSeenCallout: false // Track if we've seen a callout
                     };
                 }
                 
@@ -212,14 +214,23 @@
                 currentFlow.allElements.push(formStep);
             }
             else if (isButton && currentFlow && currentFlow.forms.length > 0) {
-                // Button after form(s) - add to completion items in order
-                currentFlow.completionItems.push({ type: 'button', element: element });
+                // Button after form(s) - position depends on whether we've seen a callout
+                console.log('Found button:', element.className, 'hasSeenCallout:', currentFlow.hasSeenCallout);
+                if (currentFlow.hasSeenCallout) {
+                    // Button after callout - add to completion items in order
+                    currentFlow.completionItems.push({ type: 'button', element: element });
+                } else {
+                    // Button before any callout - add to header buttons (inline with header)
+                    currentFlow.headerButtons.push(element);
+                }
                 // Hide button initially
                 element.classList.add('google-form-flow-hidden');
             }
             else if (isCallout && currentFlow && currentFlow.forms.length > 0) {
                 // Callout card after forms - add to completion items in order
+                console.log('Found callout:', element.className);
                 currentFlow.completionItems.push({ type: 'callout', element: element });
+                currentFlow.hasSeenCallout = true;
                 // Hide initially
                 element.classList.add('google-form-flow-hidden');
             }
@@ -258,7 +269,7 @@
      */
     async function initializeFlow(flow) {
         const totalForms = flow.forms.length;
-        const hasCompletionContent = flow.completionItems.length > 0;
+        const hasCompletionContent = flow.headerButtons.length > 0 || flow.completionItems.length > 0;
         const isMultiStep = totalForms > 1 || hasCompletionContent;
         
         // Set first form as active
@@ -530,7 +541,7 @@
     function completeStep(flow, stepIndex) {
         const currentStep = flow.forms[stepIndex];
         const totalForms = flow.forms.length;
-        const hasCompletionContent = flow.completionItems.length > 0;
+        const hasCompletionContent = flow.headerButtons.length > 0 || flow.completionItems.length > 0;
         const isMultiStep = totalForms > 1 || hasCompletionContent;
         const hasNextForm = stepIndex < totalForms - 1;
         const formTitle = currentStep.formData?.title || 'Form';
@@ -554,7 +565,7 @@
             renderFormStep(flow, stepIndex + 1, isMultiStep, totalForms);
         } else {
             // All forms completed - show completion card if we have any completion content
-            if (flow.completionItems.length > 0) {
+            if (flow.headerButtons.length > 0 || flow.completionItems.length > 0) {
                 renderCompletionCard(flow);
             }
         }
@@ -687,14 +698,37 @@
         const completionCard = document.createElement('div');
         completionCard.className = 'google-form-card google-form-card--completed google-form-completion-card';
         
-        // Build completion items HTML in order
+        // Build header buttons HTML (inline with header)
+        const headerButtonsHtml = flow.headerButtons.length > 0
+            ? `<div class="google-form-button-group">
+                ${flow.headerButtons.map(btn => {
+                    const link = extractButtonLink(btn);
+                    if (link) {
+                        return `<a href="${escapeHtml(link.getAttribute('href') || '#')}" class="google-form-action-btn" target="${link.getAttribute('target') || '_self'}">${escapeHtml(link.textContent || 'Button')}</a>`;
+                    }
+                    return '';
+                }).filter(Boolean).join('')}
+               </div>`
+            : '';
+        
+        // Build completion items HTML in order (callouts, post-callout buttons, bookmarks)
         const completionItemsHtml = flow.completionItems
             .map(item => buildCompletionItemHtml(item))
             .filter(Boolean)
             .join('');
         
+        // Only add --with-buttons modifier if we have header buttons
+        const contentClass = flow.headerButtons.length > 0
+            ? 'google-form-completed-content google-form-completed-content--with-buttons'
+            : 'google-form-completed-content';
+        
+        // Only include completion items section if we have items
+        const completionItemsSection = completionItemsHtml
+            ? `<div class="google-form-completion-items">${completionItemsHtml}</div>`
+            : '';
+        
         completionCard.innerHTML = `
-            <div class="google-form-completed-content">
+            <div class="${contentClass}">
                 <div class="google-form-completed-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
@@ -705,10 +739,9 @@
                     <span class="google-form-completed-step">Complete</span>
                     <span class="google-form-completed-title">${escapeHtml(DEFAULT_COMPLETION_MESSAGE)}</span>
                 </div>
+                ${headerButtonsHtml}
             </div>
-            <div class="google-form-completion-items">
-                ${completionItemsHtml}
-            </div>
+            ${completionItemsSection}
         `;
         
         // Insert after the last form
@@ -716,6 +749,7 @@
         lastForm.parentNode.insertBefore(completionCard, lastForm.nextSibling);
         
         // Remove the original hidden elements
+        flow.headerButtons.forEach(btn => btn.remove());
         flow.completionItems.forEach(item => item.element.remove());
     }
 
