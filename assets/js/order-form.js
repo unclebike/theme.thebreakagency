@@ -26,8 +26,6 @@
 (function() {
     'use strict';
 
-    console.log('[Order Form] Script loaded - version 2');
-
     const API_BASE = 'https://thebreaksales.ca/api';
 
     /**
@@ -170,17 +168,8 @@
             // Fetch member's catalogs from API
             const catalogs = await fetchMemberCatalogs(memberUuid, needsRefresh);
             
-            // Debug logging
-            console.log('[Order Form Debug] Page slug:', pageSlug);
-            console.log('[Order Form Debug] Member UUID:', memberUuid);
-            console.log('[Order Form Debug] Member Email:', memberEmail);
-            console.log('[Order Form Debug] Catalogs from API:', JSON.stringify(catalogs));
-            console.log('[Order Form Debug] Catalog slugs:', catalogs.map(c => c.slug));
-            
             // Check if member has access to current catalog
             const hasCatalogAccess = catalogs.some(c => c.slug === pageSlug);
-            console.log('[Order Form Debug] Has catalog access:', hasCatalogAccess);
-            console.log('[Order Form Debug] Comparison:', catalogs.map(c => `"${c.slug}" === "${pageSlug}" ? ${c.slug === pageSlug}`));
             
             // Render catalog nav if they have any catalogs
             if (catalogs.length > 0) {
@@ -192,7 +181,6 @@
             
             if (hasCatalogAccess) {
                 // Member has access - transform cards in full mode (not preview)
-                console.log('[Order Form Debug] HAS ACCESS - Setting up full form');
                 productCards.forEach((card, index) => {
                     transformProductCard(card, cardFlags[index], false);
                 });
@@ -226,7 +214,6 @@
                 }
             } else {
                 // Member doesn't have access - transform cards in preview/blur mode
-                console.log('[Order Form Debug] NO ACCESS - Setting up join gate');
                 form.classList.add('order-form--needs-join');
                 productCards.forEach((card, index) => {
                     transformProductCard(card, cardFlags[index], true);
