@@ -155,13 +155,11 @@
         
         for (const element of elements) {
             const isGoogleForm = isGoogleFormBookmark(element);
-            const isButton = element.classList.contains('kg-button-card');
+            // More robust button detection - check class name OR presence of kg-btn link
+            const isButton = element.classList.contains('kg-button-card') || 
+                             (element.querySelector && element.querySelector('a.kg-btn')) ||
+                             Array.from(element.classList || []).some(cls => cls.toLowerCase().includes('button'));
             const isSeparator = element.classList.contains('kg-divider-card');
-            
-            // Debug: log all elements after a form flow starts
-            if (currentFlow && currentFlow.forms.length > 0) {
-                console.log('Processing element:', element.className, element);
-            }
             
             if (isSeparator) {
                 // Separator breaks the chain
@@ -216,7 +214,6 @@
             }
             else if (isButton && currentFlow && currentFlow.forms.length > 0) {
                 // Button after form(s) - position depends on whether we've seen a callout
-                console.log('Found button card:', element, 'hasSeenCallout:', currentFlow.hasSeenCallout);
                 if (currentFlow.hasSeenCallout) {
                     currentFlow.footerButtons.push(element);
                 } else {
@@ -227,7 +224,6 @@
             }
             else if (element.classList.contains('kg-callout-card') && currentFlow && currentFlow.forms.length > 0) {
                 // Callout card after forms - collect for completion card
-                console.log('Found callout card:', element);
                 currentFlow.callouts.push(element);
                 currentFlow.hasSeenCallout = true;
                 // Hide initially
@@ -665,11 +661,8 @@
     function buildButtonsHtml(buttons, className) {
         if (buttons.length === 0) return '';
         
-        console.log('Building buttons HTML for', buttons.length, 'buttons, class:', className);
-        
         const buttonsMarkup = buttons.map(btn => {
             const link = extractButtonLink(btn);
-            console.log('Button element:', btn, 'innerHTML:', btn.innerHTML, 'Found link:', link);
             if (link) {
                 return `<a href="${escapeHtml(link.getAttribute('href') || '#')}" class="google-form-action-btn" target="${link.getAttribute('target') || '_self'}">${escapeHtml(link.textContent || 'Button')}</a>`;
             }
@@ -686,13 +679,6 @@
      * Includes optional callouts, bookmarks, and buttons
      */
     function renderCompletionCard(flow) {
-        console.log('renderCompletionCard called with:', {
-            headerButtons: flow.headerButtons.length,
-            footerButtons: flow.footerButtons.length,
-            callouts: flow.callouts.length,
-            bookmarks: flow.bookmarks.length
-        });
-        
         // Create completion card container - use completed card styling
         const completionCard = document.createElement('div');
         completionCard.className = 'google-form-card google-form-card--completed google-form-completion-card';
