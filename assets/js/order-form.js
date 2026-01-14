@@ -131,7 +131,7 @@
         const form = document.querySelector('.order-form');
         if (!form) return;
         
-        // Check if this is preview mode (no access - not logged in)
+        // Check if this is preview mode (no access - not logged in via Ghost)
         const isPreviewMode = form.classList.contains('order-form--preview');
 
         // Get member info from data attributes (set by Handlebars template)
@@ -147,7 +147,7 @@
         // Determine which cards should be horizontal or small square
         const cardFlags = detectCardFlags(productCards);
 
-        // Preview mode (not logged in): show signup flow immediately
+        // Preview mode (not logged in via Ghost): show signup flow immediately
         if (isPreviewMode) {
             productCards.forEach((card, index) => {
                 transformProductCard(card, cardFlags[index], true);
@@ -156,14 +156,11 @@
             return;
         }
 
-        // For logged-in members, we need to fetch catalogs from API
-        // Start with blurred state while we check access
+        // For logged-in members, we need to fetch catalogs from API first
+        // Add CSS-only blur class while checking access (no JS transforms yet)
         if (isLoggedIn) {
-            // Initially blur everything
-            form.classList.add('order-form--loading');
-            productCards.forEach((card, index) => {
-                transformProductCard(card, cardFlags[index], true); // true = preview/blurred
-            });
+            // Add blur class - CSS will handle the visual blur
+            form.classList.add('order-form--checking-access');
             
             // Check if we just joined (refresh param in URL)
             const needsRefresh = checkAndClearRefreshParam();
@@ -171,25 +168,26 @@
             // Fetch member's catalogs from API
             const catalogs = await fetchMemberCatalogs(memberUuid, needsRefresh);
             
+            // Debug logging
+            console.log('Page slug:', pageSlug);
+            console.log('Member catalogs:', catalogs);
+            
             // Check if member has access to current catalog
             const hasCatalogAccess = catalogs.some(c => c.slug === pageSlug);
+            console.log('Has catalog access:', hasCatalogAccess);
             
             // Render catalog nav if they have any catalogs
             if (catalogs.length > 0) {
                 renderCatalogNav(form, catalogs, pageSlug);
             }
             
-            // Remove loading state
-            form.classList.remove('order-form--loading');
+            // Remove checking class
+            form.classList.remove('order-form--checking-access');
             
             if (hasCatalogAccess) {
-                // Member has access - show full order form
-                form.classList.remove('order-form--needs-join');
-                
-                // Re-transform cards without blur
+                // Member has access - transform cards in full mode (not preview)
                 productCards.forEach((card, index) => {
-                    // Need to re-render without preview mode
-                    retransformProductCard(card, cardFlags[index]);
+                    transformProductCard(card, cardFlags[index], false);
                 });
                 
                 // Setup full functionality
@@ -220,63 +218,19 @@
                     addHiddenField(form, '_page_slug', pageSlug);
                 }
             } else {
-                // Member doesn't have access - show join gate
+                // Member doesn't have access - transform cards in preview/blur mode
                 form.classList.add('order-form--needs-join');
+                productCards.forEach((card, index) => {
+                    transformProductCard(card, cardFlags[index], true);
+                });
                 setupJoinCatalogGate(form, memberEmail, pageSlug);
             }
         } else {
-            // Not logged in - signup flow
+            // Not logged in - signup flow (shouldn't reach here if Ghost access control works)
             productCards.forEach((card, index) => {
                 transformProductCard(card, cardFlags[index], false);
             });
             setupSignupButtons(form);
-        }
-    }
-
-    /**
-     * Re-transform a product card from preview to full mode
-     * This is needed when we initially render as preview then confirm access
-     */
-    function retransformProductCard(card, flags) {
-        // Remove preview/skeleton classes and styles
-        card.classList.remove('skeleton-card');
-        
-        // Find the size grid and re-enable it
-        const sizeGrid = card.querySelector('.size-qty-grid');
-        if (sizeGrid) {
-            sizeGrid.classList.remove('skeleton-controls');
-            
-            // Re-enable all controls
-            sizeGrid.querySelectorAll('.skeleton-row').forEach(row => {
-                row.classList.remove('skeleton-row');
-            });
-            
-            // Replace skeleton elements with real controls
-            // This is complex - easier to just reload. For now, let's use a simpler approach:
-            // We'll transform cards correctly from the start based on access check
-        }
-        
-        // For images - remove blur
-        const img = card.querySelector('.kg-product-card-image');
-        if (img) {
-            img.style.filter = '';
-            img.style.webkitFilter = '';
-        }
-        
-        // For title - restore visibility
-        const title = card.querySelector('.kg-product-card-title');
-        if (title) {
-            title.style.color = '';
-            title.style.background = '';
-            title.style.animation = '';
-        }
-        
-        // For description - restore visibility  
-        const desc = card.querySelector('.kg-product-card-description');
-        if (desc) {
-            desc.style.color = '';
-            desc.style.background = '';
-            desc.style.animation = '';
         }
     }
 

@@ -1129,9 +1129,35 @@
     cursor: default;
 }
 
-/* Loading state - blur everything initially */
-.order-form--loading .kg-product-card {
-    opacity: 0.5;
+/* Checking access state - CSS-only blur while fetching labels */
+.order-form--checking-access .kg-product-card {
+    overflow: hidden;
+}
+
+.order-form--checking-access .kg-product-card-image {
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+}
+
+.order-form--checking-access .kg-product-card-title,
+.order-form--checking-access .kg-product-card-description,
+.order-form--checking-access .kg-product-card-description p {
+    color: transparent;
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.06) 25%,
+        rgba(0, 0, 0, 0.1) 50%,
+        rgba(0, 0, 0, 0.06) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+.order-form--checking-access .kg-product-card-button,
+.order-form--checking-access .kg-product-card-button-container {
+    opacity: 0.3;
+    pointer-events: none;
 }
 
 /* =====================
