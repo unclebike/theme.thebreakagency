@@ -377,6 +377,37 @@
     }
 
     /**
+     * Add page slug label to existing logged-in member
+     */
+    async function addLabelToMember(email) {
+        if (!email || !pageSlug) return;
+        
+        try {
+            const response = await fetch(`${API_BASE}/member/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    labels: [pageSlug],
+                    sendEmail: false  // Don't send email for existing members
+                }),
+            });
+            
+            const result = await response.json();
+            
+            if (!result.success) {
+                console.warn('Failed to add label to member:', result.error);
+            } else {
+                console.log('Label added to member:', result.action);
+            }
+        } catch (error) {
+            console.warn('Add label error:', error);
+        }
+    }
+
+    /**
      * Setup form submission handler
      */
     function setupFormSubmission(form, submitUrl, flow, stepIndex) {
@@ -437,8 +468,14 @@
                     throw new Error(result.error || 'Submission failed');
                 }
                 
-                // If user is NOT a logged-in member, try to create/update member
-                if (!memberData) {
+                // Handle member creation/label assignment
+                if (memberData) {
+                    // Logged-in member: add page slug label to their account
+                    if (pageSlug) {
+                        addLabelToMember(memberData.email);
+                    }
+                } else {
+                    // Guest: create member with contact info from form
                     const contactInfo = extractContactInfo(form);
                     if (contactInfo) {
                         // Fire and forget - don't block form completion
