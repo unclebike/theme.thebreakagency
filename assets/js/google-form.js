@@ -158,6 +158,11 @@
             const isButton = element.classList.contains('kg-button-card');
             const isSeparator = element.classList.contains('kg-divider-card');
             
+            // Debug: log all elements after a form flow starts
+            if (currentFlow && currentFlow.forms.length > 0) {
+                console.log('Processing element:', element.className, element);
+            }
+            
             if (isSeparator) {
                 // Separator breaks the chain
                 if (currentFlow && currentFlow.forms.length > 0) {
