@@ -211,22 +211,39 @@
 }
 
 /* =====================
-   Completion Card with Callouts
+   Completion Card with Ordered Items
    ===================== */
 
 .google-form-completion-card {
     /* Uses completed card styling via .google-form-card--completed */
 }
 
-.google-form-completion-callouts {
+/* Container for all completion items (buttons, callouts, bookmarks) in order */
+.google-form-completion-items {
     display: flex;
     flex-direction: column;
-    gap: clamp(8px, calc(0.56vw * var(--scale)), 12px);
+    gap: clamp(12px, calc(0.83vw * var(--scale)), 16px);
     margin-top: clamp(16px, calc(1.11vw * var(--scale)), 20px);
     padding-top: clamp(16px, calc(1.11vw * var(--scale)), 20px);
     border-top: 1px solid rgba(22, 163, 74, 0.2);
 }
 
+/* Individual completion item */
+.google-form-completion-item {
+    /* Base styles for all items */
+}
+
+/* Button item */
+.google-form-completion-button {
+    display: flex;
+    justify-content: center;
+}
+
+.google-form-completion-button .google-form-action-btn {
+    /* Uses existing action button styles */
+}
+
+/* Callout item */
 .google-form-completion-callout {
     display: flex;
     align-items: flex-start;
@@ -296,16 +313,7 @@
     color: #15803d;
 }
 
-/* Bookmarks in completion card */
-.google-form-completion-bookmarks {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(8px, calc(0.56vw * var(--scale)), 12px);
-    margin-top: clamp(16px, calc(1.11vw * var(--scale)), 20px);
-    padding-top: clamp(16px, calc(1.11vw * var(--scale)), 20px);
-    border-top: 1px solid rgba(22, 163, 74, 0.2);
-}
-
+/* Bookmark item */
 .google-form-completion-bookmark {
     /* Inherits Ghost's bookmark card styling */
 }
@@ -316,22 +324,6 @@
 
 .google-form-completion-bookmark .kg-bookmark-container:hover {
     border-color: rgba(22, 163, 74, 0.5);
-}
-
-/* Footer buttons (below callouts) */
-.google-form-footer-buttons {
-    display: flex;
-    gap: clamp(8px, calc(0.56vw * var(--scale)), 12px);
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: clamp(16px, calc(1.11vw * var(--scale)), 20px);
-    padding-top: clamp(16px, calc(1.11vw * var(--scale)), 20px);
-    border-top: 1px solid rgba(22, 163, 74, 0.2);
-}
-
-.google-form-footer-buttons .google-form-action-btn {
-    /* Same styling as header buttons */
 }
 
 /* =====================
@@ -742,9 +734,10 @@
         min-width: 0;
     }
     
-    .google-form-completion-callouts {
+    .google-form-completion-items {
         margin-top: 14px;
         padding-top: 14px;
+        gap: 12px;
     }
     
     .google-form-completion-callout {
@@ -757,10 +750,5 @@
     
     .google-form-completion-callout-text {
         font-size: 13px;
-    }
-    
-    .google-form-footer-buttons {
-        margin-top: 14px;
-        padding-top: 14px;
     }
 }
