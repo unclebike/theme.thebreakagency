@@ -676,8 +676,13 @@
                </div>`
             : '';
         
+        // Only add --with-buttons modifier if we actually have buttons
+        const contentClass = flow.buttons.length > 0 
+            ? 'google-form-completed-content google-form-completed-content--with-buttons'
+            : 'google-form-completed-content';
+        
         completionCard.innerHTML = `
-            <div class="google-form-completed-content google-form-completed-content--with-buttons">
+            <div class="${contentClass}">
                 <div class="google-form-completed-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
