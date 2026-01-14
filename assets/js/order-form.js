@@ -26,6 +26,8 @@
 (function() {
     'use strict';
 
+    console.log('[Order Form] Script loaded - version 2');
+
     const API_BASE = 'https://thebreaksales.ca/api';
 
     /**
@@ -190,6 +192,7 @@
             
             if (hasCatalogAccess) {
                 // Member has access - transform cards in full mode (not preview)
+                console.log('[Order Form Debug] HAS ACCESS - Setting up full form');
                 productCards.forEach((card, index) => {
                     transformProductCard(card, cardFlags[index], false);
                 });
@@ -223,6 +226,7 @@
                 }
             } else {
                 // Member doesn't have access - transform cards in preview/blur mode
+                console.log('[Order Form Debug] NO ACCESS - Setting up join gate');
                 form.classList.add('order-form--needs-join');
                 productCards.forEach((card, index) => {
                     transformProductCard(card, cardFlags[index], true);
