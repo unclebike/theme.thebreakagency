@@ -174,6 +174,7 @@
                         id: 'flow-' + Math.random().toString(36).substr(2, 9),
                         forms: [],
                         buttons: [],
+                        callouts: [], // Callout cards to show in completion card
                         pendingContent: [],
                         allElements: [] // Track all elements in order for proper sequencing
                     };
@@ -211,6 +212,12 @@
                 // Hide button initially
                 element.classList.add('google-form-flow-hidden');
             }
+            else if (element.classList.contains('kg-callout-card') && currentFlow && currentFlow.forms.length > 0) {
+                // Callout card after forms - collect for completion card
+                currentFlow.callouts.push(element);
+                // Hide initially
+                element.classList.add('google-form-flow-hidden');
+            }
             else if (currentFlow && currentFlow.forms.length > 0) {
                 // Other content between forms - save for later reveal
                 currentFlow.pendingContent.push(element);
@@ -240,7 +247,7 @@
      */
     async function initializeFlow(flow) {
         const totalForms = flow.forms.length;
-        const isMultiStep = totalForms > 1 || flow.buttons.length > 0;
+        const isMultiStep = totalForms > 1 || flow.buttons.length > 0 || flow.callouts.length > 0;
         
         // Set first form as active
         flow.forms[0].state = 'active';
@@ -511,7 +518,7 @@
     function completeStep(flow, stepIndex) {
         const currentStep = flow.forms[stepIndex];
         const totalForms = flow.forms.length;
-        const isMultiStep = totalForms > 1 || flow.buttons.length > 0;
+        const isMultiStep = totalForms > 1 || flow.buttons.length > 0 || flow.callouts.length > 0;
         const hasNextForm = stepIndex < totalForms - 1;
         const formTitle = currentStep.formData?.title || 'Form';
         
@@ -533,9 +540,9 @@
             // Render next form
             renderFormStep(flow, stepIndex + 1, isMultiStep, totalForms);
         } else {
-            // All forms completed - show buttons card if we have buttons
-            if (flow.buttons.length > 0) {
-                renderButtonsCard(flow);
+            // All forms completed - show completion card if we have buttons or callouts
+            if (flow.buttons.length > 0 || flow.callouts.length > 0) {
+                renderCompletionCard(flow);
             }
         }
     }
@@ -594,24 +601,65 @@
     }
 
     /**
-     * Render the final buttons card (matches completed step card style)
+     * Extract callout data from a Ghost callout card element
      */
-    function renderButtonsCard(flow) {
-        // Create buttons card container - use completed card styling
-        const buttonsCard = document.createElement('div');
-        buttonsCard.className = 'google-form-card google-form-card--completed google-form-buttons-card';
+    function extractCalloutData(calloutEl) {
+        const emoji = calloutEl.querySelector('.kg-callout-emoji')?.textContent?.trim() || '';
+        const text = calloutEl.querySelector('.kg-callout-text')?.innerHTML || '';
+        
+        // Detect the callout color from class names
+        const colorClasses = [
+            'kg-callout-card-grey', 'kg-callout-card-white', 'kg-callout-card-blue',
+            'kg-callout-card-green', 'kg-callout-card-yellow', 'kg-callout-card-red',
+            'kg-callout-card-pink', 'kg-callout-card-purple', 'kg-callout-card-accent'
+        ];
+        let color = 'grey'; // default
+        for (const cls of colorClasses) {
+            if (calloutEl.classList.contains(cls)) {
+                color = cls.replace('kg-callout-card-', '');
+                break;
+            }
+        }
+        
+        return { emoji, text, color };
+    }
+
+    /**
+     * Render the final completion card (matches completed step card style)
+     * Includes optional callouts and buttons
+     */
+    function renderCompletionCard(flow) {
+        // Create completion card container - use completed card styling
+        const completionCard = document.createElement('div');
+        completionCard.className = 'google-form-card google-form-card--completed google-form-completion-card';
         
         // Build buttons HTML from the collected button cards
-        const buttonsHtml = flow.buttons.map(btn => {
-            // Extract the button content from the Ghost button card
-            const link = btn.querySelector('a.kg-btn');
-            if (link) {
-                return `<a href="${escapeHtml(link.getAttribute('href'))}" class="google-form-action-btn" target="${link.getAttribute('target') || '_self'}">${escapeHtml(link.textContent)}</a>`;
-            }
-            return '';
-        }).join('');
+        const buttonsHtml = flow.buttons.length > 0 
+            ? `<div class="google-form-button-group">
+                ${flow.buttons.map(btn => {
+                    const link = btn.querySelector('a.kg-btn');
+                    if (link) {
+                        return `<a href="${escapeHtml(link.getAttribute('href'))}" class="google-form-action-btn" target="${link.getAttribute('target') || '_self'}">${escapeHtml(link.textContent)}</a>`;
+                    }
+                    return '';
+                }).join('')}
+               </div>`
+            : '';
         
-        buttonsCard.innerHTML = `
+        // Build callouts HTML from the collected callout cards
+        const calloutsHtml = flow.callouts.length > 0
+            ? `<div class="google-form-completion-callouts">
+                ${flow.callouts.map(callout => {
+                    const data = extractCalloutData(callout);
+                    return `<div class="google-form-completion-callout google-form-completion-callout--${data.color}">
+                        ${data.emoji ? `<div class="google-form-completion-callout-emoji">${data.emoji}</div>` : ''}
+                        <div class="google-form-completion-callout-text">${data.text}</div>
+                    </div>`;
+                }).join('')}
+               </div>`
+            : '';
+        
+        completionCard.innerHTML = `
             <div class="google-form-completed-content google-form-completed-content--with-buttons">
                 <div class="google-form-completed-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -623,18 +671,18 @@
                     <span class="google-form-completed-step">Complete</span>
                     <span class="google-form-completed-title">${escapeHtml(DEFAULT_COMPLETION_MESSAGE)}</span>
                 </div>
-                <div class="google-form-button-group">
-                    ${buttonsHtml}
-                </div>
+                ${buttonsHtml}
             </div>
+            ${calloutsHtml}
         `;
         
         // Insert after the last form
         const lastForm = flow.forms[flow.forms.length - 1].element;
-        lastForm.parentNode.insertBefore(buttonsCard, lastForm.nextSibling);
+        lastForm.parentNode.insertBefore(completionCard, lastForm.nextSibling);
         
-        // Remove the original hidden button cards
+        // Remove the original hidden button and callout cards
         flow.buttons.forEach(btn => btn.remove());
+        flow.callouts.forEach(callout => callout.remove());
     }
 
     /**
