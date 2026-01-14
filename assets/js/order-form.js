@@ -169,12 +169,16 @@
             const catalogs = await fetchMemberCatalogs(memberUuid, needsRefresh);
             
             // Debug logging
-            console.log('Page slug:', pageSlug);
-            console.log('Member catalogs:', catalogs);
+            console.log('[Order Form Debug] Page slug:', pageSlug);
+            console.log('[Order Form Debug] Member UUID:', memberUuid);
+            console.log('[Order Form Debug] Member Email:', memberEmail);
+            console.log('[Order Form Debug] Catalogs from API:', JSON.stringify(catalogs));
+            console.log('[Order Form Debug] Catalog slugs:', catalogs.map(c => c.slug));
             
             // Check if member has access to current catalog
             const hasCatalogAccess = catalogs.some(c => c.slug === pageSlug);
-            console.log('Has catalog access:', hasCatalogAccess);
+            console.log('[Order Form Debug] Has catalog access:', hasCatalogAccess);
+            console.log('[Order Form Debug] Comparison:', catalogs.map(c => `"${c.slug}" === "${pageSlug}" ? ${c.slug === pageSlug}`));
             
             // Render catalog nav if they have any catalogs
             if (catalogs.length > 0) {
