@@ -65,6 +65,7 @@
             // Logged-in user: full order functionality
             setupSubmitButton(form, memberUuid, pageSlug);
             setupDraftButtons(form, memberUuid, pageSlug);
+            setupJoinCatalogButton(form, memberEmail, pageSlug);
             
             // Pre-fill member info if available
             if (memberEmail) {
@@ -378,6 +379,74 @@
         // Store references for loadDraft to use
         form._saveDraftBtn = saveBtn;
         form._saveDraftBtnTextEl = saveBtnTextEl;
+    }
+
+    /**
+     * Setup "Join This Catalog" button for logged-in members
+     * Adds the page slug label to their member profile
+     */
+    function setupJoinCatalogButton(form, memberEmail, pageSlug) {
+        const joinBtn = form.querySelector('.order-form-join-btn');
+        if (!joinBtn || !memberEmail || !pageSlug) {
+            // Hide the button row if we can't use it
+            const joinRow = form.querySelector('.order-form-join-row');
+            if (joinRow) joinRow.style.display = 'none';
+            return;
+        }
+
+        const defaultText = 'Join This Catalog';
+        const joiningText = 'Joining...';
+        const successText = 'Joined!';
+        const alreadyJoinedText = 'Already Joined';
+
+        joinBtn.addEventListener('click', async () => {
+            joinBtn.disabled = true;
+            joinBtn.classList.remove('success', 'error', 'already-joined');
+            joinBtn.textContent = joiningText;
+
+            try {
+                const response = await fetch(`${API_BASE}/member/create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: memberEmail,
+                        labels: [pageSlug],
+                        sendEmail: false
+                    }),
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    if (result.action === 'updated') {
+                        // Label was added
+                        joinBtn.classList.add('success');
+                        joinBtn.textContent = successText;
+                    } else if (result.action === 'unchanged') {
+                        // Already had the label
+                        joinBtn.classList.add('already-joined');
+                        joinBtn.textContent = alreadyJoinedText;
+                    } else {
+                        // Member created (unlikely for logged-in user, but handle it)
+                        joinBtn.classList.add('success');
+                        joinBtn.textContent = successText;
+                    }
+                } else {
+                    throw new Error(result.error || 'Failed to join catalog');
+                }
+            } catch (error) {
+                console.error('Join catalog failed:', error);
+                joinBtn.classList.add('error');
+                joinBtn.textContent = 'Error - try again';
+                joinBtn.disabled = false;
+                
+                // Reset after 3 seconds
+                setTimeout(() => {
+                    joinBtn.classList.remove('error');
+                    joinBtn.textContent = defaultText;
+                }, 3000);
+            }
+        });
     }
 
     /**
