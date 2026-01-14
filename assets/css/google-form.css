@@ -296,6 +296,28 @@
     color: #15803d;
 }
 
+/* Bookmarks in completion card */
+.google-form-completion-bookmarks {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(8px, calc(0.56vw * var(--scale)), 12px);
+    margin-top: clamp(16px, calc(1.11vw * var(--scale)), 20px);
+    padding-top: clamp(16px, calc(1.11vw * var(--scale)), 20px);
+    border-top: 1px solid rgba(22, 163, 74, 0.2);
+}
+
+.google-form-completion-bookmark {
+    /* Inherits Ghost's bookmark card styling */
+}
+
+.google-form-completion-bookmark .kg-bookmark-container {
+    border-color: rgba(22, 163, 74, 0.3);
+}
+
+.google-form-completion-bookmark .kg-bookmark-container:hover {
+    border-color: rgba(22, 163, 74, 0.5);
+}
+
 /* =====================
    Form Header
    ===================== */

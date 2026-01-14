@@ -175,6 +175,7 @@
                         forms: [],
                         buttons: [],
                         callouts: [], // Callout cards to show in completion card
+                        bookmarks: [], // Non-form bookmark/URL cards to show in completion card
                         pendingContent: [],
                         allElements: [] // Track all elements in order for proper sequencing
                     };
@@ -218,6 +219,12 @@
                 // Hide initially
                 element.classList.add('google-form-flow-hidden');
             }
+            else if (element.classList.contains('kg-bookmark-card') && currentFlow && currentFlow.forms.length > 0) {
+                // Non-form bookmark/URL card after forms - collect for completion card
+                currentFlow.bookmarks.push(element);
+                // Hide initially
+                element.classList.add('google-form-flow-hidden');
+            }
             else if (currentFlow && currentFlow.forms.length > 0) {
                 // Other content between forms - save for later reveal
                 currentFlow.pendingContent.push(element);
@@ -247,7 +254,7 @@
      */
     async function initializeFlow(flow) {
         const totalForms = flow.forms.length;
-        const isMultiStep = totalForms > 1 || flow.buttons.length > 0 || flow.callouts.length > 0;
+        const isMultiStep = totalForms > 1 || flow.buttons.length > 0 || flow.callouts.length > 0 || flow.bookmarks.length > 0;
         
         // Set first form as active
         flow.forms[0].state = 'active';
@@ -518,7 +525,7 @@
     function completeStep(flow, stepIndex) {
         const currentStep = flow.forms[stepIndex];
         const totalForms = flow.forms.length;
-        const isMultiStep = totalForms > 1 || flow.buttons.length > 0 || flow.callouts.length > 0;
+        const isMultiStep = totalForms > 1 || flow.buttons.length > 0 || flow.callouts.length > 0 || flow.bookmarks.length > 0;
         const hasNextForm = stepIndex < totalForms - 1;
         const formTitle = currentStep.formData?.title || 'Form';
         
@@ -540,8 +547,8 @@
             // Render next form
             renderFormStep(flow, stepIndex + 1, isMultiStep, totalForms);
         } else {
-            // All forms completed - show completion card if we have buttons or callouts
-            if (flow.buttons.length > 0 || flow.callouts.length > 0) {
+            // All forms completed - show completion card if we have buttons, callouts, or bookmarks
+            if (flow.buttons.length > 0 || flow.callouts.length > 0 || flow.bookmarks.length > 0) {
                 renderCompletionCard(flow);
             }
         }
@@ -626,7 +633,7 @@
 
     /**
      * Render the final completion card (matches completed step card style)
-     * Includes optional callouts and buttons
+     * Includes optional callouts, bookmarks, and buttons
      */
     function renderCompletionCard(flow) {
         // Create completion card container - use completed card styling
@@ -659,6 +666,16 @@
                </div>`
             : '';
         
+        // Build bookmarks HTML from the collected bookmark/URL cards
+        const bookmarksHtml = flow.bookmarks.length > 0
+            ? `<div class="google-form-completion-bookmarks">
+                ${flow.bookmarks.map(bookmark => {
+                    // Clone the bookmark card's inner HTML to preserve Ghost's styling
+                    return `<div class="google-form-completion-bookmark">${bookmark.innerHTML}</div>`;
+                }).join('')}
+               </div>`
+            : '';
+        
         completionCard.innerHTML = `
             <div class="google-form-completed-content google-form-completed-content--with-buttons">
                 <div class="google-form-completed-icon">
@@ -674,15 +691,17 @@
                 ${buttonsHtml}
             </div>
             ${calloutsHtml}
+            ${bookmarksHtml}
         `;
         
         // Insert after the last form
         const lastForm = flow.forms[flow.forms.length - 1].element;
         lastForm.parentNode.insertBefore(completionCard, lastForm.nextSibling);
         
-        // Remove the original hidden button and callout cards
+        // Remove the original hidden button, callout, and bookmark cards
         flow.buttons.forEach(btn => btn.remove());
         flow.callouts.forEach(callout => callout.remove());
+        flow.bookmarks.forEach(bookmark => bookmark.remove());
     }
 
     /**
