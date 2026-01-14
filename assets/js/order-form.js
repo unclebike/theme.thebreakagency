@@ -28,11 +28,110 @@
 
     const API_BASE = 'https://thebreaksales.ca/api';
 
-    function initOrderForm() {
+    /**
+     * Format catalog slug to display name
+     * "fall-2024" → "Fall 2024"
+     */
+    function formatCatalogName(slug) {
+        return slug
+            .split('-')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+    }
+
+    /**
+     * Fetch member's catalog labels from API
+     * Returns array of { slug, name } for catalogs with matching pages
+     */
+    async function fetchMemberCatalogs(memberUuid, refresh = false) {
+        try {
+            const url = `${API_BASE}/member/labels?uuid=${encodeURIComponent(memberUuid)}${refresh ? '&refresh=true' : ''}`;
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                console.warn('Failed to fetch member catalogs:', response.status);
+                return [];
+            }
+            
+            const data = await response.json();
+            
+            // Filter to only labels with matching pages and format names
+            return (data.labels || [])
+                .filter(label => label.pageTitle) // Only labels with pages
+                .map(label => ({
+                    slug: label.name,
+                    name: formatCatalogName(label.name)
+                }));
+        } catch (error) {
+            console.warn('Error fetching member catalogs:', error);
+            return [];
+        }
+    }
+
+    /**
+     * Render catalog navigation buttons above products
+     */
+    function renderCatalogNav(form, catalogs, currentSlug) {
+        if (!catalogs || catalogs.length === 0) return;
+        
+        // Create nav container
+        const nav = document.createElement('div');
+        nav.className = 'order-form-catalog-nav';
+        
+        catalogs.forEach(catalog => {
+            const isActive = catalog.slug === currentSlug;
+            
+            if (isActive) {
+                // Current catalog - highlighted button (not a link)
+                const btn = document.createElement('span');
+                btn.className = 'order-form-catalog-btn active';
+                btn.textContent = catalog.name;
+                nav.appendChild(btn);
+            } else {
+                // Other catalogs - link to that page
+                const link = document.createElement('a');
+                link.className = 'order-form-catalog-btn';
+                link.href = `/${catalog.slug}/`;
+                link.textContent = catalog.name;
+                nav.appendChild(link);
+            }
+        });
+        
+        // Insert before products title
+        const productsTitle = form.querySelector('.order-form-products-title');
+        if (productsTitle) {
+            productsTitle.parentNode.insertBefore(nav, productsTitle);
+        } else {
+            // Fallback: append to form
+            form.appendChild(nav);
+        }
+    }
+
+    /**
+     * Check if URL has refresh param (after joining catalog)
+     * Returns true if found and cleans the URL
+     */
+    function checkAndClearRefreshParam() {
+        const url = new URL(window.location.href);
+        const refresh = url.searchParams.get('refresh') === 'true';
+        
+        if (refresh) {
+            // Clean the URL without refresh param
+            url.searchParams.delete('refresh');
+            window.history.replaceState({}, '', url.pathname + url.search);
+        }
+        
+        return refresh;
+    }
+
+    /**
+     * Initialize order form - async to support API fetching
+     */
+    async function initOrderForm() {
         const form = document.querySelector('.order-form');
         if (!form) return;
         
-        // Check if this is preview mode (no access)
+        // Check if this is preview mode (no access - not logged in)
         const isPreviewMode = form.classList.contains('order-form--preview');
 
         // Get member info from data attributes (set by Handlebars template)
@@ -40,14 +139,7 @@
         const memberEmail = form.dataset.memberEmail;
         const memberName = form.dataset.memberName;
         const pageSlug = form.dataset.pageSlug;
-        const memberLabels = form.dataset.memberLabels ? form.dataset.memberLabels.split(',').map(l => l.trim()) : [];
         const isLoggedIn = !!memberUuid;
-        
-        // Check if logged-in member has the catalog label
-        const hasCatalogLabel = isLoggedIn && pageSlug && memberLabels.includes(pageSlug);
-        
-        // Logged-in but doesn't have catalog label = needs to join first
-        const needsToJoin = isLoggedIn && pageSlug && !hasCatalogLabel;
 
         // Get product cards (exclude skeleton cards which are already styled)
         const productCards = Array.from(form.querySelectorAll('.kg-product-card:not(.skeleton-card)'));
@@ -55,56 +147,136 @@
         // Determine which cards should be horizontal or small square
         const cardFlags = detectCardFlags(productCards);
 
-        // If member needs to join, show preview/blurred state
-        const showAsPreview = isPreviewMode || needsToJoin;
-
-        productCards.forEach((card, index) => {
-            transformProductCard(card, cardFlags[index], showAsPreview);
-        });
-
-        // Preview mode: setup signup CTA and skip full functionality
+        // Preview mode (not logged in): show signup flow immediately
         if (isPreviewMode) {
+            productCards.forEach((card, index) => {
+                transformProductCard(card, cardFlags[index], true);
+            });
             setupSignupButtons(form);
             return;
         }
-        
-        // Logged-in but needs to join catalog
-        if (needsToJoin) {
-            setupJoinCatalogGate(form, memberEmail, pageSlug);
-            return;
-        }
 
-        // Setup custom lightbox that loads full image on demand
-        setupLightbox(form);
-
+        // For logged-in members, we need to fetch catalogs from API
+        // Start with blurred state while we check access
         if (isLoggedIn) {
-            // Logged-in user with catalog access: full order functionality
-            setupSubmitButton(form, memberUuid, pageSlug);
-            setupDraftButtons(form, memberUuid, pageSlug);
-            // Hide join button since they already have access
-            const joinRow = form.querySelector('.order-form-join-row');
-            if (joinRow) joinRow.style.display = 'none';
+            // Initially blur everything
+            form.classList.add('order-form--loading');
+            productCards.forEach((card, index) => {
+                transformProductCard(card, cardFlags[index], true); // true = preview/blurred
+            });
             
-            // Pre-fill member info if available
-            if (memberEmail) {
-                const emailInput = form.querySelector('[name="email"]');
-                if (emailInput && !emailInput.value) emailInput.value = memberEmail;
-            }
-            if (memberName) {
-                const nameInput = form.querySelector('[name="name"]');
-                if (nameInput && !nameInput.value) nameInput.value = memberName;
-            }
-            // Auto-load saved draft
-            loadDraft(form, memberUuid, pageSlug);
+            // Check if we just joined (refresh param in URL)
+            const needsRefresh = checkAndClearRefreshParam();
             
-            // Add hidden fields for member tracking
-            addHiddenField(form, '_member_uuid', memberUuid);
-            if (pageSlug) {
-                addHiddenField(form, '_page_slug', pageSlug);
+            // Fetch member's catalogs from API
+            const catalogs = await fetchMemberCatalogs(memberUuid, needsRefresh);
+            
+            // Check if member has access to current catalog
+            const hasCatalogAccess = catalogs.some(c => c.slug === pageSlug);
+            
+            // Render catalog nav if they have any catalogs
+            if (catalogs.length > 0) {
+                renderCatalogNav(form, catalogs, pageSlug);
+            }
+            
+            // Remove loading state
+            form.classList.remove('order-form--loading');
+            
+            if (hasCatalogAccess) {
+                // Member has access - show full order form
+                form.classList.remove('order-form--needs-join');
+                
+                // Re-transform cards without blur
+                productCards.forEach((card, index) => {
+                    // Need to re-render without preview mode
+                    retransformProductCard(card, cardFlags[index]);
+                });
+                
+                // Setup full functionality
+                setupLightbox(form);
+                setupSubmitButton(form, memberUuid, pageSlug);
+                setupDraftButtons(form, memberUuid, pageSlug);
+                
+                // Hide join button since they have access
+                const joinRow = form.querySelector('.order-form-join-row');
+                if (joinRow) joinRow.style.display = 'none';
+                
+                // Pre-fill member info
+                if (memberEmail) {
+                    const emailInput = form.querySelector('[name="email"]');
+                    if (emailInput && !emailInput.value) emailInput.value = memberEmail;
+                }
+                if (memberName) {
+                    const nameInput = form.querySelector('[name="name"]');
+                    if (nameInput && !nameInput.value) nameInput.value = memberName;
+                }
+                
+                // Auto-load saved draft
+                loadDraft(form, memberUuid, pageSlug);
+                
+                // Add hidden fields for member tracking
+                addHiddenField(form, '_member_uuid', memberUuid);
+                if (pageSlug) {
+                    addHiddenField(form, '_page_slug', pageSlug);
+                }
+            } else {
+                // Member doesn't have access - show join gate
+                form.classList.add('order-form--needs-join');
+                setupJoinCatalogGate(form, memberEmail, pageSlug);
             }
         } else {
-            // Non-logged-in user: signup flow
+            // Not logged in - signup flow
+            productCards.forEach((card, index) => {
+                transformProductCard(card, cardFlags[index], false);
+            });
             setupSignupButtons(form);
+        }
+    }
+
+    /**
+     * Re-transform a product card from preview to full mode
+     * This is needed when we initially render as preview then confirm access
+     */
+    function retransformProductCard(card, flags) {
+        // Remove preview/skeleton classes and styles
+        card.classList.remove('skeleton-card');
+        
+        // Find the size grid and re-enable it
+        const sizeGrid = card.querySelector('.size-qty-grid');
+        if (sizeGrid) {
+            sizeGrid.classList.remove('skeleton-controls');
+            
+            // Re-enable all controls
+            sizeGrid.querySelectorAll('.skeleton-row').forEach(row => {
+                row.classList.remove('skeleton-row');
+            });
+            
+            // Replace skeleton elements with real controls
+            // This is complex - easier to just reload. For now, let's use a simpler approach:
+            // We'll transform cards correctly from the start based on access check
+        }
+        
+        // For images - remove blur
+        const img = card.querySelector('.kg-product-card-image');
+        if (img) {
+            img.style.filter = '';
+            img.style.webkitFilter = '';
+        }
+        
+        // For title - restore visibility
+        const title = card.querySelector('.kg-product-card-title');
+        if (title) {
+            title.style.color = '';
+            title.style.background = '';
+            title.style.animation = '';
+        }
+        
+        // For description - restore visibility  
+        const desc = card.querySelector('.kg-product-card-description');
+        if (desc) {
+            desc.style.color = '';
+            desc.style.background = '';
+            desc.style.animation = '';
         }
     }
 
@@ -484,9 +656,6 @@
             customerInfo.style.display = 'none';
         }
         
-        // Add class to form for blur styling
-        form.classList.add('order-form--needs-join');
-        
         // Create join CTA card (similar to preview CTA but for logged-in users)
         const joinCta = document.createElement('div');
         joinCta.className = 'order-form-join-cta';
@@ -499,7 +668,14 @@
                 </div>
             </div>
         `;
-        form.appendChild(joinCta);
+        
+        // Insert CTA above the products title (after catalog nav if present)
+        const productsTitle = form.querySelector('.order-form-products-title');
+        if (productsTitle) {
+            productsTitle.parentNode.insertBefore(joinCta, productsTitle);
+        } else {
+            form.appendChild(joinCta);
+        }
         
         // Wire up the join button
         const joinBtn = joinCta.querySelector('.order-form-join-gate-btn');
@@ -527,9 +703,11 @@
                 if (result.success) {
                     joinBtn.classList.add('success');
                     joinBtn.textContent = 'Joined! Reloading...';
-                    // Reload page to get full access
+                    // Reload page with refresh param to bust cache
                     setTimeout(() => {
-                        window.location.reload();
+                        const url = new URL(window.location.href);
+                        url.searchParams.set('refresh', 'true');
+                        window.location.href = url.toString();
                     }, 500);
                 } else {
                     throw new Error(result.error || 'Failed to join catalog');

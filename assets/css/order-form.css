@@ -1091,6 +1091,50 @@
 }
 
 /* =====================
+   Catalog Navigation
+   ===================== */
+
+.order-form-catalog-nav {
+    display: flex;
+    gap: clamp(8px, calc(0.56vw * var(--scale)), 12px);
+    flex-wrap: wrap;
+    margin-bottom: clamp(16px, calc(1.11vw * var(--scale)), 24px);
+}
+
+.order-form-catalog-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(8px, calc(0.56vw * var(--scale)), 12px) clamp(16px, calc(1.11vw * var(--scale)), 24px);
+    font-size: clamp(13px, calc(0.9vw * var(--scale)), 16px);
+    font-weight: 600;
+    border-radius: clamp(4px, calc(0.28vw * var(--scale)), 8px);
+    border: 2px solid var(--ghost-accent-color, #3b82f6);
+    background: transparent;
+    color: var(--ghost-accent-color, #3b82f6);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-family: var(--font2);
+}
+
+.order-form-catalog-btn:hover:not(.active) {
+    background: var(--ghost-accent-color, #3b82f6);
+    color: #fff;
+}
+
+.order-form-catalog-btn.active {
+    background: var(--ghost-accent-color, #3b82f6);
+    color: #fff;
+    cursor: default;
+}
+
+/* Loading state - blur everything initially */
+.order-form--loading .kg-product-card {
+    opacity: 0.5;
+}
+
+/* =====================
    Public Preview (no access)
    ===================== */
 
