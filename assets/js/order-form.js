@@ -97,13 +97,13 @@
             }
         });
         
-        // Insert before products title
-        const productsTitle = form.querySelector('.order-form-products-title');
-        if (productsTitle) {
-            productsTitle.parentNode.insertBefore(nav, productsTitle);
+        // Insert above customer information section (at the top of the form)
+        const customerInfo = form.querySelector('.order-form-customer-info');
+        if (customerInfo) {
+            form.insertBefore(nav, customerInfo);
         } else {
-            // Fallback: append to form
-            form.appendChild(nav);
+            // Fallback: prepend to form
+            form.prepend(nav);
         }
     }
 
