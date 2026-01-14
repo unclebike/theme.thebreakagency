@@ -318,6 +318,22 @@
     border-color: rgba(22, 163, 74, 0.5);
 }
 
+/* Footer buttons (below callouts) */
+.google-form-footer-buttons {
+    display: flex;
+    gap: clamp(8px, calc(0.56vw * var(--scale)), 12px);
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: clamp(16px, calc(1.11vw * var(--scale)), 20px);
+    padding-top: clamp(16px, calc(1.11vw * var(--scale)), 20px);
+    border-top: 1px solid rgba(22, 163, 74, 0.2);
+}
+
+.google-form-footer-buttons .google-form-action-btn {
+    /* Same styling as header buttons */
+}
+
 /* =====================
    Form Header
    ===================== */
@@ -741,5 +757,10 @@
     
     .google-form-completion-callout-text {
         font-size: 13px;
+    }
+    
+    .google-form-footer-buttons {
+        margin-top: 14px;
+        padding-top: 14px;
     }
 }
