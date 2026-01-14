@@ -485,6 +485,23 @@
                     throw new Error('Signup failed');
                 }
                 
+                // After successful Ghost signup, add page slug label
+                const pageSlug = container.dataset?.pageSlug || 
+                                 container.closest('[data-page-slug]')?.dataset?.pageSlug;
+                if (pageSlug) {
+                    // Fire and forget - don't block success message
+                    fetch(`${API_BASE}/member/create`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            email: email,
+                            name: name,
+                            labels: [pageSlug],
+                            sendEmail: false  // Ghost already sent the magic link
+                        }),
+                    }).catch(err => console.warn('Failed to add label:', err));
+                }
+                
                 // Success - show confirmation on all buttons
                 showSuccessState([topSignupBtn, bottomSignupBtn, topLoginBtn, bottomLoginBtn]);
                 
@@ -497,6 +514,7 @@
         // Login handler - uses Ghost's signin magic link (email only)
         async function handleLogin(btn) {
             const email = emailInput?.value.trim();
+            const name = nameInput?.value.trim();  // May be empty for login
             
             if (!email) {
                 emailInput?.focus();
@@ -530,6 +548,23 @@
                 
                 if (!response.ok) {
                     throw new Error('Login failed');
+                }
+                
+                // After successful Ghost login, add page slug label to existing member
+                const pageSlug = container.dataset?.pageSlug || 
+                                 container.closest('[data-page-slug]')?.dataset?.pageSlug;
+                if (pageSlug) {
+                    // Fire and forget - don't block success message
+                    fetch(`${API_BASE}/member/create`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            email: email,
+                            name: name || undefined,  // Only update name if provided
+                            labels: [pageSlug],
+                            sendEmail: false
+                        }),
+                    }).catch(err => console.warn('Failed to add label:', err));
                 }
                 
                 // Success - show confirmation on all buttons
