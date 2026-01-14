@@ -170,6 +170,7 @@
             
             // Check if member has access to current catalog
             const hasCatalogAccess = catalogs.some(c => c.slug === pageSlug);
+            console.log('[OrderForm] Access check:', { pageSlug, catalogSlugs: catalogs.map(c => c.slug), hasCatalogAccess });
             
             // Render catalog nav if they have any catalogs
             if (catalogs.length > 0) {
