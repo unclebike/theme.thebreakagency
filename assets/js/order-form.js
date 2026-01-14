@@ -40,7 +40,14 @@
         const memberEmail = form.dataset.memberEmail;
         const memberName = form.dataset.memberName;
         const pageSlug = form.dataset.pageSlug;
+        const memberLabels = form.dataset.memberLabels ? form.dataset.memberLabels.split(',').map(l => l.trim()) : [];
         const isLoggedIn = !!memberUuid;
+        
+        // Check if logged-in member has the catalog label
+        const hasCatalogLabel = isLoggedIn && pageSlug && memberLabels.includes(pageSlug);
+        
+        // Logged-in but doesn't have catalog label = needs to join first
+        const needsToJoin = isLoggedIn && pageSlug && !hasCatalogLabel;
 
         // Get product cards (exclude skeleton cards which are already styled)
         const productCards = Array.from(form.querySelectorAll('.kg-product-card:not(.skeleton-card)'));
@@ -48,8 +55,11 @@
         // Determine which cards should be horizontal or small square
         const cardFlags = detectCardFlags(productCards);
 
+        // If member needs to join, show preview/blurred state
+        const showAsPreview = isPreviewMode || needsToJoin;
+
         productCards.forEach((card, index) => {
-            transformProductCard(card, cardFlags[index], isPreviewMode);
+            transformProductCard(card, cardFlags[index], showAsPreview);
         });
 
         // Preview mode: setup signup CTA and skip full functionality
@@ -57,15 +67,23 @@
             setupSignupButtons(form);
             return;
         }
+        
+        // Logged-in but needs to join catalog
+        if (needsToJoin) {
+            setupJoinCatalogGate(form, memberEmail, pageSlug);
+            return;
+        }
 
         // Setup custom lightbox that loads full image on demand
         setupLightbox(form);
 
         if (isLoggedIn) {
-            // Logged-in user: full order functionality
+            // Logged-in user with catalog access: full order functionality
             setupSubmitButton(form, memberUuid, pageSlug);
             setupDraftButtons(form, memberUuid, pageSlug);
-            setupJoinCatalogButton(form, memberEmail, pageSlug);
+            // Hide join button since they already have access
+            const joinRow = form.querySelector('.order-form-join-row');
+            if (joinRow) joinRow.style.display = 'none';
             
             // Pre-fill member info if available
             if (memberEmail) {
@@ -441,6 +459,87 @@
                 joinBtn.disabled = false;
                 
                 // Reset after 3 seconds
+                setTimeout(() => {
+                    joinBtn.classList.remove('error');
+                    joinBtn.textContent = defaultText;
+                }, 3000);
+            }
+        });
+    }
+
+    /**
+     * Setup join catalog gate for logged-in members without catalog label
+     * Shows blurred products with a CTA to join the catalog
+     */
+    function setupJoinCatalogGate(form, memberEmail, pageSlug) {
+        // Hide the submit button card
+        const submitCard = form.querySelector('.kg-button-card');
+        if (submitCard) {
+            submitCard.style.display = 'none';
+        }
+        
+        // Hide the customer info section (they're already logged in)
+        const customerInfo = form.querySelector('.order-form-customer-info');
+        if (customerInfo) {
+            customerInfo.style.display = 'none';
+        }
+        
+        // Add class to form for blur styling
+        form.classList.add('order-form--needs-join');
+        
+        // Create join CTA card (similar to preview CTA but for logged-in users)
+        const joinCta = document.createElement('div');
+        joinCta.className = 'order-form-join-cta';
+        joinCta.innerHTML = `
+            <h3 class="order-form-section-title">Join This Catalog</h3>
+            <p class="order-form-signup-message">You're logged in, but haven't joined this catalog yet. Click below to get access and start ordering.</p>
+            <div class="order-form-fields">
+                <div class="order-form-field order-form-field-full order-form-btn-row">
+                    <button type="button" class="order-form-join-gate-btn">Join Catalog</button>
+                </div>
+            </div>
+        `;
+        form.appendChild(joinCta);
+        
+        // Wire up the join button
+        const joinBtn = joinCta.querySelector('.order-form-join-gate-btn');
+        const defaultText = 'Join Catalog';
+        const joiningText = 'Joining...';
+        
+        joinBtn.addEventListener('click', async () => {
+            joinBtn.disabled = true;
+            joinBtn.classList.remove('success', 'error');
+            joinBtn.textContent = joiningText;
+            
+            try {
+                const response = await fetch(`${API_BASE}/member/create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: memberEmail,
+                        labels: [pageSlug],
+                        sendEmail: false
+                    }),
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    joinBtn.classList.add('success');
+                    joinBtn.textContent = 'Joined! Reloading...';
+                    // Reload page to get full access
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 500);
+                } else {
+                    throw new Error(result.error || 'Failed to join catalog');
+                }
+            } catch (error) {
+                console.error('Join catalog failed:', error);
+                joinBtn.classList.add('error');
+                joinBtn.textContent = 'Error - try again';
+                joinBtn.disabled = false;
+                
                 setTimeout(() => {
                     joinBtn.classList.remove('error');
                     joinBtn.textContent = defaultText;
