@@ -306,6 +306,12 @@
 
         submitButton.closest('.kg-button-card').classList.add('order-form-submit-card');
 
+        // Paid catalogs: linking the submit button to "#stripe" switches this catalog to
+        // Stripe Checkout (like the #SQ / #H flags on product links). The #stripe page tag also works.
+        if (/#stripe\b/i.test(submitButton.getAttribute('href') || '')) {
+            form.dataset.checkout = 'stripe';
+        }
+
         // Config
         const defaultText = form.dataset.checkout === 'stripe' ? 'Checkout' : 'Send Order';
         const successText = 'Success!';
