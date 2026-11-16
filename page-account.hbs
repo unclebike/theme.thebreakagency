@@ -184,7 +184,7 @@
     
     async function loadCatalogs(refresh = false) {
         try {
-            const url = `/api/member/labels?uuid=${memberUuid}${refresh ? '&refresh=true' : ''}`;
+            const url = `${window.BREAK_API_BASE || "/api"}/member/labels?uuid=${memberUuid}${refresh ? '&refresh=true' : ''}`;
             const response = await fetch(url);
             const data = await response.json();
             

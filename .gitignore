@@ -4,3 +4,6 @@ yarn-error.log
 .DS_Store
 /.claude
 *.zip
+
+# Local dev secrets (Docker Ghost admin login)
+/dev/.local-admin

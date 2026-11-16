@@ -26,7 +26,17 @@
 (function() {
     'use strict';
 
-    const API_BASE = 'https://thebreaksales.ca/api';
+    const API_BASE = window.BREAK_API_BASE || 'https://thebreaksales.ca/api';
+
+    /**
+     * Ghost 6 rejects /members/api/send-magic-link/ without a fresh integrity token
+     * (anti-spam; same flow Ghost's own Portal/forms use).
+     */
+    async function getIntegrityToken() {
+        const res = await fetch('/members/api/integrity-token/');
+        if (!res.ok) throw new Error('Failed to fetch integrity token');
+        return res.text();
+    }
 
     /**
      * Format catalog slug to display name
@@ -773,6 +783,7 @@
                         name: name,
                         email: email,
                         requestSrc: window.location.href,
+                        integrityToken: await getIntegrityToken(),
                     }),
                 });
                 
@@ -838,6 +849,7 @@
                         email: email,
                         emailType: 'signin',
                         requestSrc: window.location.href,
+                        integrityToken: await getIntegrityToken(),
                     }),
                 });
                 

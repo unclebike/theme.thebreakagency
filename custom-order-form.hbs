@@ -20,7 +20,7 @@
                         {{!-- Full access: show complete order form --}}
                         <form 
                             class="order-form"
-                            action="https://thebreaksales.ca/api/order"
+                            action="{{#match @site.url "http://localhost:2368"}}http://localhost:8787/api/order{{else}}https://thebreaksales.ca/api/order{{/match}}"
                             method="POST"
                             {{#if @member}}
                             data-member-uuid="{{@member.uuid}}"

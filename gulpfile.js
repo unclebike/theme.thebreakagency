@@ -12,6 +12,7 @@ function zipper() {
         '!.github', '!.github/**',
         '!yarn-error.log',
         '!deploy.sh',
+        '!dev', '!dev/**',
         '!gulpfile.js',
         '!.DS_Store',
         '!*.zip'

@@ -16,6 +16,8 @@
         {{!-- Core JS - small, needed immediately for colors/utilities --}}
         <script src="{{asset "js/global-core.js"}}"></script>
         <script>loadColors("{{@custom.colors}}");</script>
+        {{!-- Worker API base: local `wrangler dev` when running Ghost on localhost, production otherwise --}}
+        <script>window.BREAK_API_BASE = "{{#match @site.url "http://localhost:2368"}}http://localhost:8787/api{{else}}https://thebreaksales.ca/api{{/match}}";</script>
 
         {{!-- Custom elements - defer to not block render --}}
         <script defer src="{{asset "js/custom-elements.js"}}"></script>
