@@ -1510,3 +1510,22 @@
     height: clamp(36px, calc(2.5vw * var(--scale)), 72px);
     border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
 }
+
+/* =====================
+   Checkout notices (Stripe catalogs)
+   ===================== */
+.order-form .order-form-notice {
+    grid-column: 1 / -1;
+    padding: clamp(12px, calc(0.83vw * var(--scale)), 20px) clamp(16px, calc(1.11vw * var(--scale)), 28px);
+    border: 2px solid #f97316;
+    border-radius: clamp(8px, calc(0.56vw * var(--scale)), 16px);
+    background: var(--background-color);
+    font-weight: 600;
+}
+
+/* Mobile: put the sign-up box first so it isn't below a tall locked preview */
+@media screen and (max-width: 768px) {
+    .order-form--preview .order-form-preview-cta {
+        order: -1;
+    }
+}

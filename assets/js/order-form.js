@@ -28,6 +28,9 @@
 
     const API_BASE = window.BREAK_API_BASE || 'https://thebreaksales.ca/api';
 
+    // Retail (Stripe) catalogs: set in initOrderForm before product cards are built
+    let retailMode = false;
+
     /**
      * Ghost 6 rejects /members/api/send-magic-link/ without a fresh integrity token
      * (anti-spam; same flow Ghost's own Portal/forms use).
@@ -144,6 +147,16 @@
         // Check if this is preview mode (no access - not logged in via Ghost)
         const isPreviewMode = form.classList.contains('order-form--preview');
 
+        // Paid (Stripe) catalogs: submit button links to #stripe (or the page has the #stripe tag)
+        const submitHref = form.querySelector('.kg-button-card .kg-btn')?.getAttribute('href') || '';
+        if (form.dataset.checkout === 'stripe' || /#stripe\b/i.test(submitHref)) {
+            form.dataset.checkout = 'stripe';
+            form.classList.add('order-form--retail');
+            retailMode = true;
+        }
+
+        showCheckoutCancelledNote(form);
+
         // Get member info from data attributes (set by Handlebars template)
         const memberUuid = form.dataset.memberUuid;
         const memberEmail = form.dataset.memberEmail;
@@ -237,6 +250,22 @@
             });
             setupSignupButtons(form);
         }
+    }
+
+    /**
+     * Back from Stripe without paying (?checkout=cancelled): reassure, then tidy the URL.
+     */
+    function showCheckoutCancelledNote(form) {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('checkout') !== 'cancelled') return;
+        const note = document.createElement('div');
+        note.className = 'order-form-notice';
+        note.setAttribute('role', 'status');
+        note.textContent = 'Checkout cancelled. You have not been charged, and your selections are still here.';
+        form.prepend(note);
+        params.delete('checkout');
+        const qs = params.toString();
+        window.history.replaceState(null, '', window.location.pathname + (qs ? '?' + qs : '') + window.location.hash);
     }
 
     function addHiddenField(form, name, value) {
@@ -420,6 +449,10 @@
                     data._page_slug = pageSlug || '';
                     if (memberUuid) data._member_uuid = memberUuid;
                     btnTextEl.textContent = 'Opening checkout...';
+                    // Keep their selections if they back out of Stripe (the webhook clears the draft once paid)
+                    if (memberUuid && pageSlug) {
+                        try { await saveDraft(form, memberUuid, pageSlug); } catch (e) { /* non-fatal */ }
+                    }
                     const checkoutRes = await fetch(`${API_BASE}/checkout`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -1367,13 +1400,18 @@
             
             const priceValue = document.createElement('span');
             priceValue.className = 'info-chip-value';
-            priceValue.textContent = price;
+            priceValue.textContent = retailMode ? `$${price} + HST` : price;
             
             priceChip.appendChild(priceCaption);
             priceChip.appendChild(priceValue);
             row.appendChild(priceChip);
         }
         
+        // Retail catalogs have no minimums: skip the MOQ chip unless one is actually set
+        if (retailMode && moq === null) {
+            return row;
+        }
+
         // MOQ chip
         const moqChip = document.createElement('div');
         moqChip.className = 'info-chip moq-chip';
@@ -1445,8 +1483,12 @@
         let caption = null;
         let displaySize = size;
         
-        // Only treat as prefix if there's something after it (the actual size)
-        if (prefixMap[firstChar] && rest.length > 0) {
+        if (upperSize === 'OSFA' || upperSize === 'OS') {
+            // One-size items aren't adult or youth sizes
+            caption = 'ONE SIZE';
+            displaySize = upperSize;
+        } else if (prefixMap[firstChar] && rest.length > 0) {
+            // Only treat as prefix if there's something after it (the actual size)
             caption = prefixMap[firstChar];
             displaySize = rest;
         } else {

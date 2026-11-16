@@ -3,6 +3,7 @@
 {{#post}}
     <main data-accent-navigation="{{#unless feature_image}}true{{else}}{{#match @custom.post_header_type "Background Media"}}false{{else match @custom.post_header_type "Background Media Centered"}}false{{else}}true{{/match}}{{/unless}}">
         {{> "components/article"}}
+        {{#match slug "thank-you"}}{{> "components/checkout-success-note"}}{{/match}}
     </main>
 {{/post}}
 

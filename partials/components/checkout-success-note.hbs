@@ -1,0 +1,19 @@
+{{!-- Shown on /thank-you/ only when Stripe sends a paid buyer back (?checkout=success) --}}
+<template id="checkout-success-note">
+    <div class="kg-card kg-callout-card kg-callout-card-grey checkout-success-note" role="status">
+        <div class="kg-callout-emoji">✅</div>
+        <div class="kg-callout-text">
+            <strong>Payment received, thank you!</strong> Your receipt is on its way to your email.
+            Orders are pickup only. Watch your inbox for pickup details.
+        </div>
+    </div>
+</template>
+<script>
+    (function () {
+        if (new URLSearchParams(window.location.search).get('checkout') !== 'success') return;
+        var tpl = document.getElementById('checkout-success-note');
+        var target = document.querySelector('.post-content-inner') || document.querySelector('main');
+        if (!tpl || !target) return;
+        target.prepend(tpl.content.cloneNode(true));
+    })();
+</script>
