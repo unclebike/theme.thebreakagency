@@ -307,7 +307,7 @@
         submitButton.closest('.kg-button-card').classList.add('order-form-submit-card');
 
         // Config
-        const defaultText = 'Send Order';
+        const defaultText = form.dataset.checkout === 'stripe' ? 'Checkout' : 'Send Order';
         const successText = 'Success!';
         const sendingText = 'Sending...';
         const errorText = 'Error';
@@ -408,6 +408,25 @@
                 formData.forEach((value, key) => {
                     data[key] = value;
                 });
+
+                // Paid catalogs (page has internal tag #stripe): pay now via Stripe Checkout
+                if (form.dataset.checkout === 'stripe') {
+                    data._page_slug = pageSlug || '';
+                    if (memberUuid) data._member_uuid = memberUuid;
+                    btnTextEl.textContent = 'Opening checkout...';
+                    const checkoutRes = await fetch(`${API_BASE}/checkout`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data),
+                    });
+                    const checkout = await checkoutRes.json().catch(() => ({}));
+                    if (!checkoutRes.ok || !checkout.url) {
+                        throw new Error(checkout.error || 'Checkout failed');
+                    }
+                    // Draft is cleared by the Stripe webhook once payment completes
+                    window.location.href = checkout.url;
+                    return;
+                }
 
                 // Submit to API
                 const response = await fetch(`${API_BASE}/order`, {

@@ -46,6 +46,17 @@ stripe listen --forward-to localhost:8787/api/stripe/webhook
 ```
 Put `sk_test_…` and the `whsec_…` that `stripe listen` prints into `../break-order-worker/.dev.vars`.
 
+## Paid catalogs (Stripe Checkout)
+
+A catalog page uses Stripe instead of Square invoices when it has the internal tag `#stripe`. Its submit button then reads "Checkout".
+
+- Each product card's button URL is the SKU prefix, e.g. `#OBSC-CREW-OLV`. The button text lists the sizes, e.g. `YS,YM,YL,S,M,L,XL,XXL,$45.00`. The price in the text is for display only.
+- SKU = prefix + `-` + size, e.g. `OBSC-CREW-OLV-YS`. Each SKU must be an **active Stripe Price whose lookup key is the SKU**. The worker charges the Stripe price, never the page's.
+- The worker's `POST /api/checkout` creates the Checkout Session. `POST /api/stripe/webhook` handles `checkout.session.completed`: it records the order in KV as `stripe-order:<session>` and clears the member's draft.
+- In production, add a Stripe webhook endpoint at `https://thebreaksales.ca/api/stripe/webhook` for `checkout.session.completed`.
+
+Without Stripe keys, test against a fake Stripe: set `STRIPE_API_BASE` (see `.dev.vars.example`) and run a mock that serves `/v1/prices` and `/v1/checkout/sessions`.
+
 ## Google Forms Apps Script
 
 The worker posts form submissions to an Apps Script web app (`APPS_SCRIPT_URL` in `break-order-worker/src/index.ts`). Pull its source with clasp:

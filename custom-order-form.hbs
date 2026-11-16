@@ -28,6 +28,7 @@
                             data-member-name="{{@member.name}}"
                             {{/if}}
                             data-page-slug="{{slug}}"
+                            {{#has tag="#stripe"}}data-checkout="stripe"{{/has}}
                         >
                             <div class="order-form-customer-info">
                                 {{#if @member}}
