@@ -1529,3 +1529,94 @@
         order: -1;
     }
 }
+
+/* =====================
+   Paid add-on picker (e.g. sleeve print) — retail catalogs
+   Button text: "S,M,L,$45.00 | Sleeve print: All Mountain / Freestyle +$7.50"
+   ===================== */
+.order-form .option-picker {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(6px, calc(0.42vw * var(--scale)), 12px);
+}
+
+.order-form .option-picker-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    font-family: var(--font2);
+}
+
+.order-form .option-picker-label {
+    font-size: clamp(10px, calc(0.69vw * var(--scale)), 20px);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    opacity: 0.7;
+}
+
+.order-form .option-picker-fee {
+    font-size: clamp(13px, calc(0.9vw * var(--scale)), 24px);
+    font-weight: 600;
+}
+
+.order-form .option-picker-choices {
+    display: flex;
+    gap: clamp(6px, calc(0.42vw * var(--scale)), 12px);
+}
+
+.order-form .option-choice {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: clamp(8px, calc(0.56vw * var(--scale)), 16px) 10px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: clamp(6px, calc(0.42vw * var(--scale)), 12px);
+    background: rgba(0, 0, 0, 0.03);
+    color: inherit;
+    font-family: var(--font2);
+    font-size: clamp(13px, calc(0.9vw * var(--scale)), 24px);
+    font-weight: 600;
+    line-height: 1.15;
+    cursor: pointer;
+}
+
+.order-form .option-choice[aria-pressed="true"] {
+    background: var(--text-color, #1e325d);
+    border-color: var(--text-color, #1e325d);
+    color: var(--background-color, #fff);
+}
+
+.order-form .option-choice-count:empty {
+    display: none;
+}
+
+.order-form .option-choice-count {
+    min-width: 1.5em;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: var(--ghost-accent-color, #ff1a75);
+    color: #fff;
+    font-size: 0.8em;
+    text-align: center;
+}
+
+.order-form .option-group {
+    display: none;
+}
+
+.order-form .option-group.is-active {
+    display: contents;
+}
+
+@media (max-width: 480px) {
+    .order-form .option-choice {
+        flex-direction: column;
+        gap: 3px;
+    }
+}

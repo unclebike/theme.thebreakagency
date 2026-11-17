@@ -10,6 +10,10 @@
  * 4. Set button URL to product ID: "#SKU-12345"
  * 5. Add #H to force horizontal layout: "#SKU-12345#H"
  * 6. Add #SQ for small square card (one-size items): "#SKU-12345#SQ"
+ * 6b. Optional paid add-on (retail/Stripe catalogs), after a "|" in the button text:
+ *     "S,M,L,$45.00 | Sleeve print: All Mountain / Freestyle +$7.50"
+ *     Customers pick None or a choice per sweater; each choice is a Stripe price with
+ *     lookup_key "{PRODUCTID}-OPT-{CHOICE}" (e.g. OBSC-CREW-OLV-OPT-FREESTYLE).
  * 7. Add a kg-button card at the end with the Formspree URL as href
  * 
  * Layout:
@@ -1150,7 +1154,8 @@
             });
             
             // Update MOQ state for all product cards after loading quantities
-            form.querySelectorAll('.kg-product-card[data-moq]').forEach(card => {
+            form.querySelectorAll('.kg-product-card[data-moq], .kg-product-card .option-picker').forEach(el => {
+                const card = el.closest('.kg-product-card');
                 updateProductMOQState(card);
             });
         }
@@ -1197,7 +1202,16 @@
 
         // Parse sizes, MOQ, and price from button text
         // Format: "S,M,L,XL,#25,$41.99" where #25 is optional MOQ, $41.99 is optional price
-        const buttonText = buttonEl.textContent.trim();
+        let buttonText = buttonEl.textContent.trim();
+
+        // Optional add-on after a "|" (retail catalogs only): "... | Sleeve print: All Mountain / Freestyle +$7.50"
+        let option = null;
+        const bar = buttonText.indexOf('|');
+        if (bar >= 0) {
+            option = parseOptionSpec(buttonText.slice(bar + 1));
+            buttonText = buttonText.slice(0, bar).trim();
+        }
+        if (!retailMode || isPreviewMode) option = null;
         
         // Extract MOQ and price if present (skip in preview mode)
         let moq = null;
@@ -1229,7 +1243,7 @@
         if (!sizes.length) return;
 
         // Build size grid and replace button
-        const sizeGrid = createSizeGrid(productId, sizes, isPreviewMode, moq, price, flags.smallSquare);
+        const sizeGrid = createSizeGrid(productId, sizes, isPreviewMode, moq, price, flags.smallSquare, option);
         const buttonContainer = card.querySelector('.kg-product-card-button-container');
         (buttonContainer || buttonEl).replaceWith(sizeGrid);
 
@@ -1416,7 +1430,92 @@
         };
     }
 
-    function createSizeGrid(productId, sizes, isPreviewMode = false, moq = null, price = null, isSmallCard = false) {
+    /** "Sleeve print: All Mountain / Freestyle +$7.50" -> { label, choices: [{ name, key }], price } */
+    function parseOptionSpec(text) {
+        const m = String(text || '').trim().match(/^([^:]+):\s*(.+?)\s*(?:\+\s*\$(\d+(?:\.\d{1,2})?))?\s*$/);
+        if (!m) return null;
+        const choices = m[2].split('/').map(c => c.trim()).filter(Boolean)
+            .map(name => ({ name, key: name.toLowerCase().replace(/[^a-z0-9]/g, '') }))
+            .filter(c => c.key);
+        if (!choices.length) return null;
+        return { label: m[1].trim(), choices, price: m[3] ? Number(m[3]).toFixed(2) : null };
+    }
+
+    /**
+     * Option picker: None / choice A / choice B. Each choice has its own set of size rows
+     * (fields "{PRODUCTID}_{size}+{choicekey}"); only the selected set is shown.
+     */
+    function createOptionPicker(productId, sizes, option, container) {
+        const picker = document.createElement('div');
+        picker.className = 'option-picker';
+
+        const head = document.createElement('div');
+        head.className = 'option-picker-head';
+        const label = document.createElement('span');
+        label.className = 'option-picker-label';
+        label.textContent = option.label;
+        head.appendChild(label);
+        if (option.price) {
+            const fee = document.createElement('span');
+            fee.className = 'option-picker-fee';
+            fee.textContent = '+$' + option.price + ' each';
+            head.appendChild(fee);
+        }
+        picker.appendChild(head);
+
+        const seg = document.createElement('div');
+        seg.className = 'option-picker-choices';
+        seg.setAttribute('role', 'group');
+        seg.setAttribute('aria-label', option.label);
+        picker.appendChild(seg);
+
+        const all = [{ name: 'None', key: '' }].concat(option.choices);
+        const groups = [];
+        all.forEach((choice, i) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'option-choice';
+            btn.dataset.choice = choice.key;
+            btn.setAttribute('aria-pressed', String(i === 0));
+            const name = document.createElement('span');
+            name.textContent = choice.name;
+            const count = document.createElement('span');
+            count.className = 'option-choice-count';
+            btn.appendChild(name);
+            btn.appendChild(count);
+            seg.appendChild(btn);
+
+            const group = document.createElement('div');
+            group.className = 'option-group' + (i === 0 ? ' is-active' : '');
+            group.dataset.choice = choice.key;
+            sizes.forEach(size => group.appendChild(createSizeRow(productId, size, false, choice.key ? '+' + choice.key : '')));
+            groups.push(group);
+        });
+
+        seg.addEventListener('click', (e) => {
+            const btn = e.target.closest('.option-choice');
+            if (!btn) return;
+            seg.querySelectorAll('.option-choice').forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+            groups.forEach(g => g.classList.toggle('is-active', g.dataset.choice === btn.dataset.choice));
+        });
+
+        container.appendChild(picker);
+        groups.forEach(g => container.appendChild(g));
+    }
+
+    /** Show how many are picked under each choice, so picks under another choice aren't forgotten */
+    function updateOptionCounts(card) {
+        card.querySelectorAll('.option-choice').forEach(btn => {
+            const group = card.querySelector('.option-group[data-choice="' + btn.dataset.choice + '"]');
+            let n = 0;
+            if (group) group.querySelectorAll('.qty-input').forEach(input => { n += parseInt(input.value) || 0; });
+            const count = btn.querySelector('.option-choice-count');
+            if (count) count.textContent = n ? String(n) : '';
+            btn.classList.toggle('has-quantity', n > 0);
+        });
+    }
+
+    function createSizeGrid(productId, sizes, isPreviewMode = false, moq = null, price = null, isSmallCard = false, option = null) {
         const container = document.createElement('div');
         container.className = 'size-qty-grid';
         
@@ -1428,6 +1527,12 @@
         if (!isPreviewMode) {
             const chipsRow = createPriceMoqChips(price, moq, isSmallCard);
             container.appendChild(chipsRow);
+        }
+
+        if (option) {
+            container.classList.add('has-option');
+            createOptionPicker(productId, sizes, option, container);
+            return container;
         }
 
         sizes.forEach(size => {
@@ -1518,7 +1623,7 @@
         return row;
     }
 
-    function createSizeRow(productId, size, isPreviewMode = false) {
+    function createSizeRow(productId, size, isPreviewMode = false, nameSuffix = '') {
         const row = document.createElement('div');
         row.className = 'size-qty-row';
         
@@ -1607,7 +1712,7 @@
             const input = document.createElement('input');
             input.type = 'number';
             input.className = 'qty-input';
-            input.name = `${productId}_${sizeKey}`;
+            input.name = `${productId}_${sizeKey}${nameSuffix}`;
             input.value = '0';
             input.min = '0';
             input.max = '999';
@@ -1684,6 +1789,7 @@
      * Updates the MOQ chip ratio display
      */
     function updateProductMOQState(card) {
+        if (card.querySelector('.option-picker')) updateOptionCounts(card);
         const moq = parseInt(card.dataset.moq);
         if (!moq) return;
         
