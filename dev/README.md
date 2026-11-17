@@ -50,9 +50,10 @@ Put `sk_test_…` and the `whsec_…` that `stripe listen` prints into `../break
 
 A catalog page uses Stripe instead of Square invoices when its **submit button card links to `#stripe`**. This works like the `#SQ` and `#H` flags on product links. The older internal tag `#stripe` also works. The submit button then reads "Checkout".
 
-Build a paid catalog like the Osler one:
-- Set visibility to **Members**, with a **paywall card** after the preview products.
-- Members get access through the **label = page slug** ("Join This Catalog", or added automatically on sign-up from that page).
+Retail (Stripe) catalogs are **public**:
+- Set visibility to **Public**, with no paywall card. (A Members page still shows the sign-up gate: Ghost strips the content server-side and the theme can't undo that.)
+- Anyone can check out. Signed-out visitors give a name and email and go straight to Stripe; no account or catalog label needed. Their picks are kept in the browser tab if they back out of Stripe.
+- Signed-in members also skip the label check, and keep Save Draft.
 - Use product cards for the products, then a button card at the end.
 
 - Each product card's button URL is the SKU prefix, e.g. `#OBSC-CREW-OLV`. The button text lists the sizes, e.g. `YS,YM,YL,S,M,L,XL,XXL,$45.00`. The price in the text is for display only.

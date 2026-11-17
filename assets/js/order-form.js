@@ -155,7 +155,7 @@
             retailMode = true;
         }
 
-        showCheckoutCancelledNote(form);
+        const checkoutCancelled = showCheckoutCancelledNote(form);
 
         // Get member info from data attributes (set by Handlebars template)
         const memberUuid = form.dataset.memberUuid;
@@ -166,7 +166,7 @@
 
         // Get product cards (exclude skeleton cards which are already styled)
         const productCards = Array.from(form.querySelectorAll('.kg-product-card:not(.skeleton-card)'));
-        
+
         // Determine which cards should be horizontal or small square
         const cardFlags = detectCardFlags(productCards);
 
@@ -179,29 +179,42 @@
             return;
         }
 
+        // Retail (Stripe) catalogs are public: anyone can check out, signed in or not.
+        // No catalog label needed, and guests skip the sign-up gate.
+        if (retailMode && !isLoggedIn) {
+            productCards.forEach((card, index) => {
+                transformProductCard(card, cardFlags[index], false);
+            });
+            setupGuestCheckout(form, pageSlug);
+            setupLightbox(form);
+            setupSubmitButton(form, null, pageSlug);
+            if (checkoutCancelled) restoreGuestSelections(form, pageSlug);
+            return;
+        }
+
         // For logged-in members, we need to fetch catalogs from API first
         // Add CSS-only blur class while checking access (no JS transforms yet)
         if (isLoggedIn) {
-            // Add blur class - CSS will handle the visual blur
-            form.classList.add('order-form--checking-access');
-            
+            // Add blur class - CSS will handle the visual blur (not needed for public retail catalogs)
+            if (!retailMode) form.classList.add('order-form--checking-access');
+
             // Check if we just joined (refresh param in URL)
             const needsRefresh = checkAndClearRefreshParam();
-            
+
             // Fetch member's catalogs from API
             const catalogs = await fetchMemberCatalogs(memberUuid, needsRefresh);
-            
-            // Check if member has access to current catalog
-            const hasCatalogAccess = catalogs.some(c => c.slug === pageSlug);
-            
+
+            // Check if member has access to current catalog (retail catalogs are open to everyone)
+            const hasCatalogAccess = retailMode || catalogs.some(c => c.slug === pageSlug);
+
             // Render catalog nav if they have any catalogs
             if (catalogs.length > 0) {
                 renderCatalogNav(form, catalogs, pageSlug);
             }
-            
+
             // Remove checking class
             form.classList.remove('order-form--checking-access');
-            
+
             if (hasCatalogAccess) {
                 // Member has access - transform cards in full mode (not preview)
                 productCards.forEach((card, index) => {
@@ -257,7 +270,7 @@
      */
     function showCheckoutCancelledNote(form) {
         const params = new URLSearchParams(window.location.search);
-        if (params.get('checkout') !== 'cancelled') return;
+        if (params.get('checkout') !== 'cancelled') return false;
         const note = document.createElement('div');
         note.className = 'order-form-notice';
         note.setAttribute('role', 'status');
@@ -266,6 +279,43 @@
         params.delete('checkout');
         const qs = params.toString();
         window.history.replaceState(null, '', window.location.pathname + (qs ? '?' + qs : '') + window.location.hash);
+        return true;
+    }
+
+    /**
+     * Retail catalog, signed-out visitor: turn the "Sign Up to Order" box into a plain
+     * name/email box. They check out as a guest; Stripe handles payment and the receipt.
+     */
+    function setupGuestCheckout(form, pageSlug) {
+        form.classList.add('order-form--guest');
+        const info = form.querySelector('.order-form-customer-info');
+        if (info) {
+            const title = info.querySelector('.order-form-section-title');
+            if (title) title.textContent = 'Your Information';
+            info.querySelector('.order-form-signup-message')?.remove();
+            info.querySelector('.order-form-btn-row')?.remove();
+        }
+        if (pageSlug) addHiddenField(form, '_page_slug', pageSlug);
+    }
+
+    // Guests have no KV draft, so keep their picks in this tab while they're on Stripe
+    function guestDraftKey(pageSlug) {
+        return `order-form-guest:${pageSlug || window.location.pathname}`;
+    }
+
+    function saveGuestSelections(form, pageSlug) {
+        try {
+            sessionStorage.setItem(guestDraftKey(pageSlug), JSON.stringify(collectFormData(form)));
+        } catch (e) { /* storage unavailable: non-fatal */ }
+    }
+
+    function restoreGuestSelections(form, pageSlug) {
+        let draft = null;
+        try {
+            draft = JSON.parse(sessionStorage.getItem(guestDraftKey(pageSlug)) || 'null');
+            sessionStorage.removeItem(guestDraftKey(pageSlug));
+        } catch (e) { return; }
+        if (draft) applyDraft(form, draft);
     }
 
     function addHiddenField(form, name, value) {
@@ -452,6 +502,8 @@
                     // Keep their selections if they back out of Stripe (the webhook clears the draft once paid)
                     if (memberUuid && pageSlug) {
                         try { await saveDraft(form, memberUuid, pageSlug); } catch (e) { /* non-fatal */ }
+                    } else if (!memberUuid) {
+                        saveGuestSelections(form, pageSlug);
                     }
                     const checkoutRes = await fetch(`${API_BASE}/checkout`, {
                         method: 'POST',
@@ -1047,41 +1099,8 @@
             const data = await response.json();
             if (!data.found || !data.draft) return;
 
-            const { customer, products } = data.draft;
+            applyDraft(form, data.draft);
 
-            // Populate customer fields (don't overwrite if already filled)
-            if (customer) {
-                setFieldIfEmpty(form, 'name', customer.name);
-                setFieldIfEmpty(form, 'email', customer.email);
-                setFieldIfEmpty(form, 'phone', customer.phone);
-                setFieldIfEmpty(form, 'address', customer.address);
-                setFieldIfEmpty(form, 'city', customer.city);
-                setFieldIfEmpty(form, 'province', customer.province);
-                setFieldIfEmpty(form, 'postal_code', customer.postalCode);
-                setFieldIfEmpty(form, 'notes', customer.notes);
-            }
-
-            // Populate product quantities
-            if (products) {
-                Object.entries(products).forEach(([fieldName, qty]) => {
-                    const input = form.querySelector(`[name="${fieldName}"]`);
-                    if (input) {
-                        input.value = qty;
-                        // Update row state to show highlight
-                        const row = input.closest('.size-qty-row');
-                        if (row) updateRowState(row, qty);
-                    }
-                });
-                
-                // Update MOQ state for all product cards after loading quantities
-                form.querySelectorAll('.kg-product-card[data-moq]').forEach(card => {
-                    updateProductMOQState(card);
-                });
-            }
-
-            // Show loaded indicator
-            form.classList.add('draft-loaded');
-            
             // Show restored state on Save Draft button (orange, temporary)
             const saveBtn = form._saveDraftBtn;
             const saveBtnTextEl = form._saveDraftBtnTextEl;
@@ -1098,6 +1117,46 @@
         } catch (error) {
             console.error('Failed to load draft:', error);
         }
+    }
+
+    /**
+     * Fill the form from a saved draft ({ customer, products })
+     */
+    function applyDraft(form, draft) {
+        const { customer, products } = draft;
+
+        // Populate customer fields (don't overwrite if already filled)
+        if (customer) {
+            setFieldIfEmpty(form, 'name', customer.name);
+            setFieldIfEmpty(form, 'email', customer.email);
+            setFieldIfEmpty(form, 'phone', customer.phone);
+            setFieldIfEmpty(form, 'address', customer.address);
+            setFieldIfEmpty(form, 'city', customer.city);
+            setFieldIfEmpty(form, 'province', customer.province);
+            setFieldIfEmpty(form, 'postal_code', customer.postalCode);
+            setFieldIfEmpty(form, 'notes', customer.notes);
+        }
+
+        // Populate product quantities
+        if (products) {
+            Object.entries(products).forEach(([fieldName, qty]) => {
+                const input = form.querySelector(`[name="${fieldName}"]`);
+                if (input) {
+                    input.value = qty;
+                    // Update row state to show highlight
+                    const row = input.closest('.size-qty-row');
+                    if (row) updateRowState(row, qty);
+                }
+            });
+            
+            // Update MOQ state for all product cards after loading quantities
+            form.querySelectorAll('.kg-product-card[data-moq]').forEach(card => {
+                updateProductMOQState(card);
+            });
+        }
+
+        // Show loaded indicator
+        form.classList.add('draft-loaded');
     }
 
     function setFieldIfEmpty(form, name, value) {
