@@ -414,6 +414,18 @@
         submitButton.appendChild(btnTextEl);
         submitButton.classList.add('order-form-submit-btn');
 
+        // Status line under the button: tells the customer why a submission failed
+        // (the button alone only says "Error"), announced to screen readers.
+        const statusEl = document.createElement('p');
+        statusEl.className = 'order-form-status';
+        statusEl.setAttribute('role', 'alert');
+        statusEl.hidden = true;
+        submitButton.insertAdjacentElement('afterend', statusEl);
+        function showStatus(message) {
+            statusEl.textContent = message || '';
+            statusEl.hidden = !message;
+        }
+
         // Store references on form for other functions to use
         form._submitBtn = submitButton;
         form._submitBtnTextEl = btnTextEl;
@@ -424,6 +436,7 @@
             moqSubmitState = 0;
             submitButton.classList.remove('success', 'error', 'moq-warning');
             btnTextEl.textContent = defaultText;
+            showStatus('');
         }
 
         // Listen for quantity changes to reset success/error/MOQ state
@@ -489,6 +502,7 @@
             submitButton.classList.remove('success', 'error', 'moq-warning');
             submitButton.classList.add('sending');
             btnTextEl.textContent = sendingText;
+            showStatus('');
 
             try {
                 // Collect form data
@@ -530,8 +544,13 @@
                     body: JSON.stringify(data),
                 });
 
-                if (!response.ok) {
-                    throw new Error('Order submission failed');
+                // The worker replies to JSON requests with { success, invoiceId } or
+                // { success: false, error }. Require an explicit success: a 2xx that
+                // isn't that JSON (e.g. a followed redirect to an HTML error page)
+                // must not be shown to the customer as a sent order.
+                const result = await response.json().catch(() => null);
+                if (!response.ok || !result || result.success !== true) {
+                    throw new Error((result && result.error) || `Order submission failed (HTTP ${response.status})`);
                 }
 
                 // Success!
@@ -559,6 +578,11 @@
                 submitButton.classList.add('error');
                 btnTextEl.textContent = errorText;
                 moqSubmitState = 0; // Reset MOQ state on error
+                const reason = error instanceof TypeError
+                    ? 'We couldn\'t reach the order server. Check your connection and try again.'
+                    : (error && error.message) || 'Something went wrong.';
+                const reasonText = /[.!?]$/.test(reason) ? reason : `${reason}.`;
+                showStatus(`Your order was not sent: ${reasonText} Your selections are still here. Try again, or email us if it keeps happening.`);
             } finally {
                 submitButton.disabled = false;
             }
