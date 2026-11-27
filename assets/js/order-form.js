@@ -420,7 +420,9 @@
         statusEl.className = 'order-form-status';
         statusEl.setAttribute('role', 'alert');
         statusEl.hidden = true;
-        submitButton.insertAdjacentElement('afterend', statusEl);
+        // Goes after the whole button card: on desktop that card is a horizontal flex
+        // row (Save Draft + Send Order), so inside it the message would squeeze the buttons.
+        (submitButton.closest('.kg-button-card') || submitButton).insertAdjacentElement('afterend', statusEl);
         function showStatus(message) {
             statusEl.textContent = message || '';
             statusEl.hidden = !message;

@@ -784,7 +784,9 @@
 
 /* Submission failure message under the submit button */
 .order-form .order-form-status {
-    margin: 0.75rem 0 0;
+    max-width: 600px;
+    margin: 0.75rem auto 0;
+    text-align: center;
     color: #dc2626;
     font-size: 0.9rem;
     line-height: 1.4;
