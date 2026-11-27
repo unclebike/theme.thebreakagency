@@ -782,6 +782,14 @@
     color: #fff !important;
 }
 
+/* Submission failure message under the submit button */
+.order-form .order-form-status {
+    margin: 0.75rem 0 0;
+    color: #dc2626;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
 /* Submit MOQ warning state - red (for minimum order quantity warnings) */
 .order-form .order-form-submit-btn.moq-warning {
     background: #dc2626 !important;
